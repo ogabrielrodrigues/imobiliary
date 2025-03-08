@@ -1,4 +1,4 @@
-module github.com/ogabrielrodrigues/relatorio_saaec
+module github.com/ogabrielrodrigues/imobiliary
 
 go 1.23.4
 

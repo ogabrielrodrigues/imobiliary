@@ -1,7 +1,7 @@
 package environment
 
 import (
-	"github.com/ogabrielrodrigues/relatorio_saaec/kind"
+	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
 )
 
 func LoadEnvironment() *kind.Environment {

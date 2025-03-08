@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório {{ .Date }}</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --font-sans: "Courier New"
+    }
+  </style>
+</head>
+<body>
+  <table class="table-auto text-center m-10">
+    <thead>
+      <tr class="border-1 border-zinc-400">
+        <th class="px-6 py-1">Mês Referencia</th>
+        <th class="px-6 py-1 border-x-1 border-zinc-400">Valor</th>
+        <th class="px-6 py-1">Vencimento</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Houses}}
+        <tr>
+          <td colspan="3" class="px-6 py-3 font-bold text-xl border-1 border-zinc-400">{{.Address}}</td>
+        </tr>
+        {{range .Debts}}
+        <tr class="border-1 border-zinc-400">
+          <td class="px-6 py-1 font-bold">{{.MonthRef}}</td>
+          <td class="px-6 py-1 border-x-1 border-zinc-400">R${{.Value}}</td>
+          <td class="px-6 py-1">{{.ExpiresIn}}</td>
+        </tr>
+        {{end}}
+      {{end}}
+    </tbody>
+  </table>
+</body>
+</html>
