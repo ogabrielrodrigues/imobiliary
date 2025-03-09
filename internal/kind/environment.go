@@ -21,7 +21,7 @@ func (e *Environment) ReadEnvironment() {
 	url := flag.String("url", "", "destination website url.")
 	internal := flag.String("internal", "localhost:3000", "internal server address")
 	bin := flag.String("bin", "", "bin path of user browser (optional).")
-	out := flag.String("out", "report", "reports output path. (optional).")
+	out := flag.String("out", "reports", "reports output path. (optional).")
 
 	flag.Parse()
 
