@@ -1,8 +1,9 @@
 package kind
 
 import (
-	"fmt"
-	"os"
+	"flag"
+
+	"github.com/ogabrielrodrigues/imobiliary/util"
 )
 
 type Environment struct {
@@ -11,26 +12,25 @@ type Environment struct {
 	SAAEC_URL   string
 	LOCAL_URL   string
 	BROWSER_BIN string
+	REPORT_OUT  string
 }
 
-func (e *Environment) ReadEnvironmentFromStdin() {
-	if len(os.Args[1:]) == 0 {
-		fmt.Println("ERROR", "environment variables not provided")
-		os.Exit(1)
-	}
+func (e *Environment) ReadEnvironment() {
+	headless := flag.Bool("headless", false, "enable browser headless mode.")
+	path := flag.String("path", "houses.csv", "path from input table.")
+	url := flag.String("url", "", "destination website url.")
+	internal := flag.String("internal", "localhost:3000", "internal server address")
+	bin := flag.String("bin", "", "bin path of user browser (optional).")
+	out := flag.String("out", "report", "reports output path. (optional).")
 
-	args := os.Args[2:]
+	flag.Parse()
 
-	if args[0] == "true" {
-		e.HEADLESS = true
-	} else {
-		e.HEADLESS = false
-	}
+	e.HEADLESS = *headless
+	e.TABLE_PATH = *path
+	e.SAAEC_URL = *url
+	e.LOCAL_URL = *internal
+	e.BROWSER_BIN = *bin
+	e.REPORT_OUT = *out
 
-	e.TABLE_PATH = args[2]
-	e.SAAEC_URL = args[4]
-	e.LOCAL_URL = args[6]
-	e.BROWSER_BIN = args[8]
-
-	fmt.Println("Environment Variables sucessfully loaded!")
+	util.Logln(util.ColorGreen, "✓ Environment Variables sucessfully loaded!")
 }

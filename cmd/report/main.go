@@ -20,7 +20,7 @@ func main() {
 	houses := reader.ReadCSV(env.TABLE_PATH)
 
 	launch := launcher.New()
-	if env.HEADLESS {
+	if !env.HEADLESS {
 		launch.Delete("--headless")
 	}
 
@@ -31,23 +31,24 @@ func main() {
 	browser := rod.New().ControlURL(launch.MustLaunch()).MustConnect().NoDefaultDevice()
 	defer browser.MustClose()
 
-	fmt.Println("Initializing worker...")
+	util.Logln(util.ColorGreen, "✓ Initializing worker...")
 
 	page := stealth.MustPage(browser)
 
 	for i, house := range houses {
-		fmt.Printf("Retrieving data from %s\n", house.Address)
+		util.Log(util.ColorDefault, fmt.Sprintf("Retrieving data from: %s. ", house.Address))
 		houses[i].Debts = worker.Work(page, env.SAAEC_URL, house.ID)
+		util.Logln(util.ColorGreen, " ✓ OK")
 	}
 
 	go generator.Generate(env.LOCAL_URL, houses)
-	fmt.Println("Generating report...")
+	util.Logln(util.ColorDefault, "\nGenerating report...")
 
 	page.MustNavigate(fmt.Sprintf("http://%s/report", env.LOCAL_URL))
 	page.MustWaitDOMStable()
 
-	report_path := filepath.Join("reports", fmt.Sprintf("%s.pdf", util.CurrentDate()))
+	report_path := filepath.Join(env.REPORT_OUT, fmt.Sprintf("%s.pdf", util.CurrentDate()))
 	page.MustPDF(report_path)
 
-	fmt.Printf("Report saved on: %s\n", report_path)
+	util.Logln(util.ColorGreen, fmt.Sprintf("Report saved on: %s\n", report_path))
 }

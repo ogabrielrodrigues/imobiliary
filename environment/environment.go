@@ -7,7 +7,7 @@ import (
 func LoadEnvironment() *kind.Environment {
 	env := kind.Environment{}
 
-	env.ReadEnvironmentFromStdin()
+	env.ReadEnvironment()
 
 	return &env
 }
