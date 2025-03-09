@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"path"
+	"path/filepath"
 
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
@@ -19,20 +19,35 @@ func main() {
 
 	houses := reader.ReadCSV(env.TABLE_PATH)
 
-	launch := launcher.New().Delete("--headless").MustLaunch()
-	browser := rod.New().ControlURL(launch).MustConnect()
+	launch := launcher.New()
+	if env.HEADLESS {
+		launch.Delete("--headless")
+	}
+
+	if env.BROWSER_BIN != "" {
+		launch.Bin(env.BROWSER_BIN)
+	}
+
+	browser := rod.New().ControlURL(launch.MustLaunch()).MustConnect().NoDefaultDevice()
 	defer browser.MustClose()
+
+	fmt.Println("Initializing worker...")
 
 	page := stealth.MustPage(browser)
 
 	for i, house := range houses {
+		fmt.Printf("Retrieving data from %s\n", house.Address)
 		houses[i].Debts = worker.Work(page, env.SAAEC_URL, house.ID)
 	}
 
-	go generator.Generate(houses)
+	go generator.Generate(env.LOCAL_URL, houses)
+	fmt.Println("Generating report...")
 
 	page.MustNavigate(fmt.Sprintf("http://%s/report", env.LOCAL_URL))
 	page.MustWaitDOMStable()
 
-	page.MustPDF(path.Join("reports", fmt.Sprintf("%s.pdf", util.CurrentDate())))
+	report_path := filepath.Join("reports", fmt.Sprintf("%s.pdf", util.CurrentDate()))
+	page.MustPDF(report_path)
+
+	fmt.Printf("Report saved on: %s\n", report_path)
 }

@@ -2,6 +2,7 @@ package reader
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
@@ -10,13 +11,15 @@ import (
 func ReadCSV(path string) []kind.House {
 	file, err := os.Open(path)
 	if err != nil {
-		panic("err=" + err.Error())
+		fmt.Println("ERROR", "error opening csv file.")
+		os.Exit(1)
 	}
 	defer file.Close()
 
 	lines, err := csv.NewReader(file).ReadAll()
 	if err != nil {
-		panic("err=" + err.Error())
+		fmt.Println("ERROR", "error reading csv file.")
+		os.Exit(1)
 	}
 
 	// Remove csv header.
@@ -30,5 +33,6 @@ func ReadCSV(path string) []kind.House {
 		})
 	}
 
+	fmt.Println("CSV file read sucessfully!")
 	return houses
 }

@@ -5,13 +5,11 @@ import (
 	"path"
 	"text/template"
 
-	"github.com/ogabrielrodrigues/imobiliary/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
 	"github.com/ogabrielrodrigues/imobiliary/util"
 )
 
-func Generate(houses []kind.House) {
-	env := environment.LoadEnvironment()
+func Generate(url string, houses []kind.House) {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /report", func(w http.ResponseWriter, r *http.Request) {
@@ -25,5 +23,5 @@ func Generate(houses []kind.House) {
 		tmpl.Execute(w, data)
 	})
 
-	http.ListenAndServe(env.LOCAL_URL, mux)
+	http.ListenAndServe(url, mux)
 }
