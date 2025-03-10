@@ -56,6 +56,15 @@ func (ns NullMaritalStatus) Value() (driver.Value, error) {
 	return string(ns.MaritalStatus), nil
 }
 
+type Owner struct {
+	ID            uuid.UUID     `json:"id"`
+	Fullname      string        `json:"fullname"`
+	Rg            string        `json:"rg"`
+	Cpf           string        `json:"cpf"`
+	Occupation    string        `json:"occupation"`
+	MaritalStatus MaritalStatus `json:"marital_status"`
+}
+
 type Tenant struct {
 	ID            uuid.UUID     `json:"id"`
 	Fullname      string        `json:"fullname"`

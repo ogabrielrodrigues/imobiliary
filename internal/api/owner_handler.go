@@ -14,9 +14,9 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/store/pg"
 )
 
-func (h *Handler) GetTenant(w http.ResponseWriter, r *http.Request) {
-	raw_id := r.PathValue("tenant_id")
-	tenant_id, err := uuid.Parse(raw_id)
+func (h *Handler) GetOwner(w http.ResponseWriter, r *http.Request) {
+	raw_id := r.PathValue("owner_id")
+	owner_id, err := uuid.Parse(raw_id)
 
 	if err != nil {
 		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_UUID_INVALID))
@@ -24,7 +24,7 @@ func (h *Handler) GetTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := context.Background()
-	tenant, err := h.query.GetTenant(ctx, tenant_id)
+	owner, err := h.query.GetOwner(ctx, owner_id)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			response.Json(&w, http.StatusNotFound, rerr.ErrorResponse(rerr.ERR_NOT_FOUND))
@@ -36,32 +36,32 @@ func (h *Handler) GetTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response.Json(&w, http.StatusOK, kind.Response{
-		"tenant": tenant,
+		"owner": owner,
 	})
 }
 
-func (h *Handler) GetTenants(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetOwners(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
-	tenants, err := h.query.GetTenants(ctx)
+	owners, err := h.query.GetOwners(ctx)
 	if err != nil {
 		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
 		return
 	}
 
-	if tenants == nil {
+	if owners == nil {
 		response.Json(&w, http.StatusOK, kind.Response{
-			"message": "no tenants were found",
+			"message": "no owners were found",
 		})
 		return
 	}
 
 	response.Json(&w, http.StatusOK, kind.Response{
-		"tenants": tenants,
+		"owners": owners,
 	})
 }
 
-func (h *Handler) InsertTenant(w http.ResponseWriter, r *http.Request) {
-	var body pg.InsertTenantParams
+func (h *Handler) InsertOwner(w http.ResponseWriter, r *http.Request) {
+	var body pg.InsertOwnerParams
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_INVALID_BODY))
@@ -69,19 +69,19 @@ func (h *Handler) InsertTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := context.Background()
-	id, err := h.query.InsertTenant(ctx, body)
+	id, err := h.query.InsertOwner(ctx, body)
 	if err != nil {
 		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
 		return
 	}
 
 	response.Json(&w, http.StatusCreated, kind.Response{
-		"tenant": id,
+		"owner": id,
 	})
 }
 
-func (h *Handler) UpdateTenant(w http.ResponseWriter, r *http.Request) {
-	var body pg.UpdateTenantParams
+func (h *Handler) UpdateOwner(w http.ResponseWriter, r *http.Request) {
+	var body pg.UpdateOwnerParams
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_INVALID_BODY))
@@ -89,7 +89,7 @@ func (h *Handler) UpdateTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := context.Background()
-	err := h.query.UpdateTenant(ctx, body)
+	err := h.query.UpdateOwner(ctx, body)
 	if err != nil {
 		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
 		return
@@ -98,9 +98,9 @@ func (h *Handler) UpdateTenant(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *Handler) DeleteTenant(w http.ResponseWriter, r *http.Request) {
-	raw_id := r.PathValue("tenant_id")
-	tenant_id, err := uuid.Parse(raw_id)
+func (h *Handler) DeleteOwner(w http.ResponseWriter, r *http.Request) {
+	raw_id := r.PathValue("owner_id")
+	owner_id, err := uuid.Parse(raw_id)
 
 	if err != nil {
 		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_UUID_INVALID))
@@ -108,7 +108,7 @@ func (h *Handler) DeleteTenant(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := context.Background()
-	err = h.query.DeleteTenant(ctx, tenant_id)
+	err = h.query.DeleteOwner(ctx, owner_id)
 	if err != nil {
 		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
 		return
