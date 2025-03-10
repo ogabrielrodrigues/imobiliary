@@ -30,7 +30,7 @@ func main() {
 		panic(err)
 	}
 
-	handler := api.Handler(pg.New(pool))
+	handler := api.NewHandler(pg.New(pool))
 
 	go func() {
 		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {

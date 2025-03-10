@@ -14,11 +14,11 @@ import (
 type MaritalStatus string
 
 const (
-	MaritalStatusSingle      MaritalStatus = "single"
-	MaritalStatusMarried     MaritalStatus = "married"
-	MaritalStatusDivorced    MaritalStatus = "divorced"
-	MaritalStatusWidowed     MaritalStatus = "widowed"
-	MaritalStatusStableUnion MaritalStatus = "stable_union"
+	MaritalStatusSolteiroa   MaritalStatus = "solteiro(a)"
+	MaritalStatusCasadoa     MaritalStatus = "casado(a)"
+	MaritalStatusAmasiadoa   MaritalStatus = "amasiado(a)"
+	MaritalStatusDivorciadoa MaritalStatus = "divorciado(a)"
+	MaritalStatusVivoa       MaritalStatus = "viúvo(a)"
 )
 
 func (e *MaritalStatus) Scan(src interface{}) error {
@@ -34,8 +34,8 @@ func (e *MaritalStatus) Scan(src interface{}) error {
 }
 
 type NullMaritalStatus struct {
-	MaritalStatus MaritalStatus
-	Valid         bool // Valid is true if MaritalStatus is not NULL
+	MaritalStatus MaritalStatus `json:"marital_status"`
+	Valid         bool          `json:"valid"` // Valid is true if MaritalStatus is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -57,10 +57,10 @@ func (ns NullMaritalStatus) Value() (driver.Value, error) {
 }
 
 type Tenant struct {
-	ID            uuid.UUID
-	Fullname      string
-	Rg            string
-	Cpf           string
-	Occupation    string
-	MaritalStatus MaritalStatus
+	ID            uuid.UUID     `json:"id"`
+	Fullname      string        `json:"fullname"`
+	Rg            string        `json:"rg"`
+	Cpf           string        `json:"cpf"`
+	Occupation    string        `json:"occupation"`
+	MaritalStatus MaritalStatus `json:"marital_status"`
 }

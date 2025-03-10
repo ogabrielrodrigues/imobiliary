@@ -1,9 +1,9 @@
 CREATE TYPE MARITAL_STATUS AS ENUM (
-  'single',
-  'married',
-  'divorced',
-  'widowed',
-  'stable_union'
+  'solteiro(a)',
+  'casado(a)',
+  'amasiado(a)',
+  'divorciado(a)',
+  'viúvo(a)'
 );
 
 CREATE TABLE IF NOT EXISTS tenant (

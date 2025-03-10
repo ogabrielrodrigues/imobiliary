@@ -6,23 +6,23 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/store/pg"
 )
 
-type handler struct {
-	action *pg.Queries
+type Handler struct {
+	query  *pg.Queries
 	router *http.ServeMux
 }
 
-func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.router.ServeHTTP(w, r)
 }
 
-func Handler(queries *pg.Queries) http.Handler {
-	h := handler{
-		action: queries,
+func NewHandler(queries *pg.Queries) http.Handler {
+	h := Handler{
+		query: queries,
 	}
 
-	router := http.NewServeMux()
+	mux := http.NewServeMux()
+	Register(&h, mux)
 
-	h.router = router
-
+	h.router = mux
 	return h
 }

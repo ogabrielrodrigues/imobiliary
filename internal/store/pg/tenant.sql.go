@@ -88,11 +88,11 @@ RETURNING id
 `
 
 type InsertTenantParams struct {
-	Fullname      string
-	Rg            string
-	Cpf           string
-	Occupation    string
-	MaritalStatus MaritalStatus
+	Fullname      string        `json:"fullname"`
+	Rg            string        `json:"rg"`
+	Cpf           string        `json:"cpf"`
+	Occupation    string        `json:"occupation"`
+	MaritalStatus MaritalStatus `json:"marital_status"`
 }
 
 // -------------------------------
@@ -121,12 +121,12 @@ WHERE id = $6
 `
 
 type UpdateTenantParams struct {
-	Fullname      string
-	Rg            string
-	Cpf           string
-	Occupation    string
-	MaritalStatus MaritalStatus
-	ID            uuid.UUID
+	Fullname      string        `json:"fullname"`
+	Rg            string        `json:"rg"`
+	Cpf           string        `json:"cpf"`
+	Occupation    string        `json:"occupation"`
+	MaritalStatus MaritalStatus `json:"marital_status"`
+	ID            uuid.UUID     `json:"id"`
 }
 
 // -------------------------------
