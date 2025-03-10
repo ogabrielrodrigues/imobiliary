@@ -11,14 +11,14 @@ import (
 func ReadCSV(path string) []kind.House {
 	file, err := os.Open(path)
 	if err != nil {
-		util.Logln(util.ColorRed, "✗ ERROR error opening csv file.")
+		util.Logln(util.ColorRed, "✗ ERROR opening csv file.")
 		os.Exit(1)
 	}
 	defer file.Close()
 
 	lines, err := csv.NewReader(file).ReadAll()
 	if err != nil {
-		util.Logln(util.ColorRed, "✗ ERROR error reading csv file.")
+		util.Logln(util.ColorRed, "✗ ERROR reading csv file.")
 		os.Exit(1)
 	}
 

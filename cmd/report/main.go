@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	env := environment.LoadEnvironment()
+	env := environment.LoadReportEnvironment()
 
 	houses := reader.ReadCSV(env.TABLE_PATH)
 

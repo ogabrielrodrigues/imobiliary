@@ -1,12 +1,6 @@
 package kind
 
-import (
-	"flag"
-
-	"github.com/ogabrielrodrigues/imobiliary/util"
-)
-
-type Environment struct {
+type ReportEnvironment struct {
 	HEADLESS    bool
 	TABLE_PATH  string
 	SAAEC_URL   string
@@ -15,22 +9,11 @@ type Environment struct {
 	REPORT_OUT  string
 }
 
-func (e *Environment) ReadEnvironment() {
-	headless := flag.Bool("headless", false, "enable browser headless mode.")
-	path := flag.String("path", "houses.csv", "path from input table.")
-	url := flag.String("url", "", "destination website url.")
-	internal := flag.String("internal", "localhost:3000", "internal server address")
-	bin := flag.String("bin", "", "bin path of user browser (optional).")
-	out := flag.String("out", "reports", "reports output path. (optional).")
-
-	flag.Parse()
-
-	e.HEADLESS = *headless
-	e.TABLE_PATH = *path
-	e.SAAEC_URL = *url
-	e.LOCAL_URL = *internal
-	e.BROWSER_BIN = *bin
-	e.REPORT_OUT = *out
-
-	util.Logln(util.ColorGreen, "✓ Environment Variables sucessfully loaded!")
+type ServerEnvironment struct {
+	SERVER_ADDR   string
+	DATABASE_HOST string
+	DATABASE_PORT string
+	DATABASE_NAME string
+	DATABASE_USER string
+	DATABASE_PWD  string
 }

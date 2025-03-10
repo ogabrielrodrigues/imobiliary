@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:15
+    restart: unless-stopped
+    ports:
+      - ${DATABASE_PORT:-5432}:5432
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PWD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    depends_on:
+     - database
+    ports:
+     - 8081:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+
+volumes:
+  db:
+    driver: local
+  pgadmin:
+    driver: local
