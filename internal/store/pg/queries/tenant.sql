@@ -22,7 +22,9 @@ RETURNING id;
 ---------------------------------
 
 -- name: UpdateTenant :exec
-UPDATE tenant SET
+UPDATE
+  tenant
+SET
   fullname = $1,
   rg = $2,
   cpf = $3,
@@ -33,5 +35,6 @@ WHERE id = $6;
 ---------------------------------
 
 -- name: DeleteTenant :exec
-DELETE FROM tenant
+DELETE FROM
+  tenant
 WHERE id = $1;

@@ -13,7 +13,8 @@ import (
 
 const deleteOwner = `-- name: DeleteOwner :exec
 
-DELETE FROM owner
+DELETE FROM
+  owner
 WHERE id = $1
 `
 
@@ -111,7 +112,9 @@ func (q *Queries) InsertOwner(ctx context.Context, arg InsertOwnerParams) (uuid.
 
 const updateOwner = `-- name: UpdateOwner :exec
 
-UPDATE owner SET
+UPDATE
+  owner
+SET
   fullname = $1,
   rg = $2,
   cpf = $3,

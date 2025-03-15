@@ -38,7 +38,6 @@ func main() {
 	for i, house := range houses {
 		util.Log(util.ColorDefault, fmt.Sprintf("Retrieving data from: %s. ", house.Address))
 		houses[i].Debts = worker.Work(page, env.SAAEC_URL, house.ID)
-		util.Logln(util.ColorGreen, " ✓ OK")
 	}
 
 	go generator.Generate(env.LOCAL_URL, houses)

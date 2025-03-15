@@ -1,4 +1,4 @@
-.PHONY: build build-unix build-win migrate-up migrate-down
+.PHONY: build build-unix build-win services-up services-down
 
 build: build-unix build-win
 
@@ -8,9 +8,14 @@ build-unix:
 build-win:
 	@GOOS=windows go build -o ./dist/report.exe cmd/report/main.go
 
-migrate-up:
+services-up:
 	@docker compose up -d
-	@go generate ./...
+
+services-down:
+	@docker compose down
+
+migrate-up:
+	@go run cmd/tools/ternup/main.go
 
 migrate-down:
-	@docker compose down
+	@go run cmd/tools/terndn/main.go

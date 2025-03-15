@@ -22,7 +22,9 @@ RETURNING id;
 ---------------------------------
 
 -- name: UpdateOwner :exec
-UPDATE owner SET
+UPDATE
+  owner
+SET
   fullname = $1,
   rg = $2,
   cpf = $3,
@@ -33,5 +35,6 @@ WHERE id = $6;
 ---------------------------------
 
 -- name: DeleteOwner :exec
-DELETE FROM owner
+DELETE FROM
+  owner
 WHERE id = $1;

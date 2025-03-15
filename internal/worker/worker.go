@@ -29,6 +29,11 @@ func Work(page *rod.Page, url string, id string) []kind.Debit {
 
 	page.MustWaitDOMStable()
 
+	if exist := page.MustHas(".textoTituloImpressao7"); exist {
+		util.Logln(util.ColorGreen, "✓ Skipped")
+		return nil
+	}
+
 	debts := page.MustElements(".bordaServicos table tbody tr")
 	debts = debts[:len(debts)-7]
 
@@ -43,5 +48,6 @@ func Work(page *rod.Page, url string, id string) []kind.Debit {
 		})
 	}
 
+	util.Logln(util.ColorGreen, "✓ OK")
 	return found_debts
 }

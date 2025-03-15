@@ -13,7 +13,8 @@ import (
 
 const deleteTenant = `-- name: DeleteTenant :exec
 
-DELETE FROM tenant
+DELETE FROM
+  tenant
 WHERE id = $1
 `
 
@@ -111,7 +112,9 @@ func (q *Queries) InsertTenant(ctx context.Context, arg InsertTenantParams) (uui
 
 const updateTenant = `-- name: UpdateTenant :exec
 
-UPDATE tenant SET
+UPDATE
+  tenant
+SET
   fullname = $1,
   rg = $2,
   cpf = $3,

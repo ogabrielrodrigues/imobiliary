@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
-	"github.com/ogabrielrodrigues/imobiliary/internal/rerr"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 	"github.com/ogabrielrodrigues/imobiliary/internal/store/pg"
 )
@@ -19,7 +18,7 @@ func (h *Handler) GetTenant(w http.ResponseWriter, r *http.Request) {
 	tenant_id, err := uuid.Parse(raw_id)
 
 	if err != nil {
-		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_UUID_INVALID))
+		response.Error(w, http.StatusBadRequest, err)
 		return
 	}
 
@@ -27,15 +26,15 @@ func (h *Handler) GetTenant(w http.ResponseWriter, r *http.Request) {
 	tenant, err := h.query.GetTenant(ctx, tenant_id)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			response.Json(&w, http.StatusNotFound, rerr.ErrorResponse(rerr.ERR_NOT_FOUND))
+			response.Error(w, http.StatusNotFound, err)
 			return
 		}
 
-		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
+		response.Error(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	response.Json(&w, http.StatusOK, kind.Response{
+	response.Json(w, http.StatusOK, kind.Response{
 		"tenant": tenant,
 	})
 }
@@ -44,18 +43,18 @@ func (h *Handler) GetTenants(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	tenants, err := h.query.GetTenants(ctx)
 	if err != nil {
-		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
+		response.Error(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if tenants == nil {
-		response.Json(&w, http.StatusOK, kind.Response{
+		response.Json(w, http.StatusOK, kind.Response{
 			"message": "no tenants were found",
 		})
 		return
 	}
 
-	response.Json(&w, http.StatusOK, kind.Response{
+	response.Json(w, http.StatusOK, kind.Response{
 		"tenants": tenants,
 	})
 }
@@ -64,18 +63,18 @@ func (h *Handler) InsertTenant(w http.ResponseWriter, r *http.Request) {
 	var body pg.InsertTenantParams
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_INVALID_BODY))
+		response.Error(w, http.StatusBadRequest, err)
 		return
 	}
 
 	ctx := context.Background()
 	id, err := h.query.InsertTenant(ctx, body)
 	if err != nil {
-		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
+		response.Error(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	response.Json(&w, http.StatusCreated, kind.Response{
+	response.Json(w, http.StatusCreated, kind.Response{
 		"tenant": id,
 	})
 }
@@ -84,14 +83,22 @@ func (h *Handler) UpdateTenant(w http.ResponseWriter, r *http.Request) {
 	var body pg.UpdateTenantParams
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_INVALID_BODY))
+		response.Error(w, http.StatusBadRequest, err)
 		return
 	}
 
 	ctx := context.Background()
-	err := h.query.UpdateTenant(ctx, body)
+	_, err := h.query.GetTenant(ctx, body.ID)
 	if err != nil {
-		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
+		if errors.Is(err, pgx.ErrNoRows) {
+			response.Error(w, http.StatusNotFound, err)
+			return
+		}
+	}
+
+	err = h.query.UpdateTenant(ctx, body)
+	if err != nil {
+		response.Error(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -103,14 +110,22 @@ func (h *Handler) DeleteTenant(w http.ResponseWriter, r *http.Request) {
 	tenant_id, err := uuid.Parse(raw_id)
 
 	if err != nil {
-		response.Json(&w, http.StatusBadRequest, rerr.ErrorResponse(rerr.ERR_UUID_INVALID))
+		response.Error(w, http.StatusBadRequest, err)
 		return
 	}
 
 	ctx := context.Background()
-	err = h.query.DeleteTenant(ctx, tenant_id)
+	found, err := h.query.GetTenant(ctx, tenant_id)
 	if err != nil {
-		response.Json(&w, http.StatusInternalServerError, rerr.ErrorResponse(rerr.ERR_INTERNAL_SERVER))
+		if errors.Is(err, pgx.ErrNoRows) {
+			response.Error(w, http.StatusNotFound, err)
+			return
+		}
+	}
+
+	err = h.query.DeleteTenant(ctx, found.ID)
+	if err != nil {
+		response.Error(w, http.StatusInternalServerError, err)
 		return
 	}
 

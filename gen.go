@@ -1,4 +1,4 @@
 package gen
 
-//go:generate go run cmd/tools/terndotenv/main.go
+//go:generate go run cmd/tools/ternup/main.go
 //go:generate sqlc generate -f ./internal/store/pg/sqlc.yml
