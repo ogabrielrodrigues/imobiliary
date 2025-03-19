@@ -1,0 +1,26 @@
+{{define "layout"}}
+  <!DOCTYPE html>
+  <html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Date}}</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --font-sans: "Courier New"
+      }
+    </style>
+  </head>
+  <body>
+    {{range .Rentals}}
+      <div class="min-h-screen max-h-[600vh]">
+        {{ template "voucher" .}}
+        {{ template "bordereau" .}}
+        {{ template "bordereau" .}}
+        {{ template "voucher" .}}
+      </div>
+    {{end}}
+  </body>
+  </html>
+{{end}}

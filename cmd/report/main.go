@@ -17,7 +17,7 @@ import (
 func main() {
 	env := environment.LoadReportEnvironment()
 
-	houses := reader.ReadCSV(env.TABLE_PATH)
+	houses := reader.ReadHouseCSV(env.TABLE_PATH)
 
 	launch := launcher.New()
 	if !env.HEADLESS {

@@ -8,7 +8,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/util"
 )
 
-func ReadCSV(path string) []kind.House {
+func ReadHouseCSV(path string) []kind.House {
 	file, err := os.Open(path)
 	if err != nil {
 		util.Logln(util.ColorRed, "✗ ERROR opening csv file.")

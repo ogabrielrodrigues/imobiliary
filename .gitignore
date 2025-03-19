@@ -1,5 +1,7 @@
 /reports
 /dist
+/data
 *.csv
 *.env
-arch.md
+TODO.md
+*.json

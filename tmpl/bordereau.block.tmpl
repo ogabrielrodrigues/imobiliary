@@ -1,0 +1,97 @@
+{{define "bordereau"}}
+<div class="min-h-screen max-h-[200vh] text-sm px-10">
+  <h1 class="font-bold text-center">RECIBO BORDERÔ</h1>
+  <p class="font-italic text-center my-4">{{.Property.Address}}</p>
+  <p class="text-justify">Recebi em ___/___/___ referente ao pagamento do aluguel do mês
+    {{.Reference.Month}}/{{.Reference.Year}} com vencimento em {{.Expiration.Month}}/{{.Expiration.Year}} de
+    <strong>{{.Tenant.Name}}</strong>
+    {{if ne .TenantOther nil}}
+    e <strong>{{.TenantOther.Name}}</strong>.
+    {{end}}
+  </p>
+
+  <div class="my-4 leading-none">
+    <strong>LOCADOR{{if eq .Owner.Nacionality "brasileira"}}A{{end}}: {{.Owner.Name}}</strong>
+    <p>RG: {{.Owner.RG}}</p>
+    <p>CPF: {{.Owner.CPF}}</p>
+    <p>ESTADO CIVIL: {{.Owner.MaritalStatus}}</p>
+    <p>PROFISSÃO: {{.Owner.Occupation}}</p>
+    <p>ENDEREÇO: {{.Owner.Address}}</p>
+  </div>
+
+  <div class="my-4 leading-none">
+    <strong>LOCATÁRI{{if eq .Tenant.Nacionality "brasileira"}}A{{else}}O{{end}}: {{.Tenant.Name}}</strong>
+    <p>RG: {{.Tenant.RG}}</p>
+    <p>CPF: {{.Tenant.CPF}}</p>
+    <p>ESTADO CIVIL: {{.Tenant.MaritalStatus}}</p>
+    <p>PROFISSÃO: {{.Tenant.Occupation}}</p>
+    <p>ENDEREÇO: {{.Tenant.Address}}</p>
+  </div>
+
+  {{if ne .TenantOther nil}}
+    <div class="my-4 leading-none">
+      {{if eq .TenantOther.Kind "residente"}}
+      <strong>RESIDENTE: {{.TenantOther.Name}}</strong>
+      {{else}}
+      <strong>LOCATÁRI{{if eq .TenantOther.Nacionality "brasileira"}}A{{else}}O{{end}}: {{.TenantOther.Name}}</strong>
+      {{end}}
+      <p>RG: {{.TenantOther.RG}}</p>
+      <p>CPF: {{.TenantOther.CPF}}</p>
+      <p>ESTADO CIVIL: {{.TenantOther.MaritalStatus}}</p>
+      <p>PROFISSÃO: {{.TenantOther.Occupation}}</p>
+      <p>ENDEREÇO: {{.TenantOther.Address}}</p>
+    </div>
+  {{end}}
+
+  {{if ne .Guarantor nil}}
+    <div class="my-4 leading-none">
+      <strong>FIADOR{{if eq .Guarantor.Nacionality "brasileira"}}A{{end}}: {{.Guarantor.Name}}</strong>
+      <p>RG: {{.Guarantor.RG}}</p>
+      <p>CPF: {{.Guarantor.CPF}}</p>
+      <p>ESTADO CIVIL: {{.Guarantor.MaritalStatus}}</p>
+      <p>PROFISSÃO: {{.Guarantor.Occupation}}</p>
+      <p>ENDEREÇO: {{.Guarantor.Address}}</p>
+    </div>
+  {{end}}
+
+  {{if ne .GuarantorOther nil}}
+    <div class="my-4 leading-none">
+      <strong>FIADOR{{if eq .GuarantorOther.Nacionality "brasileira"}}A{{end}}: {{.GuarantorOther.Name}}</strong>
+      <p>RG: {{.GuarantorOther.RG}}</p>
+      <p>CPF: {{.GuarantorOther.CPF}}</p>
+      <p>ESTADO CIVIL: {{.GuarantorOther.MaritalStatus}}</p>
+      <p>PROFISSÃO: {{.GuarantorOther.Occupation}}</p>
+      <p>ENDEREÇO: {{.GuarantorOther.Address}}</p>
+    </div>
+  {{end}}
+
+  <div class="my-4">
+    <p class="italic"><strong>GARANTIA: </strong>{{.Property.Guarantee}}</p>
+  </div>
+
+  <div class="my-4 leading-none">
+    <p>VALIDADE DO CONTRATO: {{.Property.ExtendedIn}} a {{.Property.ExpiresIn}}.</p>
+    <p>CONTRATO FIRMADO EM: {{.Property.SignedIn}}.</p>
+    <p>VALOR DO ALUGUEL: <strong>R${{.Property.Value}} ({{.Property.Extense}})</strong>.</p>
+    <p>DIA DO VENCIMENTO: {{.Property.PaymentDay}}° de cada mês.</p>
+  </div>
+
+  <div class="flex justify-between leading-tight">
+    <p>{{.Reference.Month}}/{{.Reference.Year}} PG EM:</p>
+    <p class="pr-10">R${{.Property.Value}}</p>
+  </div>
+
+  <div class="flex justify-between leading-tight">
+    <p>VALOR DEPOSITADO: R${{.Property.Value}} (-) 10% = R${{.Property.WithoutCommission}}</p>
+  </div>
+
+  {{if ne .Property.BordereauObs ""}}
+    <p class="font-bold italic my-4">OBS: {{.Property.BordereauObs}}</p>
+  {{end}}
+
+  <p class="text-center my-10">Colina/SP&emsp;&emsp;&emsp;&emsp;de {{.Expiration.Month}} de {{.Expiration.Year}}</p>
+  <hr class="w-[350px] mx-auto">
+  <p class="font-bold text-center leading-tight">{{.Owner.Name}}</p>
+
+</div>
+{{end}}

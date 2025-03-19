@@ -4,9 +4,11 @@ build: build-unix build-win
 
 build-unix:
 	@go build -o ./dist/report cmd/report/main.go
+	@go build -o ./dist/rentgenerator cmd/rentgenerator/main.go
 
 build-win:
 	@GOOS=windows go build -o ./dist/report.exe cmd/report/main.go
+	@GOOS=windows go build -o ./dist/rentgenerator.exe cmd/rentgenerator/main.go
 
 services-up:
 	@docker compose up -d

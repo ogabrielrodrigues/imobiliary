@@ -1,0 +1,83 @@
+{{ define "voucher" }}
+<div class="min-h-screen max-h-[300vh]">
+  <div class="h-screen pt-10">
+    <h1 class="font-bold text-lg text-center mb-32">RECIBO</h1>
+    <p class="text-lg text-justify px-10">
+      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Eu, <strong
+        class="underline underline-offset-2 decoration-2">{{.Owner.Name}}</strong>, {{.Owner.Nacionality}},
+      {{.Owner.MaritalStatus}}, {{.Owner.Occupation}},
+      {{if eq .Owner.Nacionality "brasileiro"}}
+      portador da cédula RG n° {{.Owner.RG}},
+      {{else}}
+      portadora da cédula RG n° {{.Owner.RG}},
+      {{end}}
+      {{if eq .Owner.Nacionality "brasileiro"}}
+      inscrito no CPF sob o n° {{.Owner.CPF}},
+      {{else}}
+      inscrita no CPF sob o n° {{.Owner.CPF}},
+      {{end}}
+      residente e
+      {{if eq .Owner.Nacionality "brasileiro"}}
+      domiciliado na
+      {{else}}
+      domiciliada na
+      {{end}}
+      {{.Owner.Address}},
+      <strong>RECEBI </strong>
+      de <strong class="underline underline-offset-2 decoration-2">{{.Tenant.Name}}</strong>, {{.Tenant.Nacionality}},
+      {{.Tenant.MaritalStatus}}, {{.Tenant.Occupation}},
+      {{if eq .Tenant.Nacionality "brasileiro"}}
+      portador da cédula RG n° {{.Tenant.RG}},
+      {{else}}
+      portadora da cédula RG n° {{.Tenant.RG}},
+      {{end}}
+      {{if eq .Tenant.Nacionality "brasileiro"}}
+      inscrito no CPF sob o n° {{.Tenant.CPF}},
+      {{else}}
+      inscrita no CPF sob o n° {{.Tenant.CPF}},
+      {{end}}
+      residente e
+      {{if eq .Tenant.Nacionality "brasileiro"}}
+      domiciliado na
+      {{else}}
+      domiciliada na
+      {{end}}
+      {{.Tenant.Address}},
+      {{if ne .TenantOther nil}}
+      <strong>&</strong> <strong class="underline underline-offset-2 decoration-2">{{.TenantOther.Name}}</strong>,
+      {{.TenantOther.Nacionality}}, {{.TenantOther.MaritalStatus}}, {{.TenantOther.Occupation}},
+      {{if eq .TenantOther.Nacionality "brasileiro"}}
+      portador da cédula RG n° {{.TenantOther.RG}},
+      {{else}}
+      portadora da cédula RG n° {{.TenantOther.RG}},
+      {{end}}
+      {{if eq .TenantOther.Nacionality "brasileiro"}}
+      inscrito no CPF sob o n° {{.TenantOther.CPF}},
+      {{else}}
+      inscrita no CPF sob o n° {{.TenantOther.CPF}},
+      {{end}}
+      residente e
+      {{if eq .TenantOther.Nacionality "brasileiro"}}
+      domiciliado na
+      {{else}}
+      domiciliada na
+      {{end}}
+      {{.TenantOther.Address}},
+      {{end}}
+      a quantia de <strong>R${{.Property.Value}} ({{.Property.Extense}})</strong>,
+      referente ao aluguel do mês de {{.Reference.Month}}/{{.Reference.Year}} com vencimento em
+      {{.Expiration.Month}}/{{.Expiration.Year}},
+      do contrato de locação do imóvel {{.Property.Kind}} da {{.Property.Address}}.
+    </p>
+
+    {{if ne .Property.VoucherObs ""}}
+      <p class="font-bold italic my-4 px-10">OBS: {{.Property.VoucherObs}}</p>
+    {{end}}
+
+    <p class="text-lg text-center mt-10 mb-20">Colina/SP, {{.Property.PaymentDay}} de {{.Expiration.Month}} de {{.Expiration.Year}}.</p>
+
+    <hr class="w-[350px] mx-auto">
+
+    <p class="text-lg font-bold text-center leading-tight">{{.Owner.Name}}</p>
+  </div>
+{{end}}

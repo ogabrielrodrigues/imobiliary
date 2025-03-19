@@ -17,3 +17,8 @@ type ServerEnvironment struct {
 	DATABASE_USER string
 	DATABASE_PWD  string
 }
+
+type RentGeneratorEnvironment struct {
+	RENT_PATH string
+	LOCAL_URL string
+}
