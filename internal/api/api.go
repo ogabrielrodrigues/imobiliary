@@ -3,11 +3,11 @@ package api
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/store/pg"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Handler struct {
-	query  *pg.Queries
+	pool   *pgxpool.Pool
 	router *http.ServeMux
 }
 
@@ -15,9 +15,9 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.router.ServeHTTP(w, r)
 }
 
-func NewHandler(queries *pg.Queries) http.Handler {
+func NewHandler(pool *pgxpool.Pool) http.Handler {
 	h := Handler{
-		query: queries,
+		pool: pool,
 	}
 
 	mux := http.NewServeMux()

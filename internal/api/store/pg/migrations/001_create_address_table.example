@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS "address" (
+  "address_id" UUID NOT NULL PRIMARY KEY DEFAULT gen_random_uuid(),
+  "active" BOOLEAN DEFAULT TRUE,
+  "street" VARCHAR(100) NOT NULL,
+  "number" VARCHAR(30) NOT NULL,
+  "neighborhood" VARCHAR(50) NOT NULL,
+  "city" VARCHAR(50) NOT NULL,
+  "state" VARCHAR(50) NOT NULL,
+  "postal_code" CHAR(9) NOT NULL,
+  "fulladdress" VARCHAR(300) UNIQUE
+);
+
+CREATE OR REPLACE FUNCTION generate_fulladdress()
+RETURNS trigger AS $$
+BEGIN
+  NEW.fulladdress := NEW.street || ', n° ' || NEW.number || ', ' || NEW.neighborhood
+                      || ', ' || NEW.city || '/' || NEW.state;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_fulladdress
+BEFORE INSERT OR UPDATE ON address
+FOR EACH ROW
+EXECUTE FUNCTION generate_fulladdress();
+
+---- create above / drop below ----
+
+DROP TRIGGER IF EXISTS update_fulladdress ON address;
+
+DROP FUNCTION IF EXISTS generate_fulladdress();
+
+DROP TABLE IF EXISTS address;

@@ -3,7 +3,7 @@ services:
     image: postgres:15
     restart: unless-stopped
     ports:
-      - ${DATABASE_PORT:-5432}:5432
+      - ${DATABASE_PORT}:5432
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PWD}

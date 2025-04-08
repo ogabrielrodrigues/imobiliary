@@ -2,6 +2,6 @@
 /dist
 /data
 *.csv
-*.env
+.env
+.env.test
 TODO.md
-*.json

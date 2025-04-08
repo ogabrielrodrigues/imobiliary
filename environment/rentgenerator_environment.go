@@ -4,7 +4,7 @@ import (
 	"flag"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
-	"github.com/ogabrielrodrigues/imobiliary/util"
+	"github.com/ogabrielrodrigues/imobiliary/internal/shared"
 )
 
 func LoadRentGeneratorEnvironment() *kind.RentGeneratorEnvironment {
@@ -18,7 +18,7 @@ func LoadRentGeneratorEnvironment() *kind.RentGeneratorEnvironment {
 	env.RENT_PATH = *rent_path
 	env.LOCAL_URL = *port
 
-	util.Logln(util.ColorGreen, "✓ Environment Variables sucessfully loaded!")
+	shared.Logln(shared.ColorGreen, "✓ Environment Variables sucessfully loaded!")
 
 	return &env
 }

@@ -17,9 +17,9 @@ func main() {
 
 	mux.HandleFunc("GET /gerar", func(w http.ResponseWriter, r *http.Request) {
 		tmpl, _ := template.ParseFiles(
-			path.Join("tmpl", "base.layout.tmpl"),
-			path.Join("tmpl", "voucher.block.tmpl"),
-			path.Join("tmpl", "bordereau.block.tmpl"),
+			path.Join("internal", "template", "base.layout.tmpl"),
+			path.Join("internal", "template", "voucher.block.tmpl"),
+			path.Join("internal", "template", "bordereau.block.tmpl"),
 		)
 
 		tmpl.ExecuteTemplate(w, "layout", rent_data)

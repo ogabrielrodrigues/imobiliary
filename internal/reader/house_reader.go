@@ -5,20 +5,20 @@ import (
 	"os"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
-	"github.com/ogabrielrodrigues/imobiliary/util"
+	"github.com/ogabrielrodrigues/imobiliary/internal/shared"
 )
 
 func ReadHouseCSV(path string) []kind.House {
 	file, err := os.Open(path)
 	if err != nil {
-		util.Logln(util.ColorRed, "✗ ERROR opening csv file.")
+		shared.Logln(shared.ColorRed, "✗ ERROR opening csv file.")
 		os.Exit(1)
 	}
 	defer file.Close()
 
 	lines, err := csv.NewReader(file).ReadAll()
 	if err != nil {
-		util.Logln(util.ColorRed, "✗ ERROR reading csv file.")
+		shared.Logln(shared.ColorRed, "✗ ERROR reading csv file.")
 		os.Exit(1)
 	}
 
@@ -33,7 +33,7 @@ func ReadHouseCSV(path string) []kind.House {
 		})
 	}
 
-	util.Logln(util.ColorGreen, "✓ CSV file read sucessfully!")
+	shared.Logln(shared.ColorGreen, "✓ CSV file read sucessfully!")
 
 	return houses
 }

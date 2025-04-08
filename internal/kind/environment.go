@@ -9,7 +9,7 @@ type ReportEnvironment struct {
 	REPORT_OUT  string
 }
 
-type ServerEnvironment struct {
+type APIEnvironment struct {
 	SERVER_ADDR   string
 	DATABASE_HOST string
 	DATABASE_PORT string

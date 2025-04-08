@@ -4,7 +4,7 @@ import (
 	"flag"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/kind"
-	"github.com/ogabrielrodrigues/imobiliary/util"
+	"github.com/ogabrielrodrigues/imobiliary/internal/shared"
 )
 
 func LoadReportEnvironment() *kind.ReportEnvironment {
@@ -26,7 +26,7 @@ func LoadReportEnvironment() *kind.ReportEnvironment {
 	env.BROWSER_BIN = *bin
 	env.REPORT_OUT = *out
 
-	util.Logln(util.ColorGreen, "✓ Environment Variables sucessfully loaded!")
+	shared.Logln(shared.ColorGreen, "✓ Environment Variables sucessfully loaded!")
 
 	return &env
 }
