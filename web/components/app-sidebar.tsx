@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { NavMain } from "@/components/nav-main"
+import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -12,68 +14,95 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-import { ChartPie, Eye, HandCoins, House, HousePlus, MapPinHouse, Scroll } from "lucide-react"
+import { User } from "@/types/user"
+import {
+  Banknote,
+  BarChart,
+  Building,
+  ClipboardCheck,
+  FileText,
+  House,
+  HousePlus,
+  UserRoundCheck,
+  UsersRound
+} from "lucide-react"
+import Link from "next/link"
 
-import { NavProperties } from "@/components/nav-properties"
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
-
-// Mock data
 const data = {
-  user: {
-    name: "Gabriel Rodrigues",
-    email: "gabriel.rodrigues@creci.org.br",
-  },
   navMain: [
     {
-      name: "Visão Geral",
-      url: "/dashboard",
-      icon: Eye,
-    },
-    {
-      name: "Relatórios (SAAEC)",
-      url: "/dashboard/relatorios",
-      icon: Scroll,
-    },
-  ],
-  properties: [
-    {
-      name: "Compra/Venda",
-      url: "/dashboard/imoveis/compra-venda",
-      icon: HandCoins,
-    },
-    {
-      name: "Alugueis",
-      url: "/dashboard/imoveis/alugueis",
-      icon: MapPinHouse,
+      title: "Locação de Imóveis",
+      url: "/dashboard/locacao",
+      icon: House,
+      isActive: true,
+      items: [
+        {
+          title: "Alugueres",
+          url: "/dashboard/locacao",
+          icon: Banknote,
+        },
+        {
+          title: "Contratos",
+          url: "/dashboard/locacao/contratos",
+          icon: FileText,
+        },
+        {
+          title: "Inquilinos",
+          url: "/dashboard/locacao/inquilinos",
+          icon: UsersRound,
+        },
+        {
+          title: "Imóveis",
+          url: "/dashboard/locacao/imoveis",
+          icon: Building,
+        },
+        {
+          title: "Proprietários",
+          url: "/dashboard/locacao/proprietarios",
+          icon: UserRoundCheck,
+        },
+        {
+          title: "Vistorias",
+          url: "/dashboard/locacao/vistorias",
+          icon: ClipboardCheck,
+        },
+        {
+          title: "Relatórios",
+          url: "/dashboard/locacao/relatorios",
+          icon: BarChart,
+        },
+      ],
     },
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  user: User
+}
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+      {...props}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <a href="/dashboard">
+            <SidebarMenuButton size="lg" className="text-lg font-bold">
+              <Link href="/" className="flex items-center gap-2">
                 <HousePlus className="!size-5" />
-                <span className="text-base font-semibold">Imobiliary</span>
-              </a>
+                Imobiliary
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProperties items={data.properties} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

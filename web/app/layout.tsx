@@ -1,7 +1,9 @@
+import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist_Mono as GeistMono } from "next/font/google";
+import { PropsWithChildren } from "react";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 
 const font_mono = GeistMono({
   variable: "--font-mono",
@@ -17,14 +19,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: PropsWithChildren) {
   return (
     <html lang="en" className="dark">
       <body
         className={cn(font_mono.variable, 'font-display antialiased')}
       >
+        <Toaster />
         {children}
       </body>
     </html>
