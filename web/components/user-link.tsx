@@ -3,15 +3,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User } from "@/types/user"
 
-
-// export function readUser(): User {
-//   const cookies = parseCookies(null, "imobiliary-user")
-
-//   const user = cookies["imobiliary-user"]
-//   console.log(JSON.parse(user))
-//   return JSON.parse(user)
-// }
-
 export function UserLink({ user }: { user: User }) {
   return (
     <a href="/dashboard/conta" className="flex items-center gap-2">

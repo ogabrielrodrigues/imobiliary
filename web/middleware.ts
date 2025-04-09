@@ -2,7 +2,6 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 const protectedRoutes = ['/dashboard']
-const rootRoute = '/'
 const publicRoutes = ['/login', '/cadastro']
 
 export default async function middleware(req: NextRequest) {
@@ -11,14 +10,13 @@ export default async function middleware(req: NextRequest) {
   const isPublicRoute = publicRoutes.includes(path)
 
   const cookieStore = await cookies()
-  const imobiliaryUser = cookieStore.get("imobiliary-user")
-  const user = imobiliaryUser ? JSON.parse(imobiliaryUser.value) : null
+  const hasUser = cookieStore.has("imobiliary-user")
 
-  if (isProtectedRoute && !user) {
+  if (isProtectedRoute && !hasUser) {
     return NextResponse.redirect(new URL('/login', req.nextUrl))
   }
 
-  if (isPublicRoute && user) {
+  if (isPublicRoute && hasUser) {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
   }
 

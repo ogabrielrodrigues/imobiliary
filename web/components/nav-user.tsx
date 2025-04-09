@@ -34,7 +34,11 @@ import { User } from "@/types/user"
 import { logout } from "@/actions/auth"
 import { ProPlanDialog } from "./pro-plan-dialog"
 
-export function NavUser({ user }: { user: User }) {
+type NavUserProps = {
+  user: User | undefined
+}
+
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
 
   return (
@@ -48,9 +52,9 @@ export function NavUser({ user }: { user: User }) {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 {
-                  user.avatar ?
+                  user?.avatar ?
                     <AvatarImage src={user.avatar} /> :
-                    <AvatarFallback className="bg-sidebar-primary">{user.fullname.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="bg-sidebar-primary">{user?.fullname.charAt(0)}</AvatarFallback>
                 }
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -70,9 +74,9 @@ export function NavUser({ user }: { user: User }) {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   {
-                    user.avatar ?
+                    user?.avatar ?
                       <AvatarImage src={user.avatar} /> :
-                      <AvatarFallback className="bg-sidebar-primary">{user.fullname.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="bg-sidebar-primary">{user?.fullname.charAt(0)}</AvatarFallback>
                   }
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

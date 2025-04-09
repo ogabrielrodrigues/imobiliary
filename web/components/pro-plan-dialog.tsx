@@ -65,9 +65,9 @@ export function ProPlanDialog({ user, children }: ProPlanDialogProps) {
             </ul>
           </CardContent>
         </Card>
-        <DialogFooter className="!justify-between">
+        <DialogFooter className="!flex-row !justify-between">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold">R$15,99</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">R$15,99</h1>
             <p className="text-xl text-muted-foreground">/mês</p>
           </div>
 

@@ -7,12 +7,13 @@ import { redirect } from "next/navigation"
 export async function auth(): Promise<User | undefined> {
   const cookiesStore = await cookies()
 
-  const user = cookiesStore.get("imobiliary-user")
-  if (!user) {
+  const hasUser = cookiesStore.has("imobiliary-user")
+
+  if (!hasUser) {
     return undefined
   }
 
-  return JSON.parse(user.value)
+  return JSON.parse(cookiesStore.get("imobiliary-user")!.value)
 }
 
 export async function logout() {

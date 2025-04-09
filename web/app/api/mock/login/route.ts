@@ -13,16 +13,10 @@ export async function POST(request: NextRequest) {
   }
 
   const cookieStore = await cookies()
-  const imobiliaryUser = cookieStore.set("imobiliary-user", JSON.stringify(user), {
+  cookieStore.set("imobiliary-user", JSON.stringify(user), {
     maxAge: 60 * 60 * 24 * 30,
     path: "/",
   })
 
-  return new NextResponse(null, { 
-      status: 200,
-      headers: {
-        "Set-Cookie": `imobiliary-user=${imobiliaryUser}`
-      } 
-    }
-  )
+  return new NextResponse(null, { status: 200 })
 }
