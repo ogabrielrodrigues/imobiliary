@@ -1,15 +1,12 @@
 'use client'
 
-import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { toast } from "sonner"
 
-import { AlertCircle, Mail } from "lucide-react"
 
 import { PasswordInput } from "@/components/password-input"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   Form,
   FormControl,
@@ -18,10 +15,13 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
+import { login } from "@/actions/auth"
 import { cn } from "@/lib/utils"
-import { User } from "@/types/user"
-import { redirect, useRouter } from "next/navigation"
+import { AlertCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 const auth_schema = z.object({
   email: z.string().email("o e-mail digitado deve ser válido"),
@@ -40,18 +40,13 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"form">) 
   })
 
   async function onSubmit(values: z.infer<typeof auth_schema>) {
-    const response = await fetch("/api/mock/login", {
-      method: "POST",
-      body: JSON.stringify(values)
-    })
+    const status = await login(values.email, values.password)
 
-    if (response.status === 400) {
-      return toast("E-mail ou senha inválidos.", {
+    if (status === 401) {
+      toast("E-mail ou senha inválidos.", {
         icon: <AlertCircle className="size-4" />,
       })
     }
-
-    return redirect("/dashboard")
   }
 
   return (
