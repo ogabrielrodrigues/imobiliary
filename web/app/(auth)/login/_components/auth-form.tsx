@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-
 import { PasswordInput } from "@/components/password-input"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,7 +19,6 @@ import { Input } from "@/components/ui/input"
 import { login } from "@/actions/auth"
 import { cn } from "@/lib/utils"
 import { AlertCircle } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 const auth_schema = z.object({
@@ -29,8 +27,6 @@ const auth_schema = z.object({
 })
 
 export function AuthForm({ className, ...props }: React.ComponentProps<"form">) {
-  const navigate = useRouter()
-
   const form = useForm<z.infer<typeof auth_schema>>({
     resolver: zodResolver(auth_schema),
     defaultValues: {
