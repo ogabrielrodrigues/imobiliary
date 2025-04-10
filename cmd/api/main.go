@@ -1,49 +1,46 @@
 package main
 
 import (
-	"fmt"
+	"errors"
+	"net/http"
+	"os"
+	"os/signal"
 
-	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/api/entity"
+	"github.com/ogabrielrodrigues/imobiliary/environment"
+	"github.com/ogabrielrodrigues/imobiliary/internal/api"
+	"github.com/ogabrielrodrigues/imobiliary/internal/shared/logger"
 )
 
 func main() {
-	user, _ := entity.NewUser(
-		uuid.New(),
-		"98767-F",
-		"Gabriel Rodrigues",
-		"gabriel.rodrigues@crecisp.gov.br",
-	)
-
-	user.GenerateAccessCode()
-
-	fmt.Println()
-	// env := environment.LoadAPIEnvironment()
+	env := environment.LoadAPIEnvironment()
 
 	// ctx := context.Background()
 
 	// pool, err := pgxpool.New(ctx, shared.ConnStr(env))
 	// if err != nil {
-	// 	panic(err)
+	// 	logger.Error(logger.ErrDatabaseConnection, "err", err)
+	// 	os.Exit(1)
 	// }
 
 	// defer pool.Close()
 
 	// if err := pool.Ping(ctx); err != nil {
-	// 	panic(err)
+	// 	logger.Error(logger.ErrDatabaseConnection, "err", err)
+	// 	os.Exit(1)
 	// }
 
-	// handler := api.NewHandler(pool)
+	handler := api.NewHandler(nil)
 
-	// go func() {
-	// 	if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
-	// 		if !errors.Is(err, http.ErrServerClosed) {
-	// 			panic(err)
-	// 		}
-	// 	}
-	// }()
+	go func() {
+		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
+			if !errors.Is(err, http.ErrServerClosed) {
+				logger.Error(logger.ErrInternalServer, "err", err)
+				os.Exit(1)
+			}
+		}
+	}()
 
-	// quit := make(chan os.Signal, 1)
-	// signal.Notify(quit, os.Interrupt)
-	// <-quit
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
 }

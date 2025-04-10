@@ -42,8 +42,19 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"form">) 
   async function onSubmit(values: z.infer<typeof auth_schema>) {
     const status = await login(values.email, values.password)
 
-    if (status === 401) {
-      toast("E-mail ou senha inválidos.", {
+    let message = ""
+
+    if (status != 200) {
+      switch (status) {
+        case 401:
+          message = "E-mail ou senha inválidos."
+          break
+        case 404:
+          message = "Usuário não encontrado."
+          break
+      }
+
+      toast(message, {
         icon: <AlertCircle className="size-4" />,
       })
     }

@@ -2,7 +2,7 @@
 
 import { env } from "@/lib/env"
 import { User } from "@/types/user"
-import jwt from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
@@ -15,9 +15,8 @@ export async function auth(): Promise<User | undefined> {
     return undefined
   }
 
-  const token = jwt.verify(cookiesStore.get("imobiliary-user")!.value, env.JWT_SECRET!)
+  const token = jwt.verify(cookiesStore.get("imobiliary-user")!.value, env.JWT_SECRET!) as JwtPayload
 
-  // @ts-ignore
   return token.user
 }
 
@@ -27,8 +26,8 @@ export async function login(email: string, password: string): Promise<number> {
     body: JSON.stringify({ email, password }),
   })
 
-  if (response.status === 401) {
-    return 401
+  if (response.status !== 200) {
+    return response.status
   }
 
   const cookieStore = await cookies()

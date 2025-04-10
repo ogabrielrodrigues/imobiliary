@@ -12,7 +12,7 @@ export default async function AccountPage() {
   const user = await auth()
 
   return (
-    <div className="relative overflow-y-hidden">
+    <div className="relative">
       <div className="hidden sm:block absolute z-10 bg-zinc-50 w-20 h-20 blur-[96px] translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2" />
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex justify-between items-center">

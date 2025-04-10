@@ -16,6 +16,7 @@ type APIEnvironment struct {
 	DATABASE_NAME string
 	DATABASE_USER string
 	DATABASE_PWD  string
+	SECRET_KEY    string
 }
 
 type RentGeneratorEnvironment struct {
