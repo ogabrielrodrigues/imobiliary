@@ -1,5 +1,6 @@
+import { FreePlan, ProPlan } from "@/components/plan-describe"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Check, Sparkles, X } from "lucide-react"
+import { Sparkles } from "lucide-react"
 
 export function PlanSection() {
   return (
@@ -17,40 +18,7 @@ export function PlanSection() {
             </CardDescription>
           </CardHeader>
           <CardContent className="md:h-60">
-            <ul className="space-y-1">
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Gerenciamento de até 30 imóveis
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Métricas e relatórios simples
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Até 2 usuários
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Suporte via e-mail
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <X className="size-4 text-red-500" />
-                Notificações por e-mail e push
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <X className="size-4 text-red-500" />
-                Levantamento de taxas de consumo
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <X className="size-4 text-red-500" />
-                Gerencimento de vistorias
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <X className="size-4 text-red-500" />
-                Administração de carteira
-              </li>
-            </ul>
+            <FreePlan />
           </CardContent>
           <CardFooter className="flex flex-row justify-end">
             <h1 className="text-2xl font-bold">Grátis</h1>
@@ -65,40 +33,7 @@ export function PlanSection() {
             </CardDescription>
           </CardHeader>
           <CardContent className="md:h-60">
-            <ul className="space-y-1">
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Gerenciamento ilimitado de imóveis
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Notificações por e-mail e push
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Levantamento de taxas de consumo
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Gerencimento de vistorias
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Administração de carteira
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Métricas e relatórios detalhados
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Até 5 usuários
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Suporte 24/7 via e-mail e chat
-              </li>
-            </ul>
+            <ProPlan />
           </CardContent>
           <CardFooter className="flex flex-row justify-end">
             <h1 className="text-2xl font-bold">R$15,99</h1>

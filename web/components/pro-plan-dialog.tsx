@@ -2,16 +2,12 @@
 import { Button } from "./ui/button";
 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { User } from "@/types/user";
-import { Check, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { PropsWithChildren } from "react";
+import { ProPlan } from "./plan-describe";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
-type ProPlanDialogProps = PropsWithChildren & {
-  user: User | undefined
-}
-
-export function ProPlanDialog({ user, children }: ProPlanDialogProps) {
+export function ProPlanDialog({ children }: PropsWithChildren) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,40 +25,7 @@ export function ProPlanDialog({ user, children }: ProPlanDialogProps) {
             <CardTitle>Plano PRO</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <ul className="space-y-1">
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Gerenciamento ilimitado de imóveis
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Notificações por e-mail e push
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Levantamento de taxas de consumo
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Gerencimento de vistorias
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Administração de carteira
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Métricas e relatórios detalhados
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Até 5 usuários
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <Check className="size-4 text-emerald-500" />
-                Suporte 24/7 via e-mail e chat
-              </li>
-            </ul>
+            <ProPlan />
           </CardContent>
         </Card>
         <DialogFooter className="!flex-row !justify-between">

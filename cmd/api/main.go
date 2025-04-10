@@ -32,6 +32,7 @@ func main() {
 	handler := api.NewHandler(nil)
 
 	go func() {
+		logger.Info("Starting server on port " + env.SERVER_ADDR)
 		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
 				logger.Error(logger.ErrInternalServer, "err", err)

@@ -87,7 +87,7 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <ProPlanDialog user={user}>
+              <ProPlanDialog>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <Sparkles />
                   Atualizar para o PRO

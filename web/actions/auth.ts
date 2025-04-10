@@ -30,8 +30,10 @@ export async function login(email: string, password: string): Promise<number> {
     return response.status
   }
 
+  const token = response.headers.get("Authorization")!.split(" ")[1]
+
   const cookieStore = await cookies()
-  cookieStore.set("imobiliary-user", response.headers.get("Authorization")!, {
+  cookieStore.set("imobiliary-user", token, {
     maxAge: 60 * 60 * 24 * 30,
     path: "/",
   })

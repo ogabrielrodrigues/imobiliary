@@ -71,7 +71,7 @@ export default async function SubscriptionPage() {
             </div>
           </CardContent>
           <CardFooter className="justify-end">
-            <ProPlanDialog user={user}>
+            <ProPlanDialog>
               <Button>
                 <Sparkles />
                 Atualizar para o PRO
