@@ -1,8 +1,7 @@
-package entity
+package user
 
 import (
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/api/dto"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -35,7 +34,7 @@ func (u *User) ComparePwd(password string) bool {
 	return true
 }
 
-func NewUser(id uuid.UUID, creci_id, fullname, cellphone, email, password, avatar string) (*User, error) {
+func New(id uuid.UUID, creci_id, fullname, cellphone, email, password, avatar string) (*User, error) {
 	u := &User{
 		ID:        id,
 		CreciID:   creci_id,
@@ -57,8 +56,8 @@ func NewUser(id uuid.UUID, creci_id, fullname, cellphone, email, password, avata
 	return u, nil
 }
 
-func (u *User) ToDTO() *dto.UserDTO {
-	return &dto.UserDTO{
+func (u *User) ToDTO() *DTO {
+	return &DTO{
 		ID:        u.ID.String(),
 		CreciID:   u.CreciID,
 		Fullname:  u.Fullname,
@@ -68,7 +67,7 @@ func (u *User) ToDTO() *dto.UserDTO {
 	}
 }
 
-func UserFromDTO(dto *dto.UserDTO) *User {
+func UserFromDTO(dto *DTO) *User {
 	return &User{
 		ID:        uuid.MustParse(dto.ID),
 		CreciID:   dto.CreciID,
