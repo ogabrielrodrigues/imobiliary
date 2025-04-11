@@ -1,6 +1,8 @@
 package user
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,6 +23,9 @@ func (u *User) hashPwd() error {
 		return err
 	}
 
+	fmt.Println("password", u.password)
+	fmt.Println("hash", string(hash))
+
 	u.password = string(hash)
 	return nil
 }
@@ -34,9 +39,9 @@ func (u *User) ComparePwd(password string) bool {
 	return true
 }
 
-func New(id uuid.UUID, creci_id, fullname, cellphone, email, password, avatar string) (*User, error) {
+func New(creci_id, fullname, cellphone, email, password, avatar string) (*User, error) {
 	u := &User{
-		ID:        id,
+		ID:        uuid.New(),
 		CreciID:   creci_id,
 		Fullname:  fullname,
 		Cellphone: cellphone,
@@ -54,6 +59,16 @@ func New(id uuid.UUID, creci_id, fullname, cellphone, email, password, avatar st
 	}
 
 	return u, nil
+}
+
+func (u *User) SetPassword(password string) {
+	u.password = password
+}
+
+func (u *User) ChangePassword(password string) {
+	u.password = password
+
+	u.hashPwd()
 }
 
 func (u *User) ToDTO() *DTO {

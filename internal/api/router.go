@@ -3,12 +3,9 @@ package api
 import (
 	"net/http"
 
+	repository "github.com/ogabrielrodrigues/imobiliary/internal/api/repository/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/api/user"
 )
-
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
 
 func Register(h *Handler, mux *http.ServeMux) {
 	// env := environment.LoadAPIEnvironment()
@@ -61,9 +58,9 @@ func Register(h *Handler, mux *http.ServeMux) {
 	// 	http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 	// })
 
-	userHandler := user.NewHandler(user.NewService(user.NewRepository()))
-	mux.HandleFunc("GET /users/{param}", userHandler.FindBy)
+	userHandler := user.NewHandler(user.NewService(repository.NewMemUserRepository()))
+	mux.HandleFunc("GET /users", userHandler.FindBy)
 	mux.HandleFunc("POST /users", userHandler.Create)
 	mux.HandleFunc("PUT /users/{param}", userHandler.Update)
-	mux.HandleFunc("DELETE /users/{param}", userHandler.Delete)
+	mux.HandleFunc("DELETE /users/{id}", userHandler.Delete)
 }

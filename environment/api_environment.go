@@ -23,6 +23,7 @@ func LoadAPIEnvironment() *kind.APIEnvironment {
 	env.DATABASE_USER = os.Getenv("DATABASE_USER")
 	env.DATABASE_PWD = os.Getenv("DATABASE_PWD")
 	env.SECRET_KEY = os.Getenv("SECRET_KEY")
+	env.CORS_ORIGIN = os.Getenv("CORS_ORIGIN")
 
 	return &env
 }

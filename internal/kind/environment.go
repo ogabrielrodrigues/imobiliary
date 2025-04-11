@@ -17,6 +17,7 @@ type APIEnvironment struct {
 	DATABASE_USER string
 	DATABASE_PWD  string
 	SECRET_KEY    string
+	CORS_ORIGIN   string
 }
 
 type RentGeneratorEnvironment struct {

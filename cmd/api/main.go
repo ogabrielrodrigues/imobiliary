@@ -8,6 +8,7 @@ import (
 
 	"github.com/ogabrielrodrigues/imobiliary/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/api"
+	"github.com/ogabrielrodrigues/imobiliary/internal/api/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/shared/logger"
 )
 
@@ -33,7 +34,7 @@ func main() {
 
 	go func() {
 		logger.Info("Starting server on port " + env.SERVER_ADDR)
-		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
+		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(env, handler)); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
 				logger.Error(logger.ErrInternalServer, "err", err)
 				os.Exit(1)

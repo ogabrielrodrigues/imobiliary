@@ -13,9 +13,9 @@ type Repository struct {
 type IRepository interface {
 	FindByID(ctx context.Context, id uuid.UUID) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
-	Create(ctx context.Context, user *User) error
+	Create(ctx context.Context, user *User) (uuid.UUID, error)
 	Update(ctx context.Context, user *User) error
-	Delete(ctx context.Context, user *User) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 func NewRepository() *Repository {
