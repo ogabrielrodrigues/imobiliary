@@ -21,7 +21,7 @@ export async function auth(): Promise<User | undefined> {
 }
 
 export async function login(email: string, password: string): Promise<number> {
-  const response = await fetch(`${env.SERVER_ADDR}/auth`, {
+  const response = await fetch(`${env.SERVER_ADDR}/users/auth`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
   })

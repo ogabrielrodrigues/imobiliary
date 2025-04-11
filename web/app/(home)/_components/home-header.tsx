@@ -2,7 +2,7 @@ import { Tooltip } from "@/components/ui/tooltip";
 
 import { TooltipContent } from "@/components/ui/tooltip";
 
-import { AvatarImage } from "@/components/ui/avatar";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { auth, logout } from "@/actions/auth";
 import { Avatar } from "@/components/ui/avatar";
@@ -23,6 +23,7 @@ export async function HomeHeader() {
               <Link href="/dashboard/conta">
                 <Avatar>
                   <AvatarImage src={user.avatar} />
+                  <AvatarFallback className="bg-sidebar-primary">{user.fullname.charAt(0)}</AvatarFallback>
                 </Avatar>
               </Link>
             </TooltipTrigger>
