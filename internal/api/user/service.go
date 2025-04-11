@@ -2,8 +2,11 @@ package user
 
 import (
 	"context"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/environment"
 )
 
 type Service struct {
@@ -11,23 +14,34 @@ type Service struct {
 }
 
 type IService interface {
-	FindByID(ctx context.Context, id uuid.UUID) (*User, error)
-	FindByEmail(ctx context.Context, email string) (*User, error)
+	FindByID(ctx context.Context, id uuid.UUID) (*DTO, error)
+	FindByEmail(ctx context.Context, email string) (*DTO, error)
 	Create(ctx context.Context, dto *CreateDTO) (uuid.UUID, error)
 	Update(ctx context.Context, dto *UpdateDTO) error
 	Delete(ctx context.Context, id uuid.UUID) error
+	Authenticate(ctx context.Context, email, password string) (string, error)
 }
 
 func NewService(repo IRepository) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) FindByID(ctx context.Context, id uuid.UUID) (*User, error) {
-	return s.repo.FindByID(ctx, id)
+func (s *Service) FindByID(ctx context.Context, id uuid.UUID) (*DTO, error) {
+	user, err := s.repo.FindByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return user.ToDTO(), nil
 }
 
-func (s *Service) FindByEmail(ctx context.Context, email string) (*User, error) {
-	return s.repo.FindByEmail(ctx, email)
+func (s *Service) FindByEmail(ctx context.Context, email string) (*DTO, error) {
+	user, err := s.repo.FindByEmail(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+
+	return user.ToDTO(), nil
 }
 
 func (s *Service) Create(ctx context.Context, dto *CreateDTO) (uuid.UUID, error) {
@@ -47,4 +61,25 @@ func (s *Service) Update(ctx context.Context, dto *UpdateDTO) error {
 
 func (s *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	return s.repo.Delete(ctx, id)
+}
+
+func (s *Service) Authenticate(ctx context.Context, email, password string) (string, error) {
+	user, err := s.repo.Authenticate(ctx, email, password)
+	if err != nil {
+		return "", err
+	}
+
+	secret_key := environment.LoadAPIEnvironment().SECRET_KEY
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":   user.ID,
+		"user": user.ToDTO(),
+		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
+	})
+
+	token, err := claims.SignedString([]byte(secret_key))
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }

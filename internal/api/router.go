@@ -63,4 +63,5 @@ func Register(h *Handler, mux *http.ServeMux) {
 	mux.HandleFunc("POST /users", userHandler.Create)
 	mux.HandleFunc("PUT /users/{param}", userHandler.Update)
 	mux.HandleFunc("DELETE /users/{id}", userHandler.Delete)
+	mux.HandleFunc("POST /users/auth", userHandler.Authenticate)
 }

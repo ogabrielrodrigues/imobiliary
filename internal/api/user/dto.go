@@ -8,7 +8,7 @@ type DTO struct {
 	Fullname  string `json:"fullname"`
 	Cellphone string `json:"cellphone"`
 	Email     string `json:"email"`
-	Avatar    string `json:"avatar"`
+	Avatar    string `json:"avatar,omitempty"`
 }
 
 func (d *DTO) ToUser() *User {

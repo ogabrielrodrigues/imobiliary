@@ -10,7 +10,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/api/response"
-	"github.com/ogabrielrodrigues/imobiliary/internal/shared/logger"
 )
 
 type Handler struct {
@@ -27,8 +26,6 @@ func (h *Handler) FindBy(w http.ResponseWriter, r *http.Request) {
 
 	email := params.Get("email")
 	id := params.Get("id")
-
-	logger.Info("Params", "params", params)
 
 	if email != "" && id != "" {
 		response.Error(w, http.StatusBadRequest, errors.New("only one parameter must be provided"))
@@ -94,4 +91,22 @@ func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	h.service.Delete(nil, uuid.MustParse(r.PathValue("id")))
+}
+
+func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
+	var dto AuthDTO
+	ctx := context.Background()
+
+	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
+		response.Error(w, http.StatusBadRequest, err)
+	}
+
+	token, err := h.service.Authenticate(ctx, dto.Email, dto.Password)
+	if err != nil {
+		response.Error(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	w.Header().Add("Authorization", fmt.Sprintf("Bearer %s", token))
+	w.WriteHeader(http.StatusOK)
 }

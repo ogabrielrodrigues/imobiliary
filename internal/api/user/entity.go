@@ -1,8 +1,6 @@
 package user
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,9 +20,6 @@ func (u *User) hashPwd() error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("password", u.password)
-	fmt.Println("hash", string(hash))
 
 	u.password = string(hash)
 	return nil

@@ -72,3 +72,19 @@ func (r *MemUserRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	}
 	return errors.New("user not found or not exists")
 }
+
+func (r *MemUserRepository) Authenticate(ctx context.Context, email, password string) (*user.User, error) {
+	logger.Info("Authenticating user", "email", email)
+
+	for _, user := range r.users {
+		if user.Email == email {
+			if user.ComparePwd(password) {
+				return user, nil
+			}
+
+			return nil, errors.New("invalid password")
+		}
+	}
+
+	return nil, errors.New("user not found or not exists")
+}

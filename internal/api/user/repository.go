@@ -16,6 +16,7 @@ type IRepository interface {
 	Create(ctx context.Context, user *User) (uuid.UUID, error)
 	Update(ctx context.Context, user *User) error
 	Delete(ctx context.Context, id uuid.UUID) error
+	Authenticate(ctx context.Context, email, password string) (*User, error)
 }
 
 func NewRepository() *Repository {
