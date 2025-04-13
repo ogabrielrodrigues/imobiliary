@@ -2,34 +2,11 @@ package main
 
 import (
 	"errors"
-<<<<<<< HEAD
-	"fmt"
-=======
->>>>>>> cowork/api
+
 	"net/http"
 	"os"
 	"os/signal"
 
-<<<<<<< HEAD
-	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/api"
-	"github.com/ogabrielrodrigues/imobiliary/internal/api/entity"
-)
-
-func main() {
-	user, _ := entity.NewUser(
-		uuid.New(),
-		"98767-F",
-		"Gabriel Rodrigues",
-		"gabriel.rodrigues@crecisp.gov.br",
-	)
-
-	user.GenerateAccessCode()
-
-	fmt.Println()
-	env := environment.LoadAPIEnvironment()
-=======
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	api "github.com/ogabrielrodrigues/imobiliary/internal"
@@ -38,7 +15,6 @@ func main() {
 
 func main() {
 	env := environment.Load()
->>>>>>> cowork/api
 
 	// ctx := context.Background()
 
@@ -58,17 +34,17 @@ func main() {
 	handler := api.NewHandler(nil)
 
 	go func() {
-<<<<<<< HEAD
 		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
 				panic(err)
-=======
-		logger.Info("Starting server on port " + env.SERVER_ADDR)
-		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(env, handler)); err != nil {
-			if !errors.Is(err, http.ErrServerClosed) {
-				logger.Error("err", err)
-				os.Exit(1)
->>>>>>> cowork/api
+			}
+
+			logger.Info("Starting server on port " + env.SERVER_ADDR)
+			if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(env, handler)); err != nil {
+				if !errors.Is(err, http.ErrServerClosed) {
+					logger.Error("err", err)
+					os.Exit(1)
+				}
 			}
 		}
 	}()
