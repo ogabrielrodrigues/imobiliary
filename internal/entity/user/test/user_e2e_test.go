@@ -1,4 +1,4 @@
-package user_test
+package test
 
 import (
 	"bytes"
@@ -10,12 +10,12 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
 	res "github.com/ogabrielrodrigues/imobiliary/internal/types/response"
-	"github.com/ogabrielrodrigues/imobiliary/internal/user"
 )
 
-func TestCreateUser(t *testing.T) {
+func TestE2ECreateUser(t *testing.T) {
 	repo := repository.NewMemUserRepository()
 	service := user.NewService(repo)
 	userHandler := user.NewHandler(service)
@@ -350,7 +350,7 @@ func TestCreateUser(t *testing.T) {
 	})
 }
 
-func TestFindByUser(t *testing.T) {
+func TestE2EFindByUser(t *testing.T) {
 	repo := repository.NewMemUserRepository()
 	service := user.NewService(repo)
 	userHandler := user.NewHandler(service)
@@ -526,7 +526,7 @@ func TestFindByUser(t *testing.T) {
 	})
 }
 
-func TestAuthenticateUser(t *testing.T) {
+func TestE2EAuthenticateUser(t *testing.T) {
 	godotenv.Load("../../../.env")
 
 	repo := repository.NewMemUserRepository()
