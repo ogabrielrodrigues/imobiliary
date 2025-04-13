@@ -12,9 +12,9 @@ export default async function AccountPage() {
   const user = await auth()
 
   return (
-    <div className="relative overflow-y-hidden">
+    <div className="relative">
       <div className="hidden sm:block absolute z-10 bg-zinc-50 w-20 h-20 blur-[96px] translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2" />
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-4xl mx-auto space-y-4">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">Conta</h1>
         </div>
@@ -36,31 +36,31 @@ export default async function AccountPage() {
           </CardContent>
         </Card>
 
-        <Card className="!gap-2 z-20 bg-zinc-900/20 backdrop-blur-2xl">
+        <Card className="!gap-0 z-20 bg-zinc-900/20 backdrop-blur-2xl">
           <CardHeader>
             <CardDescription>Nome completo</CardDescription>
           </CardHeader>
           <CardContent className="text-sm sm:text-base">{user?.fullname}</CardContent>
         </Card>
 
-        <Card className="!gap-2 z-20 bg-zinc-900/20 backdrop-blur-2xl">
+        <Card className="!gap-0 z-20 bg-zinc-900/20 backdrop-blur-2xl">
           <CardHeader>
             <CardDescription>E-mail</CardDescription>
           </CardHeader>
           <CardContent className="text-sm sm:text-base">{user?.email}</CardContent>
-          <CardFooter className="text-xs text-muted-foreground">
+          <CardFooter className="mt-1 text-xs text-muted-foreground">
             Caso deseje alterar seu e-mail entre em contato com o suporte.
           </CardFooter>
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="!gap-2 z-20 bg-zinc-900/20 backdrop-blur-2xl">
+          <Card className="!gap-0 z-20 bg-zinc-900/20 backdrop-blur-2xl">
             <CardHeader>
               <CardDescription>Telefone</CardDescription>
             </CardHeader>
             <CardContent className="text-sm sm:text-base">{user?.cellphone}</CardContent>
           </Card>
-          <Card className="!gap-2 z-20 bg-zinc-900/20 backdrop-blur-2xl">
+          <Card className="!gap-0 z-20 bg-zinc-900/20 backdrop-blur-2xl">
             <CardHeader>
               <CardDescription>CRECI</CardDescription>
             </CardHeader>

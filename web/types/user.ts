@@ -8,12 +8,12 @@ export const user_schema = z.object({
   password: z.string().min(8),
   avatar: z.string().url().optional(),
   cellphone: z.string().min(12).max(13),
-  plan: z.object({
-    kind: z.enum(["free", "pro"]),
-    propertiesTotalQuota: z.number(),
-    propertiesUsedQuota: z.number(),
-    propertiesRemainingQuota: z.number(),
-  })
+  // plan: z.object({
+  //   kind: z.enum(["free", "pro"]),
+  //   propertiesTotalQuota: z.number(),
+  //   propertiesUsedQuota: z.number(),
+  //   propertiesRemainingQuota: z.number(),
+  // })
 });
 
 export type User = z.infer<typeof user_schema>;
