@@ -44,10 +44,10 @@ export async function HomeHeader() {
           </form>
         </div>}
         {!user && <div>
-          <Link href="/login">
+          <Link href="/login" id="login">
             <Button variant="ghost">Login</Button>
           </Link>
-          <Link href="/cadastro">
+          <Link href="/cadastro" id="sign">
             <Button variant="ghost">Cadastro</Button>
           </Link>
         </div>}

@@ -1,10 +1,10 @@
 'use client'
 
-import { forwardRef, useState } from 'react'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { Input, InputProps } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
 function PasswordInput({ className, type, ...props }: React.ComponentProps<"input">) {
@@ -19,6 +19,7 @@ function PasswordInput({ className, type, ...props }: React.ComponentProps<"inpu
         {...props}
       />
       <Button
+        id='password-toggle'
         type="button"
         variant="ghost"
         size="sm"

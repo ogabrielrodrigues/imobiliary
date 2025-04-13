@@ -51,6 +51,8 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"form">) 
       }
 
       toast(message, {
+        className: "login-error",
+        description: "Verifique os dados e tente novamente.",
         icon: <AlertCircle className="size-4" />,
       })
     }
@@ -78,7 +80,7 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"form">) 
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage id="email-error-label" />
             </FormItem>
           )}
         />
@@ -97,11 +99,11 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"form">) 
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage id="password-error-label" />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" id="login">
           Entrar
         </Button>
       </form>

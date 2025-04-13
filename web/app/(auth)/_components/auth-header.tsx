@@ -24,7 +24,7 @@ export function AuthHeader({ title, description, url, urlText }: AuthHeaderProps
         <h1 className="text-xl font-bold text-center">{title}</h1>
         <div className="text-center text-sm">
           {description}{" "}
-          <a href={url} className="underline underline-offset-4">
+          <a href={url} id="auth-option" className="underline underline-offset-4">
             {urlText}
           </a>
         </div>
