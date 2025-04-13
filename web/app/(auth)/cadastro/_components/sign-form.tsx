@@ -18,10 +18,17 @@ import { Input } from "@/components/ui/input"
 
 import { cn } from "@/lib/utils"
 
-const sign_schema = z.object({
+import { sign } from "@/actions/auth"
+import { AlertCircle } from "lucide-react"
+import { toast } from "sonner"
+import { useHookFormMask } from 'use-mask-input'
+
+export const sign_schema = z.object({
   fullname: z.string().min(10, "Seu nome deve contem ao menos 10 caracteres").max(100, "Seu nome deve contem menos de 100 caracteres"),
-  creci: z.string().min(7, "Seu CRECI deve ser válido"),
+  creci_id: z.string().min(7, "Seu CRECI deve ser válido"),
   email: z.string().email("o e-mail digitado deve ser válido"),
+  cellphone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
+    .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
   password: z.string().min(8, "A senha deve contem ao menos 8 caracteres"),
   confirm_password: z.string().min(8, "A senha deve contem ao menos 8 caracteres")
 }).refine((data) => data.password === data.confirm_password, {
@@ -34,16 +41,26 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
     resolver: zodResolver(sign_schema),
     defaultValues: {
       fullname: "",
-      creci: "",
+      creci_id: "",
       email: "",
+      cellphone: "",
       password: "",
       confirm_password: ""
     }
   })
 
-  function onSubmit(values: z.infer<typeof sign_schema>) {
-    // TODO: implementar lógica de login de usário
-    console.log(values)
+  const registerWithMask = useHookFormMask(form.register);
+
+  async function onSubmit(values: z.infer<typeof sign_schema>) {
+    const status = await sign(values)
+
+    if (status != 201) {
+      toast("Erro ao cadastrar usuário", {
+        className: "login-error",
+        description: "Verifique os dados e tente novamente.",
+        icon: <AlertCircle className="size-4" />,
+      })
+    }
   }
 
   return (
@@ -74,7 +91,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
         />
         <FormField
           control={form.control}
-          name="creci"
+          name="creci_id"
           render={({ field }) => (
             <FormItem className="col-span-1">
               <FormLabel>Seu CRECI</FormLabel>
@@ -103,6 +120,27 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   placeholder="Seu e-mail de acesso"
                   autoComplete="off"
                   {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="cellphone"
+          render={({ field }) => (
+            <FormItem className="col-span-1 md:col-span-3">
+              <FormLabel>Telefone / Celular</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="Seu telefone ou celular"
+                  autoComplete="off"
+                  {...field}
+                  {...registerWithMask("cellphone", ['(99) 9999-9999', '(99) 99999-9999'], {
+                    required: true
+                  })}
                 />
               </FormControl>
               <FormMessage />

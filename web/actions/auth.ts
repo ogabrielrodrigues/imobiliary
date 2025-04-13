@@ -1,10 +1,12 @@
 'use server'
 
+import { sign_schema } from "@/app/(auth)/cadastro/_components/sign-form"
 import { env } from "@/lib/env"
 import { User } from "@/types/user"
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import { z } from "zod"
 
 export async function auth(): Promise<User | undefined> {
   const cookiesStore = await cookies()
@@ -39,6 +41,25 @@ export async function login(email: string, password: string): Promise<number> {
   })
 
   redirect("/dashboard")
+}
+
+export async function sign(data: z.infer<typeof sign_schema>): Promise<number> {
+  const response = await fetch(`${env.SERVER_ADDR}/users`, {
+    method: "POST",
+    body: JSON.stringify({
+      fullname: data.fullname,
+      creci_id: data.creci_id,
+      email: data.email,
+      cellphone: data.cellphone,
+      password: data.password,
+    }),
+  })
+
+  if (response.status !== 201) {
+    return response.status
+  }
+
+  redirect("/login")
 }
 
 export async function logout() {
