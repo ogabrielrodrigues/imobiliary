@@ -28,19 +28,19 @@ func (h *Handler) FindBy(w http.ResponseWriter, r *http.Request) {
 	id := params.Get("id")
 
 	if email != "" && id != "" {
-		response.Error(w, http.StatusBadRequest, errors.New("only one parameter must be provided"))
+		response.Error(w, http.StatusBadRequest, errors.New(ERR_ONLY_ONE_MUST_PARAMETER_MUST_BE_PROVIDED))
 		return
 	}
 
 	if id == "" {
 		if match, _ := regexp.MatchString(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`, email); !match {
-			response.Error(w, http.StatusBadRequest, errors.New("invalid user email"))
+			response.Error(w, http.StatusBadRequest, errors.New(ERR_EMAIL_INVALID))
 			return
 		}
 
 		user, err := h.service.FindByEmail(ctx, email)
 		if err != nil {
-			response.Error(w, http.StatusInternalServerError, err)
+			response.Error(w, http.StatusNotFound, err)
 			return
 		}
 
@@ -57,7 +57,7 @@ func (h *Handler) FindBy(w http.ResponseWriter, r *http.Request) {
 
 		user, err := h.service.FindByID(ctx, uid)
 		if err != nil {
-			response.Error(w, http.StatusInternalServerError, err)
+			response.Error(w, http.StatusNotFound, err)
 			return
 		}
 
@@ -103,6 +103,11 @@ func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
 
 	token, err := h.service.Authenticate(ctx, dto.Email, dto.Password)
 	if err != nil {
+		if err.Error() == ERR_USER_NOT_FOUND_OR_NOT_EXISTS {
+			response.Error(w, http.StatusNotFound, err)
+			return
+		}
+
 		response.Error(w, http.StatusUnauthorized, err)
 		return
 	}

@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/environment"
 )
 
 type Service struct {
@@ -69,14 +69,13 @@ func (s *Service) Authenticate(ctx context.Context, email, password string) (str
 		return "", err
 	}
 
-	secret_key := environment.LoadAPIEnvironment().SECRET_KEY
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":   user.ID,
 		"user": user.ToDTO(),
 		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
-	token, err := claims.SignedString([]byte(secret_key))
+	token, err := claims.SignedString([]byte(os.Getenv("SECRET_KEY")))
 	if err != nil {
 		return "", err
 	}
