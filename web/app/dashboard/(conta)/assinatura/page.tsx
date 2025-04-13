@@ -1,10 +1,5 @@
 import { auth } from "@/actions/auth"
-import { ProPlanDialog } from "@/components/pro-plan-dialog"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { Check, Sparkles } from "lucide-react"
+import { Card, CardDescription, CardHeader } from "@/components/ui/card"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -30,7 +25,7 @@ export default async function SubscriptionPage() {
           </CardHeader>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Plano {user?.plan.kind.toUpperCase()}</CardTitle>
           </CardHeader>
@@ -78,7 +73,7 @@ export default async function SubscriptionPage() {
               </Button>
             </ProPlanDialog>
           </CardFooter>
-        </Card>
+        </Card> */}
       </div>
     </div>
   )

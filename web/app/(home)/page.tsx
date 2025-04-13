@@ -19,7 +19,7 @@ export default async function HomePage() {
       <PlanSection />
 
       <section className="my-16 flex flex-col items-center">
-        <Link href="/login">
+        <Link id="home-btn" href="/login">
           <Button>Conhecer agora</Button>
         </Link>
       </section>
