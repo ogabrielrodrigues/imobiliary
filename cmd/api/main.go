@@ -6,14 +6,14 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/ogabrielrodrigues/imobiliary/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/api"
-	"github.com/ogabrielrodrigues/imobiliary/internal/api/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/shared/logger"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
+	"github.com/ogabrielrodrigues/imobiliary/config/logger"
+	api "github.com/ogabrielrodrigues/imobiliary/internal"
+	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 )
 
 func main() {
-	env := environment.LoadAPIEnvironment()
+	env := environment.Load()
 
 	// ctx := context.Background()
 
@@ -36,7 +36,7 @@ func main() {
 		logger.Info("Starting server on port " + env.SERVER_ADDR)
 		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(env, handler)); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
-				logger.Error(logger.ErrInternalServer, "err", err)
+				logger.Error("err", err)
 				os.Exit(1)
 			}
 		}
