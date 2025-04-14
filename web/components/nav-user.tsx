@@ -86,15 +86,19 @@ export function NavUser({ user }: NavUserProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <ProPlanDialog>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <Sparkles />
-                  Atualizar para o PRO
-                </DropdownMenuItem>
-              </ProPlanDialog>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            {user?.plan.kind === "free" && (
+              <>
+                <DropdownMenuGroup>
+                  <ProPlanDialog>
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Sparkles />
+                      Atualizar para o PRO
+                    </DropdownMenuItem>
+                  </ProPlanDialog>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <a href="/dashboard/conta">

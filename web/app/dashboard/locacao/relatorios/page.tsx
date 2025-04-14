@@ -1,15 +1,22 @@
+import { auth } from "@/actions/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart, LineChart, PieChart } from "lucide-react"
-
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Relatórios",
   description: "Gerencie os relatórios",
 }
 
-export default function RelatoriosPage() {
+export default async function RelatoriosPage() {
+  const user = await auth()
+
+  if (user?.plan.kind !== 'pro') {
+    return redirect('/dashboard')
+  }
+
   return (
     <div className="container mx-auto py-6">
       <h1 className="text-3xl font-bold mb-6">Relatórios</h1>

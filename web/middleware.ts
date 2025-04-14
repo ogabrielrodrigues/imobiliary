@@ -20,17 +20,8 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
   }
 
-  // if (
-  //   isPublicRoute &&
-  //   user &&
-  //   !req.nextUrl.pathname.startsWith('/dashboard')
-  // ) {
-  //   return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-  // }
-
   const headers = new Headers()
   headers.set('x-pathname', path)
-
 
   return NextResponse.next({ headers })
 }

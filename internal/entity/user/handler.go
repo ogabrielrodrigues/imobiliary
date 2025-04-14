@@ -4,10 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"regexp"
+	"strings"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
+	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -118,4 +124,63 @@ func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Authorization", fmt.Sprintf("Bearer %s", token))
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
+	var authorization string
+
+	if r.Header.Get("Authorization") == "" {
+		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		response.End(w, err.Code, err)
+		return
+	}
+
+	// TODO: fix this block of code
+	authorization, _ = strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
+
+	token, err := jwt.Parse(authorization, func(token *jwt.Token) (interface{}, error) {
+		return []byte(environment.Load().SECRET_KEY), nil
+	})
+
+	if err != nil {
+		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		response.End(w, err.Code, err)
+		return
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		user_id := claims["user_id"].(string)
+
+		if user_id == "" {
+			err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+			response.End(w, err.Code, err)
+			return
+		}
+
+		file, file_handler, err := r.FormFile("avatar")
+		if err != nil {
+			logger.Error("1", err)
+			return
+		}
+		defer file.Close()
+
+		filename := strings.ReplaceAll(file_handler.Filename, " ", "_")
+
+		dst, err := os.Create(fmt.Sprintf("./tmp/%s/%s", user_id, filename))
+		if err != nil {
+			logger.Error("2", err)
+			return
+		}
+		defer dst.Close()
+
+		_, err = io.Copy(dst, file)
+		if err != nil {
+			logger.Error("3", err)
+			return
+		}
+
+		response.End(w, http.StatusOK, response.Response{
+			"url": fmt.Sprintf("http://localhost:8080/users/avatar/%s", filename),
+		})
+	}
 }

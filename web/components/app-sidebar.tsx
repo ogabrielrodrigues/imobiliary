@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 
 import { User } from "@/types/user"
-import { House, HousePlus } from "lucide-react"
+import { House, HousePlus, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -39,6 +39,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               <Link href="/" className="flex items-center gap-2">
                 <HousePlus className="!size-5" />
                 Imobiliary
+                {user?.plan.kind === 'pro' && <Sparkles className="size-4 self-start" />}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -56,7 +57,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <NavMain />
+        <NavMain user={user} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

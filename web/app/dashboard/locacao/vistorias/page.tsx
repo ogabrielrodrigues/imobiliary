@@ -1,12 +1,20 @@
+import { auth } from "@/actions/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Vistorias",
   description: "Gerencie as vistorias dos imóveis",
 }
 
-export default function VistoriasPage() {
+export default async function VistoriasPage() {
+  const user = await auth()
+
+  if (user?.plan.kind !== 'pro') {
+    return redirect('/dashboard')
+  }
+
   return (
     <div className="container py-8">
       <h1 className="text-3xl font-bold mb-6">Vistorias</h1>

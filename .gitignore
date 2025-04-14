@@ -1,6 +1,7 @@
 /reports
 /dist
 /data
+/tmp
 *.csv
 .env
 .env.test

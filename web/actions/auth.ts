@@ -8,6 +8,20 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { z } from "zod"
 
+export async function token(): Promise<string | undefined> {
+  const cookiesStore = await cookies()
+
+  const hasUser = cookiesStore.has("imobiliary-user")
+
+  if (!hasUser) {
+    return undefined
+  }
+
+  const token = cookiesStore.get("imobiliary-user")!.value
+
+  return token
+}
+
 export async function auth(): Promise<User | undefined> {
   const cookiesStore = await cookies()
 

@@ -9,14 +9,6 @@ export function FreePlan() {
       </li>
       <li className="flex items-center gap-2 text-sm">
         <Check className="size-4 text-emerald-500" />
-        Métricas e relatórios simples
-      </li>
-      <li className="flex items-center gap-2 text-sm">
-        <Check className="size-4 text-emerald-500" />
-        1 usuário
-      </li>
-      <li className="flex items-center gap-2 text-sm">
-        <Check className="size-4 text-emerald-500" />
         Suporte via e-mail
       </li>
     </ul>

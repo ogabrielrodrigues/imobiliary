@@ -8,7 +8,7 @@ import { auth, logout } from "@/actions/auth";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { TooltipTrigger } from "@/components/ui/tooltip";
-import { HousePlus, LogOut } from "lucide-react";
+import { HousePlus, LogOut, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export async function HomeHeader() {
@@ -55,7 +55,14 @@ export async function HomeHeader() {
       <div className="flex items-center gap-2">
         <HousePlus className="size-5" />
         <span className="sr-only">Imobiliary</span>
-        <h1 className="text-lg font-bold hidden sm:block select-none">Imobiliary</h1>
+        <>
+          <h1 className="text-lg font-bold hidden sm:block select-none">
+            Imobiliary
+          </h1>
+          {user?.plan.kind === 'pro' && (
+            <Sparkles className="size-4 self-start" />
+          )}
+        </>
       </div>
     </header>
   )

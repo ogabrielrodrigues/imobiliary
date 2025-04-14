@@ -1,5 +1,11 @@
 import { auth } from "@/actions/auth"
-import { Card, CardDescription, CardHeader } from "@/components/ui/card"
+import { FreePlan, ProPlan } from "@/components/plan-describe"
+import { ProPlanDialog } from "@/components/pro-plan-dialog"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { Separator } from "@/components/ui/separator"
+import { Sparkles } from "lucide-react"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -20,60 +26,52 @@ export default async function SubscriptionPage() {
         <Card>
           <CardHeader>
             <CardDescription>
-              Atualmente você está utilizando o Imobiliary no plano <strong className="text-primary">FREE</strong>. Para ter acesso a todas as funcionalidades, assine o plano <strong className="text-primary">PRO</strong>.
+              {user?.plan.kind === "free"
+                ? (<>Atualmente você está utilizando o Imobiliary no plano <strong className="text-primary">FREE</strong>.<br /><br />Para ter acesso a todas as funcionalidades, assine o plano <strong className="text-primary">PRO</strong>.</>)
+                : (<>Parabéns! Você já possui o plano <strong className="text-primary">{user?.plan.kind.toUpperCase()}</strong> e já tendo acesso a todas as funcionalidades.</>)
+              }
             </CardDescription>
           </CardHeader>
         </Card>
 
-        {/* <Card>
+        <Card>
           <CardHeader>
             <CardTitle>Plano {user?.plan.kind.toUpperCase()}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <p>{user?.plan.propertiesUsedQuota}/{user?.plan.propertiesTotalQuota}</p>
-                <p>Imóveis</p>
-              </div>
-              <Progress value={(user?.plan.propertiesUsedQuota ?? 0) / (user?.plan.propertiesTotalQuota ?? 1) * 100} />
-            </div>
+            {user?.plan.kind === 'free' && (
+              <>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="inline-flex items-center">{user?.plan.properties_used_quota === 0 ? "0" : user?.plan.properties_used_quota.toString().padStart(2, "0")}/{user?.plan.properties_total_quota.toString().padStart(2, "0")}</p>
+                    <p>imóveis</p>
+                  </div>
+                  <Progress value={(user?.plan.properties_used_quota ?? 0) / (user?.plan.properties_total_quota ?? 1) * 100} />
+                </div>
 
-            <Separator />
+                <Separator />
+              </>
+            )}
 
             <div>
               <ul className="space-y-1">
-                <li className="flex items-center gap-2 text-sm">
-                  <Check className="size-4 text-emerald-500" />
-                  Gerencie até 30 imóveis
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <Check className="size-4 text-emerald-500" />
-                  Geração de recibos
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <Check className="size-4 text-emerald-500" />
-                  Métricas e relatórios simples
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <Check className="size-4 text-emerald-500" />
-                  Até 2 usuários
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <Check className="size-4 text-emerald-500" />
-                  Suporte via e-mail
-                </li>
+                {user?.plan.kind === "free"
+                  ? (<FreePlan />)
+                  : (<ProPlan />)}
               </ul>
             </div>
           </CardContent>
-          <CardFooter className="justify-end">
-            <ProPlanDialog>
-              <Button>
-                <Sparkles />
-                Atualizar para o PRO
-              </Button>
-            </ProPlanDialog>
-          </CardFooter>
-        </Card> */}
+          {user?.plan.kind === "free" && (
+            <CardFooter className="justify-end">
+              <ProPlanDialog>
+                <Button>
+                  <Sparkles />
+                  Atualizar para o PRO
+                </Button>
+              </ProPlanDialog>
+            </CardFooter>
+          )}
+        </Card>
       </div>
     </div>
   )

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,6 +17,7 @@ type User struct {
 	Email     string
 	password  string
 	Avatar    string
+	Plan      plan.Plan
 }
 
 func (u *User) hashPwd() *response.Err {
@@ -30,11 +32,8 @@ func (u *User) hashPwd() *response.Err {
 
 func (u *User) ComparePwd(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.password), []byte(password))
-	if err != nil {
-		return false
-	}
 
-	return true
+	return err == nil
 }
 
 func New(creci_id, fullname, cellphone, email, password, avatar string) (*User, *response.Err) {
@@ -46,6 +45,7 @@ func New(creci_id, fullname, cellphone, email, password, avatar string) (*User, 
 		Email:     email,
 		Avatar:    avatar,
 		password:  password,
+		Plan:      *plan.New(plan.PlanKindFree, 0, 30, 0, 30),
 	}
 
 	if err := u.validate(); err != nil {
@@ -77,6 +77,7 @@ func (u *User) ToDTO() *DTO {
 		Cellphone: u.Cellphone,
 		Email:     u.Email,
 		Avatar:    u.Avatar,
+		Plan:      *u.Plan.ToDTO(),
 	}
 }
 
@@ -88,5 +89,12 @@ func UserFromDTO(dto *DTO) *User {
 		Cellphone: dto.Cellphone,
 		Email:     dto.Email,
 		Avatar:    dto.Avatar,
+		Plan: *plan.New(
+			plan.PlanKind(dto.Plan.Kind),
+			dto.Plan.Price,
+			dto.Plan.PropertiesTotalQuota,
+			dto.Plan.PropertiesUsedQuota,
+			dto.Plan.PropertiesRemainingQuota,
+		),
 	}
 }

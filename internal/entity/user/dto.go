@@ -1,14 +1,18 @@
 package user
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
+)
 
 type DTO struct {
-	ID        string `json:"id"`
-	CreciID   string `json:"creci_id"`
-	Fullname  string `json:"fullname"`
-	Cellphone string `json:"cellphone"`
-	Email     string `json:"email"`
-	Avatar    string `json:"avatar,omitempty"`
+	ID        string   `json:"id"`
+	CreciID   string   `json:"creci_id"`
+	Fullname  string   `json:"fullname"`
+	Cellphone string   `json:"cellphone"`
+	Email     string   `json:"email"`
+	Avatar    string   `json:"avatar,omitempty"`
+	Plan      plan.DTO `json:"plan"`
 }
 
 func (d *DTO) ToUser() *User {
@@ -19,6 +23,13 @@ func (d *DTO) ToUser() *User {
 		Cellphone: d.Cellphone,
 		Email:     d.Email,
 		Avatar:    d.Avatar,
+		Plan: *plan.New(
+			plan.PlanKind(d.Plan.Kind),
+			d.Plan.Price,
+			d.Plan.PropertiesTotalQuota,
+			d.Plan.PropertiesUsedQuota,
+			d.Plan.PropertiesRemainingQuota,
+		),
 	}
 }
 

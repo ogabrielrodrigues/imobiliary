@@ -18,12 +18,14 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { User } from "@/types/user"
 import { usePathname } from "next/navigation"
 
 type NavMainItemType = {
   title: string
   url: string
   icon: LucideIcon
+  visibility: 'free' | 'pro'
 }
 
 type NavMainType = {
@@ -42,41 +44,52 @@ const item: NavMainType = {
       title: "Alugueres",
       url: "/dashboard/locacao",
       icon: Banknote,
+      visibility: 'free',
     },
     {
       title: "Contratos",
       url: "/dashboard/locacao/contratos",
       icon: FileText,
+      visibility: 'free',
     },
     {
       title: "Inquilinos",
       url: "/dashboard/locacao/inquilinos",
       icon: UsersRound,
+      visibility: 'free',
     },
     {
       title: "Imóveis",
       url: "/dashboard/locacao/imoveis",
       icon: Building,
+      visibility: 'free',
     },
     {
       title: "Proprietários",
       url: "/dashboard/locacao/proprietarios",
       icon: UserRoundCheck,
+      visibility: 'free',
     },
     {
       title: "Vistorias",
       url: "/dashboard/locacao/vistorias",
       icon: ClipboardCheck,
+      visibility: 'pro',
     },
     {
       title: "Relatórios",
       url: "/dashboard/locacao/relatorios",
       icon: BarChart,
+      visibility: 'pro',
     },
   ],
 }
 
-export function NavMain() {
+type NavMainProps = {
+  user: User | undefined
+}
+
+export function NavMain({ user }: NavMainProps) {
   const pathname = usePathname()
 
   return (
@@ -100,7 +113,7 @@ export function NavMain() {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
+                  {item.items?.filter(item => item.visibility === user?.plan.kind).map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
                         <a href={subItem.url}>
