@@ -3,9 +3,9 @@ package user
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 	"golang.org/x/crypto/bcrypt"
@@ -46,11 +46,15 @@ func New(creci_id, fullname, cellphone, email, password string) (*User, *respons
 		Cellphone: cellphone,
 		Email:     email,
 		password:  password,
-		Plan:      *plan.New(plan.PlanKindFree, 0, 30, 0, 30),
+		Plan:      *plan.New(plan.PlanKindFree, 30, 0, 30),
 	}
 
-	// TODO: fix on deployment
-	u.Avatar = fmt.Sprintf("http://%s/users/%s/avatar", os.Getenv("SERVER_ADDR"), u.ID.String())
+	u.Avatar = fmt.Sprintf(
+		"%s://%s/users/%s/avatar",
+		environment.Environment.SERVER_PROTOCOL,
+		environment.Environment.SERVER_ADDR,
+		u.ID.String(),
+	)
 
 	if err := u.validate(); err != nil {
 		return nil, err
@@ -86,6 +90,14 @@ func (u *User) ToDTO() *DTO {
 }
 
 func UserFromDTO(dto *DTO) *User {
+	plan := plan.New(
+		plan.PlanKind(dto.Plan.Kind),
+		dto.Plan.PropertiesTotalQuota,
+		dto.Plan.PropertiesUsedQuota,
+		dto.Plan.PropertiesRemainingQuota,
+	)
+	plan.Price = dto.Plan.Price
+
 	return &User{
 		ID:        uuid.MustParse(dto.ID),
 		CreciID:   dto.CreciID,
@@ -93,12 +105,6 @@ func UserFromDTO(dto *DTO) *User {
 		Cellphone: dto.Cellphone,
 		Email:     dto.Email,
 		Avatar:    dto.Avatar,
-		Plan: *plan.New(
-			plan.PlanKind(dto.Plan.Kind),
-			dto.Plan.Price,
-			dto.Plan.PropertiesTotalQuota,
-			dto.Plan.PropertiesUsedQuota,
-			dto.Plan.PropertiesRemainingQuota,
-		),
+		Plan:      *plan,
 	}
 }

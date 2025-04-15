@@ -4,11 +4,11 @@ import (
 	"context"
 	"mime/multipart"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -85,7 +85,7 @@ func (s *Service) Authenticate(ctx context.Context, email, password string) (str
 		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
-	token, t_err := claims.SignedString([]byte(os.Getenv("SECRET_KEY")))
+	token, t_err := claims.SignedString([]byte(environment.Environment.SECRET_KEY))
 	if t_err != nil {
 		return "", response.NewErr(http.StatusInternalServerError, ERR_FAILED_GENERATE_TOKEN)
 	}

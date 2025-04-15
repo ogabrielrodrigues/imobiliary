@@ -16,6 +16,14 @@ type DTO struct {
 }
 
 func (d *DTO) ToUser() *User {
+	p := plan.New(
+		d.Plan.Kind,
+		d.Plan.PropertiesTotalQuota,
+		d.Plan.PropertiesUsedQuota,
+		d.Plan.PropertiesRemainingQuota,
+	)
+	p.Price = d.Plan.Price
+
 	return &User{
 		ID:        uuid.MustParse(d.ID),
 		CreciID:   d.CreciID,
@@ -23,13 +31,7 @@ func (d *DTO) ToUser() *User {
 		Cellphone: d.Cellphone,
 		Email:     d.Email,
 		Avatar:    d.Avatar,
-		Plan: *plan.New(
-			plan.PlanKind(d.Plan.Kind),
-			d.Plan.Price,
-			d.Plan.PropertiesTotalQuota,
-			d.Plan.PropertiesUsedQuota,
-			d.Plan.PropertiesRemainingQuota,
-		),
+		Plan:      *p,
 	}
 }
 

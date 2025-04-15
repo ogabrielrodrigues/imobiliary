@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -136,7 +136,7 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	authorization, _ := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
 
 	token, err := jwt.Parse(authorization, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("SECRET_KEY")), nil
+		return []byte(environment.Environment.SECRET_KEY), nil
 	})
 	if err != nil {
 		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))

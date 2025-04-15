@@ -1,24 +1,73 @@
 package plan
 
-import "github.com/google/uuid"
+import (
+	"net/http"
+
+	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+)
 
 type PlanKind string
 
 const (
 	PlanKindFree PlanKind = "free"
 	PlanKindPro  PlanKind = "pro"
+
+	PlanFreePrice float32 = 0.00
+	PlanProPrice  float32 = 15.99
 )
 
 type Plan struct {
 	ID                       uuid.UUID
 	Kind                     PlanKind
-	Price                    float64
+	Price                    float32
 	PropertiesTotalQuota     int
 	PropertiesUsedQuota      int
 	PropertiesRemainingQuota int
 }
 
-func New(kind PlanKind, price float64, propertiesTotalQuota, propertiesUsedQuota, propertiesRemainingQuota int) *Plan {
+func (p *Plan) Upgrade() *response.Err {
+	if p.Kind == PlanKindPro {
+		return response.NewErr(http.StatusBadRequest, ERR_PLAN_ALREADY_UPGRADED)
+	}
+
+	p.Kind = PlanKindPro
+	p.Price = PlanProPrice
+	p.PropertiesTotalQuota = -1     // unlimited
+	p.PropertiesRemainingQuota = -1 // unlimited
+
+	return nil
+}
+
+func (p *Plan) Downgrade() *response.Err {
+	if p.Kind == PlanKindFree {
+		return response.NewErr(http.StatusBadRequest, ERR_PLAN_ALREADY_DOWNGRADED)
+	}
+
+	if p.PropertiesUsedQuota > 30 {
+		return response.NewErr(http.StatusBadRequest, ERR_PLAN_CANNOT_DOWNGRADE)
+	}
+
+	p.Kind = PlanKindFree
+	p.Price = PlanFreePrice
+	p.PropertiesTotalQuota = 30
+	p.PropertiesRemainingQuota = (p.PropertiesTotalQuota - p.PropertiesUsedQuota)
+
+	return nil
+}
+
+func New(kind PlanKind, propertiesTotalQuota, propertiesUsedQuota, propertiesRemainingQuota int) *Plan {
+	var price float32
+
+	switch kind {
+	case PlanKindFree:
+		price = PlanFreePrice
+	case PlanKindPro:
+		price = PlanProPrice
+	default:
+		price = PlanFreePrice
+	}
+
 	return &Plan{
 		ID:                       uuid.New(),
 		Kind:                     kind,

@@ -31,7 +31,7 @@ export async function auth(): Promise<User | undefined> {
     return undefined
   }
 
-  const token = jwt.verify(cookiesStore.get("imobiliary-user")!.value, env.JWT_SECRET!) as JwtPayload
+  const token = jwt.verify(cookiesStore.get("imobiliary-user")!.value, env.SECRET_KEY!) as JwtPayload
 
   return token.user
 }
