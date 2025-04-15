@@ -62,8 +62,8 @@ export function AvatarForm({ user }: AvatarFormProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Avatar className="w-20 h-20 text-2xl font-semibold hover:opacity-80 transition-opacity">
-                {user?.avatar ? <AvatarImage src={user?.avatar} className="object-cover" />
-                  : <AvatarFallback className="bg-sidebar-primary animate-pulse" />}
+                <AvatarImage src={user?.avatar} className="object-cover" />
+                <AvatarFallback className="bg-sidebar-primary">{user?.fullname.charAt(0)}</AvatarFallback>
               </Avatar>
             </TooltipTrigger>
             <TooltipContent side="bottom">

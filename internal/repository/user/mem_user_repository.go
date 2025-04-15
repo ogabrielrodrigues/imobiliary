@@ -3,10 +3,10 @@ package repository
 import (
 	"context"
 	"net/http"
+	"slices"
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	errors "github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -25,7 +25,7 @@ func (r *MemUserRepository) FindByID(ctx context.Context, id uuid.UUID) (*user.U
 		}
 	}
 
-	return nil, response.NewErr(http.StatusNotFound, errors.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
+	return nil, response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 }
 
 func (r *MemUserRepository) FindByEmail(ctx context.Context, email string) (*user.User, *response.Err) {
@@ -35,7 +35,7 @@ func (r *MemUserRepository) FindByEmail(ctx context.Context, email string) (*use
 		}
 	}
 
-	return nil, response.NewErr(http.StatusNotFound, errors.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
+	return nil, response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 }
 
 func (r *MemUserRepository) Create(ctx context.Context, user *user.User) (uuid.UUID, *response.Err) {
@@ -43,37 +43,37 @@ func (r *MemUserRepository) Create(ctx context.Context, user *user.User) (uuid.U
 	return user.ID, nil
 }
 
-func (r *MemUserRepository) Update(ctx context.Context, user *user.User) *response.Err {
+func (r *MemUserRepository) Update(ctx context.Context, usr *user.User) *response.Err {
 	for i, u := range r.users {
-		if u.ID == user.ID {
-			r.users[i] = user
+		if u.ID == usr.ID {
+			r.users[i] = usr
 			return nil
 		}
 	}
 
-	return response.NewErr(http.StatusNotFound, errors.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
+	return response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 }
 
 func (r *MemUserRepository) Delete(ctx context.Context, id uuid.UUID) *response.Err {
 	for i, u := range r.users {
 		if u.ID == id {
-			r.users = append(r.users[:i], r.users[i+1:]...)
+			r.users = slices.Delete(r.users, i, i+1)
 			return nil
 		}
 	}
-	return response.NewErr(http.StatusNotFound, errors.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
+	return response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 }
 
 func (r *MemUserRepository) Authenticate(ctx context.Context, email, password string) (*user.User, *response.Err) {
-	for _, user := range r.users {
-		if user.Email == email {
-			if user.ComparePwd(password) {
-				return user, nil
+	for _, usr := range r.users {
+		if usr.Email == email {
+			if usr.ComparePwd(password) {
+				return usr, nil
 			}
 
-			return nil, response.NewErr(http.StatusUnauthorized, errors.ERR_PASSWORD_INVALID)
+			return nil, response.NewErr(http.StatusUnauthorized, user.ERR_PASSWORD_INVALID)
 		}
 	}
 
-	return nil, response.NewErr(http.StatusNotFound, errors.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
+	return nil, response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 }

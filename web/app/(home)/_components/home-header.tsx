@@ -22,8 +22,8 @@ export async function HomeHeader() {
             <TooltipTrigger asChild>
               <Link href="/dashboard/conta">
                 <Avatar>
-                  {user?.avatar ? <AvatarImage src={user?.avatar} className="object-cover" />
-                    : <AvatarFallback className="bg-sidebar-primary animate-pulse" />}
+                  <AvatarImage src={user?.avatar} className="object-cover" />
+                  <AvatarFallback className="bg-sidebar-primary">{user?.fullname.charAt(0)}</AvatarFallback>
                 </Avatar>
               </Link>
             </TooltipTrigger>
