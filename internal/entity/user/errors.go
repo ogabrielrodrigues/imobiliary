@@ -17,4 +17,5 @@ const (
 	ERR_FAILED_TO_PROCESS_USER                   string = "failed to process user"
 	ERR_UUID_INVALID                             string = "user uuid is invalid"
 	ERR_INVALID_USER_REQUEST_BODY                string = "user request body is invalid"
+	ERR_AVATAR_NOT_FOUND                         string = "avatar not found"
 )

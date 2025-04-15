@@ -20,7 +20,7 @@ type IRepository interface {
 }
 
 type IAvatarStorageRepository interface {
-	GetAvatar(ctx context.Context, id string) string
+	GetAvatar(ctx context.Context, id string) (string, *response.Err)
 	SaveAvatar(ctx context.Context, id string, avatar multipart.File) *response.Err
 }
 

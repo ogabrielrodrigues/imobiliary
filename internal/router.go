@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
@@ -22,10 +21,5 @@ func Register(h *Handler, mux *http.ServeMux) {
 	mux.HandleFunc("DELETE /users/{id}", userHandler.Delete)
 	mux.HandleFunc("POST /users/auth", userHandler.Authenticate)
 	mux.HandleFunc("POST /users/avatar", userHandler.UpdateAvatar)
-
-	mux.HandleFunc("GET /users/{user_id}/avatar", func(w http.ResponseWriter, r *http.Request) {
-		user_id := r.PathValue("user_id")
-
-		http.ServeFile(w, r, fmt.Sprintf("./tmp/%s/avatar.png", user_id))
-	})
+	mux.HandleFunc("GET /users/{user_id}/avatar", userHandler.GetAvatar)
 }

@@ -11,6 +11,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -160,52 +161,30 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 
 	r_err := h.service.SaveAvatar(ctx, uuid.MustParse(user_id), file)
 	if r_err != nil {
+		logger.Error("Error saving avatar", "error", r_err)
 		response.End(w, r_err.Code, r_err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
 
-	// if _, err = os.Stat(fmt.Sprintf("./tmp/%s", user_id)); os.IsNotExist(err) {
-	// 	if err := os.Mkdir(fmt.Sprintf("./tmp/%s", user_id), os.ModePerm); err != nil {
-	// 		err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-	// 		response.End(w, err.Code, err)
-	// 		return
-	// 	}
-	// }
+func (h *Handler) GetAvatar(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	id := r.PathValue("user_id")
 
-	// if _, err = os.Stat(fmt.Sprintf("./tmp/%s/%s", user_id, filename)); os.IsNotExist(err) {
-	// 	dst, err := os.Create(fmt.Sprintf("./tmp/%s/%s", user_id, filename))
-	// 	if err != nil {
-	// 		err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-	// 		response.End(w, err.Code, err)
-	// 		return
-	// 	}
+	user_id, err := uuid.Parse(id)
+	if err != nil {
+		err := response.NewErr(http.StatusBadRequest, ERR_UUID_INVALID)
+		response.End(w, err.Code, err)
+		return
+	}
 
-	// 	defer dst.Close()
+	avatar_path, r_err := h.service.GetAvatar(ctx, user_id)
+	if r_err != nil {
+		response.End(w, r_err.Code, r_err)
+		return
+	}
 
-	// 	_, err = io.Copy(dst, file)
-	// 	if err != nil {
-	// 		err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-	// 		response.End(w, err.Code, err)
-	// 		return
-	// 	}
-
-	// 	w.WriteHeader(http.StatusOK)
-	// 	return
-	// }
-
-	// dst, err := os.OpenFile(fmt.Sprintf("./tmp/%s/%s", user_id, filename), os.O_WRONLY|os.O_TRUNC, 0666)
-	// if err != nil {
-	// 	err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-	// 	response.End(w, err.Code, err)
-	// 	return
-	// }
-
-	// _, err = io.Copy(dst, file)
-	// if err != nil {
-	// 	err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
-	// 	response.End(w, err.Code, err)
-	// 	return
-	// }
+	http.ServeFile(w, r, avatar_path)
 }

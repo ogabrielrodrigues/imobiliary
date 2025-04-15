@@ -25,6 +25,7 @@ type IService interface {
 	Delete(ctx context.Context, id uuid.UUID) *response.Err
 	Authenticate(ctx context.Context, email, password string) (string, *response.Err)
 	SaveAvatar(ctx context.Context, id uuid.UUID, avatarFile multipart.File) *response.Err
+	GetAvatar(ctx context.Context, id uuid.UUID) (string, *response.Err)
 }
 
 func NewService(repo IRepository, storage IAvatarStorageRepository) *Service {
@@ -94,4 +95,8 @@ func (s *Service) Authenticate(ctx context.Context, email, password string) (str
 
 func (s *Service) SaveAvatar(ctx context.Context, id uuid.UUID, avatarFile multipart.File) *response.Err {
 	return s.storage.SaveAvatar(ctx, id.String(), avatarFile)
+}
+
+func (s *Service) GetAvatar(ctx context.Context, id uuid.UUID) (string, *response.Err) {
+	return s.storage.GetAvatar(ctx, id.String())
 }
