@@ -3,12 +3,8 @@
 import { env } from "@/lib/env"
 import { token } from "./auth"
 
-export async function updateAvatar(formData: FormData): Promise<{ status: number, url: string }> {
+export async function updateAvatar(formData: FormData): Promise<number> {
   const auth_token = await token()
-
-  if (!auth_token) {
-    return { status: 401, url: "" }
-  }
 
   const response = await fetch(`${env.SERVER_ADDR}/users/avatar`, {
     method: "POST",
@@ -18,7 +14,5 @@ export async function updateAvatar(formData: FormData): Promise<{ status: number
     }
   })
 
-  const data = await response.json()
-
-  return { status: response.status, url: data.url }
+  return response.status
 }

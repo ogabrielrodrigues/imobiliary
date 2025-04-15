@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"regexp"
@@ -12,8 +11,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -127,7 +124,7 @@ func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
-	var authorization string
+	ctx := context.Background()
 
 	if r.Header.Get("Authorization") == "" {
 		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
@@ -135,52 +132,80 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: fix this block of code
-	authorization, _ = strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
+	authorization, _ := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
 
 	token, err := jwt.Parse(authorization, func(token *jwt.Token) (interface{}, error) {
-		return []byte(environment.Load().SECRET_KEY), nil
+		return []byte(os.Getenv("SECRET_KEY")), nil
 	})
-
 	if err != nil {
 		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
 		response.End(w, err.Code, err)
 		return
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		user_id := claims["user_id"].(string)
-
-		if user_id == "" {
-			err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
-			response.End(w, err.Code, err)
-			return
-		}
-
-		file, file_handler, err := r.FormFile("avatar")
-		if err != nil {
-			logger.Error("1", err)
-			return
-		}
-		defer file.Close()
-
-		filename := strings.ReplaceAll(file_handler.Filename, " ", "_")
-
-		dst, err := os.Create(fmt.Sprintf("./tmp/%s/%s", user_id, filename))
-		if err != nil {
-			logger.Error("2", err)
-			return
-		}
-		defer dst.Close()
-
-		_, err = io.Copy(dst, file)
-		if err != nil {
-			logger.Error("3", err)
-			return
-		}
-
-		response.End(w, http.StatusOK, response.Response{
-			"url": fmt.Sprintf("http://localhost:8080/users/avatar/%s", filename),
-		})
+	user_id, err := token.Claims.GetSubject()
+	if err != nil {
+		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		response.End(w, err.Code, err)
+		return
 	}
+
+	file, _, err := r.FormFile("avatar")
+	if err != nil {
+		err := response.NewErr(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		response.End(w, err.Code, err)
+		return
+	}
+	defer file.Close()
+
+	r_err := h.service.SaveAvatar(ctx, uuid.MustParse(user_id), file)
+	if r_err != nil {
+		response.End(w, r_err.Code, r_err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	// if _, err = os.Stat(fmt.Sprintf("./tmp/%s", user_id)); os.IsNotExist(err) {
+	// 	if err := os.Mkdir(fmt.Sprintf("./tmp/%s", user_id), os.ModePerm); err != nil {
+	// 		err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	// 		response.End(w, err.Code, err)
+	// 		return
+	// 	}
+	// }
+
+	// if _, err = os.Stat(fmt.Sprintf("./tmp/%s/%s", user_id, filename)); os.IsNotExist(err) {
+	// 	dst, err := os.Create(fmt.Sprintf("./tmp/%s/%s", user_id, filename))
+	// 	if err != nil {
+	// 		err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	// 		response.End(w, err.Code, err)
+	// 		return
+	// 	}
+
+	// 	defer dst.Close()
+
+	// 	_, err = io.Copy(dst, file)
+	// 	if err != nil {
+	// 		err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	// 		response.End(w, err.Code, err)
+	// 		return
+	// 	}
+
+	// 	w.WriteHeader(http.StatusOK)
+	// 	return
+	// }
+
+	// dst, err := os.OpenFile(fmt.Sprintf("./tmp/%s/%s", user_id, filename), os.O_WRONLY|os.O_TRUNC, 0666)
+	// if err != nil {
+	// 	err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	// 	response.End(w, err.Code, err)
+	// 	return
+	// }
+
+	// _, err = io.Copy(dst, file)
+	// if err != nil {
+	// 	err := response.NewErr(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
+	// 	response.End(w, err.Code, err)
+	// 	return
+	// }
 }

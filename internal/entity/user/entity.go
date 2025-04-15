@@ -1,7 +1,9 @@
 package user
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
@@ -36,17 +38,19 @@ func (u *User) ComparePwd(password string) bool {
 	return err == nil
 }
 
-func New(creci_id, fullname, cellphone, email, password, avatar string) (*User, *response.Err) {
+func New(creci_id, fullname, cellphone, email, password string) (*User, *response.Err) {
 	u := &User{
 		ID:        uuid.New(),
 		CreciID:   creci_id,
 		Fullname:  fullname,
 		Cellphone: cellphone,
 		Email:     email,
-		Avatar:    avatar,
 		password:  password,
 		Plan:      *plan.New(plan.PlanKindFree, 0, 30, 0, 30),
 	}
+
+	// TODO: fix on deployment
+	u.Avatar = fmt.Sprintf("http://%s/users/%s/avatar", os.Getenv("SERVER_ADDR"), u.ID.String())
 
 	if err := u.validate(); err != nil {
 		return nil, err

@@ -17,7 +17,8 @@ import (
 
 func TestE2ECreateUser(t *testing.T) {
 	repo := repository.NewMemUserRepository()
-	service := user.NewService(repo)
+	storage := repository.NewLocalUserAvatarRepository("./tmp")
+	service := user.NewService(repo, storage)
 	userHandler := user.NewHandler(service)
 
 	t.Run("should be able to create a user", func(t *testing.T) {
@@ -352,7 +353,8 @@ func TestE2ECreateUser(t *testing.T) {
 
 func TestE2EFindByUser(t *testing.T) {
 	repo := repository.NewMemUserRepository()
-	service := user.NewService(repo)
+	storage := repository.NewLocalUserAvatarRepository("./tmp")
+	service := user.NewService(repo, storage)
 	userHandler := user.NewHandler(service)
 
 	t.Run("should not be able to find a user by providing both ID and email together", func(t *testing.T) {
@@ -530,7 +532,8 @@ func TestE2EAuthenticateUser(t *testing.T) {
 	godotenv.Load("../../../.env")
 
 	repo := repository.NewMemUserRepository()
-	service := user.NewService(repo)
+	storage := repository.NewLocalUserAvatarRepository("./tmp")
+	service := user.NewService(repo, storage)
 	userHandler := user.NewHandler(service)
 
 	t.Run("should be able to authenticate a user", func(t *testing.T) {

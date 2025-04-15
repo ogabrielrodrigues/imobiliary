@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"time"
@@ -12,7 +13,8 @@ import (
 )
 
 type Service struct {
-	repo IRepository
+	repo    IRepository
+	storage IAvatarStorageRepository
 }
 
 type IService interface {
@@ -22,10 +24,14 @@ type IService interface {
 	Update(ctx context.Context, dto *UpdateDTO) *response.Err
 	Delete(ctx context.Context, id uuid.UUID) *response.Err
 	Authenticate(ctx context.Context, email, password string) (string, *response.Err)
+	SaveAvatar(ctx context.Context, id uuid.UUID, avatarFile multipart.File) *response.Err
 }
 
-func NewService(repo IRepository) *Service {
-	return &Service{repo: repo}
+func NewService(repo IRepository, storage IAvatarStorageRepository) *Service {
+	return &Service{
+		repo:    repo,
+		storage: storage,
+	}
 }
 
 func (s *Service) FindByID(ctx context.Context, id uuid.UUID) (*DTO, *response.Err) {
@@ -47,7 +53,7 @@ func (s *Service) FindByEmail(ctx context.Context, email string) (*DTO, *respons
 }
 
 func (s *Service) Create(ctx context.Context, dto *CreateDTO) (uuid.UUID, *response.Err) {
-	user, err := New(dto.CreciID, dto.Fullname, dto.Cellphone, dto.Email, dto.Password, "")
+	user, err := New(dto.CreciID, dto.Fullname, dto.Cellphone, dto.Email, dto.Password)
 	if err != nil {
 		return uuid.Nil, err
 	}
@@ -73,6 +79,7 @@ func (s *Service) Authenticate(ctx context.Context, email, password string) (str
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":   user.ID,
+		"sub":  user.ID,
 		"user": user.ToDTO(),
 		"exp":  time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
@@ -83,4 +90,8 @@ func (s *Service) Authenticate(ctx context.Context, email, password string) (str
 	}
 
 	return token, nil
+}
+
+func (s *Service) SaveAvatar(ctx context.Context, id uuid.UUID, avatarFile multipart.File) *response.Err {
+	return s.storage.SaveAvatar(ctx, id.String(), avatarFile)
 }

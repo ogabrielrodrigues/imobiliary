@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"mime/multipart"
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
@@ -16,6 +17,11 @@ type IRepository interface {
 	Update(ctx context.Context, user *User) *response.Err
 	Delete(ctx context.Context, id uuid.UUID) *response.Err
 	Authenticate(ctx context.Context, email, password string) (*User, *response.Err)
+}
+
+type IAvatarStorageRepository interface {
+	GetAvatar(ctx context.Context, id string) string
+	SaveAvatar(ctx context.Context, id string, avatar multipart.File) *response.Err
 }
 
 func NewRepository() *Repository {

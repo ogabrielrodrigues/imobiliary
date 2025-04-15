@@ -22,28 +22,6 @@ export default async function AccountPage() {
         <Card className="z-20 bg-zinc-900/20 backdrop-blur-2xl relative overflow-hidden">
           <CardContent className="flex flex-col items-center sm:flex-row space-x-6 space-y-4">
             <AvatarForm user={user} />
-            {/* <label htmlFor="avatar" className="cursor-pointer">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Avatar className="w-20 h-20 text-2xl font-semibold hover:opacity-80 transition-opacity">
-                    {
-                      user?.avatar ?
-                        <AvatarImage src={user.avatar} /> :
-                        <AvatarFallback className="bg-sidebar-primary">{user?.fullname?.charAt(0)}</AvatarFallback>
-                    }
-                  </Avatar>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Alterar avatar</p>
-                </TooltipContent>
-              </Tooltip>
-              <input
-                type="file"
-                id="avatar"
-                accept="image/*"
-                className="hidden"
-              />
-            </label> */}
             <div className="flex flex-col items-center sm:items-start">
               <h2 className="text-xl font-semibold">{user?.fullname}</h2>
               <p className="text-muted-foreground">{user?.email}</p>

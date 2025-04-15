@@ -14,7 +14,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err != nil {
@@ -29,7 +28,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_FULLNAME_EMPTY {
@@ -48,7 +46,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_FULLNAME_INVALID {
@@ -67,7 +64,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_FULLNAME_INVALID {
@@ -86,7 +82,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_EMAIL_EMPTY {
@@ -105,7 +100,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_EMAIL_INVALID {
@@ -124,7 +118,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_CRECIID_EMPTY {
@@ -143,7 +136,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_CRECIID_INVALID {
@@ -162,7 +154,6 @@ func TestUser(t *testing.T) {
 			"",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_CELLPHONE_EMPTY {
@@ -181,7 +172,6 @@ func TestUser(t *testing.T) {
 			"01 1236789",
 			"johndoe@example.com",
 			"password",
-			"",
 		)
 
 		if err.Message != user.ERR_CELLPHONE_INVALID {
@@ -199,7 +189,6 @@ func TestUser(t *testing.T) {
 			"John Doe of Silva",
 			"(01) 12345-6789",
 			"johndoe@example.com",
-			"",
 			"",
 		)
 
@@ -219,7 +208,6 @@ func TestUser(t *testing.T) {
 			"(01) 12345-6789",
 			"johndoe@example.com",
 			"pwd",
-			"",
 		)
 
 		if err.Message != user.ERR_PASSWORD_INVALID {

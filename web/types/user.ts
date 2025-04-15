@@ -6,7 +6,7 @@ export const user_schema = z.object({
   creci_id: z.string().min(7).max(7),
   email: z.string().email(),
   password: z.string().min(8),
-  avatar: z.string().url().optional(),
+  avatar: z.string().url(),
   cellphone: z.string().min(12).max(13),
   plan: z.object({
     id: z.string().uuid(),
