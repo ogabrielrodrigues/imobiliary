@@ -35,7 +35,7 @@ func (s *Service) FindByID(ctx context.Context, user_id uuid.UUID) (*DTO, *respo
 }
 
 func (s *Service) Create(ctx context.Context, dto *CreateDTO, user_id uuid.UUID) (*Property, *response.Err) {
-	p, err := New(dto.Address.ToAddress(), dto.WaterID, dto.EnergyID, user_id)
+	p, err := New(dto.Address.ToAddress(), dto.Status, dto.WaterID, dto.EnergyID, user_id)
 	if err != nil {
 		return nil, err
 	}

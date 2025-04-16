@@ -5,8 +5,8 @@ import "fmt"
 type Kind string
 
 const (
-	Residential Kind = "residential"
-	Comercial   Kind = "comercial"
+	Residential Kind = "Residencial"
+	Comercial   Kind = "Comercial"
 )
 
 type Address struct {

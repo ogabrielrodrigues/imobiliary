@@ -8,6 +8,7 @@ import (
 type DTO struct {
 	ID       string      `json:"id"`
 	Address  address.DTO `json:"address"`
+	Status   Status      `json:"status"`
 	WaterID  string      `json:"water_id"`
 	EnergyID string      `json:"energy_id"`
 	UserID   string      `json:"user_id"`
@@ -17,6 +18,7 @@ func (d *DTO) ToProperty() *Property {
 	return &Property{
 		ID:       uuid.MustParse(d.ID),
 		Address:  d.Address.ToAddress(),
+		Status:   d.Status,
 		WaterID:  d.WaterID,
 		EnergyID: d.EnergyID,
 		UserID:   uuid.MustParse(d.UserID),
@@ -25,6 +27,7 @@ func (d *DTO) ToProperty() *Property {
 
 type CreateDTO struct {
 	Address  address.CreateDTO `json:"address"`
+	Status   Status            `json:"status"`
 	WaterID  string            `json:"water_id"`
 	EnergyID string            `json:"energy_id"`
 }
@@ -32,6 +35,7 @@ type CreateDTO struct {
 func (d *CreateDTO) ToProperty() *Property {
 	return &Property{
 		Address:  d.Address.ToAddress(),
+		Status:   d.Status,
 		WaterID:  d.WaterID,
 		EnergyID: d.EnergyID,
 	}
@@ -39,6 +43,7 @@ func (d *CreateDTO) ToProperty() *Property {
 
 type UpdateDTO struct {
 	Address  address.DTO `json:"address"`
+	Status   Status      `json:"status"`
 	WaterID  string      `json:"water_id"`
 	EnergyID string      `json:"energy_id"`
 }
@@ -46,6 +51,7 @@ type UpdateDTO struct {
 func (d *UpdateDTO) ToProperty() *Property {
 	return &Property{
 		Address:  d.Address.ToAddress(),
+		Status:   d.Status,
 		WaterID:  d.WaterID,
 		EnergyID: d.EnergyID,
 	}
