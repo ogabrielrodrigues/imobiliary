@@ -3,6 +3,7 @@ package test
 import (
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
 )
@@ -13,6 +14,7 @@ func TestProperty(t *testing.T) {
 			address.New("street", "number", "neighborhood", "complement", "city", "state", "state_abbr", "zip", address.Residential),
 			"water-123",
 			"energy-123",
+			uuid.New(),
 		)
 
 		if err != nil {
@@ -25,6 +27,7 @@ func TestProperty(t *testing.T) {
 			address.New("street", "number", "neighborhood", "complement", "city", "state", "state_abbr", "zip", address.Residential),
 			"",
 			"energy-123",
+			uuid.New(),
 		)
 
 		if err.Message != property.ERR_EMPTY_WATER_ID {
@@ -37,6 +40,7 @@ func TestProperty(t *testing.T) {
 			address.New("street", "number", "neighborhood", "complement", "city", "state", "state_abbr", "zip", address.Residential),
 			"water-123",
 			"",
+			uuid.New(),
 		)
 
 		if err.Message != property.ERR_EMPTY_ENERGY_ID {
@@ -49,6 +53,7 @@ func TestProperty(t *testing.T) {
 			nil,
 			"water-123",
 			"energy-123",
+			uuid.New(),
 		)
 
 		if err.Message != property.ERR_EMPTY_ADDRESS {

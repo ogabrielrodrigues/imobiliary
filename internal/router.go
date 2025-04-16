@@ -3,15 +3,18 @@ package api
 import (
 	"net/http"
 
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
+	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
+	property_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/property"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
 )
 
 func Register(h *Handler, mux *http.ServeMux) {
 	userHandler := user.NewHandler(
 		user.NewService(
-			repository.NewMemUserRepository(),
-			repository.NewLocalUserAvatarRepository("./tmp"),
+			user_repository.NewMemUserRepository(),
+			user_repository.NewLocalUserAvatarRepository("./tmp"),
 		),
 	)
 
@@ -22,4 +25,16 @@ func Register(h *Handler, mux *http.ServeMux) {
 	mux.HandleFunc("POST /users/auth", userHandler.Authenticate)
 	mux.HandleFunc("POST /users/avatar", userHandler.UpdateAvatar)
 	mux.HandleFunc("GET /users/{user_id}/avatar", userHandler.GetAvatar)
+
+	propertyHandler := property.NewHandler(
+		property.NewService(
+			property_repository.NewMemPropertyRepository(),
+		),
+	)
+
+	mux.HandleFunc("GET /properties", propertyHandler.FindAllByUserID)
+	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.FindByID)))
+	mux.Handle("POST /properties", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.Create)))
+	mux.HandleFunc("PUT /properties/{property_id}", propertyHandler.Update)
+	mux.HandleFunc("DELETE /properties/{property_id}", propertyHandler.Delete)
 }

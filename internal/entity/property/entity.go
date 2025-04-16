@@ -11,14 +11,16 @@ type Property struct {
 	Address  *address.Address
 	WaterID  string
 	EnergyID string
+	UserID   uuid.UUID
 }
 
-func New(address *address.Address, water_id, energy_id string) (*Property, *response.Err) {
+func New(address *address.Address, water_id, energy_id string, user_id uuid.UUID) (*Property, *response.Err) {
 	p := &Property{
 		ID:       uuid.New(),
 		Address:  address,
 		WaterID:  water_id,
 		EnergyID: energy_id,
+		UserID:   user_id,
 	}
 
 	err := p.validate()
@@ -35,5 +37,6 @@ func (p *Property) ToDTO() *DTO {
 		Address:  *p.Address.ToDTO(),
 		WaterID:  p.WaterID,
 		EnergyID: p.EnergyID,
+		UserID:   p.UserID.String(),
 	}
 }
