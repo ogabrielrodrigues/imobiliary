@@ -18,12 +18,12 @@ func NewMemPropertyRepository() *MemPropertyRepository {
 	return &MemPropertyRepository{}
 }
 
-func (r *MemPropertyRepository) FindAllByUserID(ctx context.Context, user_id uuid.UUID) ([]property.Property, *response.Err) {
-	found := []property.Property{}
+func (r *MemPropertyRepository) FindAllByUserID(ctx context.Context, user_id uuid.UUID) ([]property.DTO, *response.Err) {
+	found := []property.DTO{}
 
 	for _, property := range r.properties {
 		if property.UserID == user_id {
-			found = append(found, *property)
+			found = append(found, *property.ToDTO())
 		}
 	}
 

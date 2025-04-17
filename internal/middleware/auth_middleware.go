@@ -18,7 +18,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		authorization, _ := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
+		authorization := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 
 		token, err := jwt.Parse(authorization, func(token *jwt.Token) (interface{}, error) {
 			return []byte(environment.Environment.SECRET_KEY), nil

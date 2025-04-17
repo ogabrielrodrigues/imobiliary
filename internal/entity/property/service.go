@@ -24,8 +24,7 @@ func NewService(repo IRepository) *Service {
 }
 
 func (s *Service) FindAllByUserID(ctx context.Context, user_id uuid.UUID) ([]DTO, *response.Err) {
-	// return
-	return nil, nil
+	return s.repo.FindAllByUserID(ctx, user_id)
 }
 
 func (s *Service) FindByID(ctx context.Context, user_id uuid.UUID) (*DTO, *response.Err) {

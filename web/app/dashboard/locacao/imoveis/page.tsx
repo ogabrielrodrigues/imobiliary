@@ -1,4 +1,4 @@
-import { getProperty } from "@/actions/properties"
+import { getProperties } from "@/actions/properties"
 import { Metadata } from "next"
 import { PropertiesHeader } from "./_components/properties-header"
 import { PropertiesTable } from "./_components/properties-table"
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default async function PropertiesPage() {
-  const property = await getProperty("f6bd4a6a-89ad-42c4-88cc-f81374565189")
+  const property = await getProperties()
 
   const properties = Array.isArray(property) ? property : [property]
 

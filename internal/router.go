@@ -11,6 +11,12 @@ import (
 )
 
 func Register(h *Handler, mux *http.ServeMux) {
+	registerUserRoutes(mux)
+
+	registerPropertyRoutes(mux)
+}
+
+func registerUserRoutes(mux *http.ServeMux) {
 	userHandler := user.NewHandler(
 		user.NewService(
 			user_repository.NewMemUserRepository(),
@@ -25,14 +31,16 @@ func Register(h *Handler, mux *http.ServeMux) {
 	mux.HandleFunc("POST /users/auth", userHandler.Authenticate)
 	mux.HandleFunc("POST /users/avatar", userHandler.UpdateAvatar)
 	mux.HandleFunc("GET /users/{user_id}/avatar", userHandler.GetAvatar)
+}
 
+func registerPropertyRoutes(mux *http.ServeMux) {
 	propertyHandler := property.NewHandler(
 		property.NewService(
 			property_repository.NewMemPropertyRepository(),
 		),
 	)
 
-	mux.HandleFunc("GET /properties", propertyHandler.FindAllByUserID)
+	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.FindAllByUserID)))
 	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.FindByID)))
 	mux.Handle("POST /properties", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.Create)))
 	mux.HandleFunc("PUT /properties/{property_id}", propertyHandler.Update)

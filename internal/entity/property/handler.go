@@ -19,7 +19,22 @@ func NewHandler(service IService) *Handler {
 }
 
 func (h *Handler) FindAllByUserID(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+	user_id := r.Context().Value("user_id").(string)
+
+	uid, err := uuid.Parse(user_id)
+	if err != nil {
+		r_err := response.NewErr(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		response.End(w, r_err.Code, r_err)
+		return
+	}
+
+	properties, r_err := h.service.FindAllByUserID(context.Background(), uid)
+	if r_err != nil {
+		response.End(w, r_err.Code, r_err)
+		return
+	}
+
+	response.End(w, http.StatusOK, properties)
 }
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
