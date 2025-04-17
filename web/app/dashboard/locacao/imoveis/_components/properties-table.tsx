@@ -1,11 +1,12 @@
 'use client'
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Property } from "@/types/property"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpRight, Check, CircleCheck, CircleX } from "lucide-react"
+import { ArrowUpDown, ArrowUpRight } from "lucide-react"
+import Link from "next/link"
 import { DataTable } from "./properties-data-table"
+import { StatusBadge } from "./status-badge"
 
 interface PropertiesTableProps {
   properties: Property[]
@@ -13,31 +14,24 @@ interface PropertiesTableProps {
 
 const columns: ColumnDef<Property>[] = [
   {
-    header: "Endereço",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Endereço
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     accessorKey: "address.mini_address",
     id: "address",
   },
   {
     header: "Status",
     accessorKey: "status",
-    cell: ({ row }) => {
-      const status = row.original.status.toUpperCase()
-
-      switch (status) {
-        case "DISPONÍVEL":
-          return <Badge variant="outline" className="h-8">
-            <CircleCheck className="!size-4 text-green-500" />{status}
-          </Badge >
-        case "OCCUPIED":
-          return <Badge variant="outline" className="h-8">
-            <Check className="!size-4 text-yellow-500" />{status}
-          </Badge >
-        case "UNAVAILABLE":
-          return <Badge variant="outline" className="h-8">
-            <CircleX className="!size-4 text-red-500" />{status}
-          </Badge >
-      }
-    },
+    cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
     header: "Tipo",
@@ -53,11 +47,13 @@ const columns: ColumnDef<Property>[] = [
   },
   {
     id: "actions",
-    cell: () => (
-      <Button variant="outline">
-        <ArrowUpRight className="size-4" />
-        <p className="text-xs hidden md:block">Ver</p>
-      </Button>
+    cell: ({ row }) => (
+      <Link href={`/dashboard/locacao/imoveis/${row.original.id}`}>
+        <Button variant="outline">
+          <ArrowUpRight className="size-4" />
+          <p className="text-xs hidden md:block">Ver</p>
+        </Button>
+      </Link>
     ),
   },
 ]
@@ -65,7 +61,6 @@ const columns: ColumnDef<Property>[] = [
 export function PropertiesTable({ properties }: PropertiesTableProps) {
   return (
     <DataTable
-      className="mt-6"
       columns={columns}
       data={properties}
     />

@@ -6,6 +6,8 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable
 } from "@tanstack/react-table"
 
@@ -22,7 +24,7 @@ import {
 import { cn } from "@/lib/utils"
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react"
 import Link from "next/link"
-import { ComponentProps } from "react"
+import { ComponentProps, useState } from "react"
 
 type DataTableProps<TData, TValue> = ComponentProps<'div'> & {
   columns: ColumnDef<TData, TValue>[]
@@ -34,12 +36,24 @@ export function DataTable<TData, TValue>({
   data,
   className,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 5
+      }
+    }
   })
 
   return (
@@ -55,9 +69,9 @@ export function DataTable<TData, TValue>({
         />
 
         <Link href="/dashboard/locacao/imoveis/novo">
-          <Button variant="outline">
+          <Button>
             <Plus className="w-4 h-4" />
-            <p className="hidden md:block">Novo Imóvel</p>
+            <p className="hidden lg:block">Novo Imóvel</p>
           </Button>
         </Link>
       </div>
@@ -97,8 +111,8 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                  Nenhum imóvel encontrado.
                 </TableCell>
               </TableRow>
             )}
@@ -106,23 +120,29 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="w-full flex items-center justify-end space-x-2 mt-4">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <ChevronRight className="w-4 h-4" />
-        </Button>
+      <div className="w-full flex items-center justify-between">
+        <div className="text-sm text-muted-foreground">
+          Pág. {table.getState().pagination.pageIndex + 1} de{" "}
+          {table.getPageCount()}.
+        </div>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </div>
   )

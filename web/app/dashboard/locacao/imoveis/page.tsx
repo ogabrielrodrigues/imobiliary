@@ -14,8 +14,8 @@ export default async function PropertiesPage() {
   const properties = Array.isArray(property) ? property : [property]
 
   return (
-    <div className="container mx-auto">
-      <PropertiesHeader />
+    <div className="container mx-auto flex flex-col space-y-4">
+      <PropertiesHeader properties={properties} />
 
       <PropertiesTable properties={properties} />
     </div >
