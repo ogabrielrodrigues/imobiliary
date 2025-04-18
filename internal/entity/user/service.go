@@ -22,7 +22,7 @@ type IService interface {
 	FindByEmail(ctx context.Context, email string) (*DTO, *response.Err)
 	Create(ctx context.Context, dto *CreateDTO) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, email, password string) (string, *response.Err)
-	SaveAvatar(ctx context.Context, id uuid.UUID, avatarFile multipart.File) *response.Err
+	SaveAvatar(ctx context.Context, avatarFile multipart.File) *response.Err
 }
 
 func NewService(repo IRepository, storage IAvatarStorageRepository) *Service {
@@ -80,11 +80,11 @@ func (s *Service) Authenticate(ctx context.Context, email, password string) (str
 	return token, nil
 }
 
-func (s *Service) SaveAvatar(ctx context.Context, id uuid.UUID, avatarFile multipart.File) *response.Err {
-	avatar_url, err := s.storage.SaveAvatar(ctx, id.String(), avatarFile)
+func (s *Service) SaveAvatar(ctx context.Context, avatarFile multipart.File) *response.Err {
+	avatar_url, err := s.storage.SaveAvatar(ctx, avatarFile)
 	if err != nil {
 		return err
 	}
 
-	return s.repo.ChangeAvatar(ctx, id, avatar_url)
+	return s.repo.ChangeAvatar(ctx, avatar_url)
 }

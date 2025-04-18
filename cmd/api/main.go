@@ -12,6 +12,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	api "github.com/ogabrielrodrigues/imobiliary/internal"
+	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 )
 
@@ -20,24 +21,18 @@ func main() {
 
 	pool, err := pgxpool.New(context.Background(), store.PGConnectionString(*env))
 	if err != nil {
-		logger.Log("pgxpool err=", err)
+		logger.Log("error initializing database", err)
 		return
 	}
 
 	handler := api.NewHandler(pool)
 
 	go func() {
-		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
+		logger.Log("server running on", env.SERVER_ADDR)
+		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(handler)); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
-				panic(err)
-			}
-
-			logger.Log("Starting server on port " + env.SERVER_ADDR)
-			if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
-				if !errors.Is(err, http.ErrServerClosed) {
-					logger.Log("err", err)
-					os.Exit(1)
-				}
+				logger.Log(err.Error())
+				os.Exit(1)
 			}
 		}
 	}()

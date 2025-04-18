@@ -15,11 +15,11 @@ type IRepository interface {
 	FindByEmail(ctx context.Context, email string) (*User, *response.Err)
 	Create(ctx context.Context, user *User) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, email, password string) (*User, *response.Err)
-	ChangeAvatar(ctx context.Context, id uuid.UUID, avatar_url string) *response.Err
+	ChangeAvatar(ctx context.Context, avatar_url string) *response.Err
 }
 
 type IAvatarStorageRepository interface {
-	SaveAvatar(ctx context.Context, id string, avatar multipart.File) (string, *response.Err)
+	SaveAvatar(ctx context.Context, avatar multipart.File) (string, *response.Err)
 }
 
 func NewRepository() *Repository {

@@ -11,6 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -54,8 +56,14 @@ func NewCloudflareR2AvatarRepository(s3_public_url, s3_bucket, s3_access_key, s3
 	}, nil
 }
 
-func (r2 *CloudflareR2AvatarRepository) SaveAvatar(ctx context.Context, id string, avatar multipart.File) (string, *response.Err) {
-	file_key := fmt.Sprintf("avatars/%s", id)
+func (r2 *CloudflareR2AvatarRepository) SaveAvatar(ctx context.Context, avatar multipart.File) (string, *response.Err) {
+	id := ctx.Value("user_id").(string)
+	user_id, err := uuid.Parse(id)
+	if err != nil {
+		return "", response.NewErr(http.StatusBadRequest, user.ERR_UUID_INVALID)
+	}
+
+	file_key := fmt.Sprintf("avatars/%s", user_id)
 
 	out, err := r2.manager.Upload(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String(r2.s3_bucket),

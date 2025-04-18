@@ -6,11 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
-	"strings"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -128,31 +125,13 @@ func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-
-	if r.Header.Get("Authorization") == "" {
-		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
-		response.End(w, err.Code, err)
-		return
-	}
-
-	authorization, _ := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
-
-	token, err := jwt.Parse(authorization, func(token *jwt.Token) (interface{}, error) {
-		return []byte(environment.Environment.SECRET_KEY), nil
-	})
-	if err != nil {
-		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
-		response.End(w, err.Code, err)
-		return
-	}
-
-	user_id, err := token.Claims.GetSubject()
-	if err != nil {
-		err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
-		response.End(w, err.Code, err)
-		return
-	}
+	// id := r.Context().Value("user_id").(string)
+	// user_id, err := uuid.Parse(id)
+	// if err != nil {
+	// 	err := response.NewErr(http.StatusBadRequest, ERR_UUID_INVALID)
+	// 	response.End(w, err.Code, err)
+	// 	return
+	// }
 
 	file, _, err := r.FormFile("avatar")
 	if err != nil {
@@ -162,7 +141,7 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	r_err := h.service.SaveAvatar(ctx, uuid.MustParse(user_id), file)
+	r_err := h.service.SaveAvatar(r.Context(), file)
 	if r_err != nil {
 		response.End(w, r_err.Code, r_err)
 		return

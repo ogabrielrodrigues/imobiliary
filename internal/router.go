@@ -12,7 +12,7 @@ import (
 func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 	registerUserRoutes(mux, pool)
 
-	registerPropertyRoutes(mux)
+	// registerPropertyRoutes(mux)
 }
 
 func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
@@ -21,18 +21,18 @@ func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 		os.Exit(1)
 	}
 
-	mux.Handle("GET /users", middleware.CORSMiddleware(http.HandlerFunc(user_handler.FindBy)))
-	mux.Handle("POST /users", middleware.CORSMiddleware(http.HandlerFunc(user_handler.Create)))
-	mux.Handle("POST /users/auth", middleware.CORSMiddleware(http.HandlerFunc(user_handler.Authenticate)))
+	mux.Handle("GET /users", http.HandlerFunc(user_handler.FindBy))
+	mux.Handle("POST /users", http.HandlerFunc(user_handler.Create))
+	mux.Handle("POST /users/auth", http.HandlerFunc(user_handler.Authenticate))
 
-	mux.Handle("POST /users/avatar", middleware.CORSMiddleware(http.HandlerFunc(user_handler.UpdateAvatar)))
-	mux.Handle("GET /users/plan", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(user_handler.GetUserPlan))))
+	mux.Handle("POST /users/avatar", middleware.AuthMiddleware(http.HandlerFunc(user_handler.UpdateAvatar)))
+	mux.Handle("GET /users/plan", middleware.AuthMiddleware(http.HandlerFunc(user_handler.GetUserPlan)))
 }
 
 func registerPropertyRoutes(mux *http.ServeMux) {
 	property_handler := factory.NewPropertyHandlerFactory()
 
-	mux.Handle("GET /properties", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID))))
-	mux.Handle("GET /properties/{property_id}", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID))))
-	mux.Handle("POST /properties", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(property_handler.Create))))
+	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID)))
+	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID)))
+	mux.Handle("POST /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.Create)))
 }
