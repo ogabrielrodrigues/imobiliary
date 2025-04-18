@@ -4,14 +4,15 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
+	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar"
 	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan"
 	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func NewUserHandlerFactory(pool *pgxpool.Pool) (*user.Handler, *response.Err) {
+func NewUserHandlerFactory(pool *pgxpool.Pool) (*user_handler.Handler, *response.Err) {
 	env := environment.Environment
 
 	user_repo, ur_err := user_repository.NewPostgresUserRepository(pool)
@@ -35,8 +36,8 @@ func NewUserHandlerFactory(pool *pgxpool.Pool) (*user.Handler, *response.Err) {
 		return nil, pr_err
 	}
 
-	return user.NewHandler(
-		user.NewService(user_repo, avatar_repo),
+	return user_handler.NewHandler(
+		user_service.NewService(user_repo, avatar_repo),
 		plan.NewService(plan_repo),
 	), nil
 }
