@@ -3,10 +3,12 @@ package middleware
 import (
 	"net/http"
 
-	types "github.com/ogabrielrodrigues/imobiliary/internal/types/config"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 )
 
-func CORSMiddleware(env *types.Environment, next http.Handler) http.Handler {
+func CORSMiddleware(next http.Handler) http.Handler {
+	env := environment.Environment
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", env.CORS_ORIGIN)
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")

@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"net/http"
-	"slices"
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
@@ -41,27 +40,6 @@ func (r *MemUserRepository) FindByEmail(ctx context.Context, email string) (*use
 func (r *MemUserRepository) Create(ctx context.Context, user *user.User) (uuid.UUID, *response.Err) {
 	r.users = append(r.users, user)
 	return user.ID, nil
-}
-
-func (r *MemUserRepository) Update(ctx context.Context, usr *user.User) *response.Err {
-	for i, u := range r.users {
-		if u.ID == usr.ID {
-			r.users[i] = usr
-			return nil
-		}
-	}
-
-	return response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
-}
-
-func (r *MemUserRepository) Delete(ctx context.Context, id uuid.UUID) *response.Err {
-	for i, u := range r.users {
-		if u.ID == id {
-			r.users = slices.Delete(r.users, i, i+1)
-			return nil
-		}
-	}
-	return response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 }
 
 func (r *MemUserRepository) Authenticate(ctx context.Context, email, password string) (*user.User, *response.Err) {

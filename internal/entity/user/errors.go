@@ -12,6 +12,7 @@ const (
 	ERR_PASSWORD_EMPTY                           string = "user password is empty"
 	ERR_PASSWORD_INVALID                         string = "user password is invalid must be at least 8 characters"
 	ERR_USER_NOT_FOUND_OR_NOT_EXISTS             string = "user not found or not exists"
+	ERR_PASSWORD_DONT_MATCH                      string = "user password don't match"
 	ERR_ONLY_ONE_MUST_PARAMETER_MUST_BE_PROVIDED string = "only one of the parameters must be provided"
 	ERR_FAILED_GENERATE_TOKEN                    string = "failed to generate token"
 	ERR_FAILED_TO_PROCESS_USER                   string = "failed to process user"

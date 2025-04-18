@@ -1,0 +1,42 @@
+package factory
+
+import (
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar"
+	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+)
+
+func NewUserHandlerFactory(pool *pgxpool.Pool) (*user.Handler, *response.Err) {
+	env := environment.Environment
+
+	user_repo, ur_err := user_repository.NewPostgresUserRepository(pool)
+	if ur_err != nil {
+		return nil, ur_err
+	}
+
+	avatar_repo, ar_err := avatar_repository.NewCloudflareR2AvatarRepository(
+		env.S3_PUBLIC_URL,
+		env.S3_AVATAR_BUCKET,
+		env.S3_ACCESS_KEY,
+		env.S3_SECRET_KEY,
+		env.S3_ACCOUNT_ID,
+	)
+	if ar_err != nil {
+		return nil, ar_err
+	}
+
+	plan_repo, pr_err := plan_repository.NewPostgresPlanRepository(pool)
+	if pr_err != nil {
+		return nil, pr_err
+	}
+
+	return user.NewHandler(
+		user.NewService(user_repo, avatar_repo),
+		plan.NewService(plan_repo),
+	), nil
+}

@@ -1,16 +1,12 @@
 package logger
 
 import (
-	"log/slog"
+	"log"
 	"os"
 )
 
-var logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
+var logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-func Info(msg string, args ...any) {
-	logger.Info(msg, args...)
-}
-
-func Error(msg string, args ...any) {
-	logger.Error(msg, args...)
+func Log(msg string, args ...any) {
+	logger.Println(msg, args)
 }

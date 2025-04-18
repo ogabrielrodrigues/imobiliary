@@ -21,7 +21,7 @@ func NewHandler(pool *pgxpool.Pool) http.Handler {
 	}
 
 	mux := http.NewServeMux()
-	Register(&h, mux)
+	Register(&h, mux, pool)
 
 	h.router = mux
 	return h

@@ -11,8 +11,6 @@ type IService interface {
 	FindAllByUserID(ctx context.Context, user_id uuid.UUID) ([]DTO, *response.Err)
 	FindByID(ctx context.Context, user_id uuid.UUID) (*DTO, *response.Err)
 	Create(ctx context.Context, dto *CreateDTO, user_id uuid.UUID) (*Property, *response.Err)
-	Update(ctx context.Context, dto *UpdateDTO, user_id uuid.UUID) (*Property, *response.Err)
-	Delete(ctx context.Context, user_id uuid.UUID) *response.Err
 }
 
 type Service struct {
@@ -40,15 +38,4 @@ func (s *Service) Create(ctx context.Context, dto *CreateDTO, user_id uuid.UUID)
 	}
 
 	return s.repo.Create(ctx, p)
-}
-
-func (s *Service) Update(ctx context.Context, property *UpdateDTO, user_id uuid.UUID) (*Property, *response.Err) {
-	p := property.ToProperty()
-	p.UserID = user_id
-
-	return s.repo.Update(ctx, p)
-}
-
-func (s *Service) Delete(ctx context.Context, user_id uuid.UUID) *response.Err {
-	return s.repo.Delete(ctx, user_id)
 }

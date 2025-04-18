@@ -1,37 +1,30 @@
 package main
 
 import (
+	"context"
 	"errors"
 
 	"net/http"
 	"os"
 	"os/signal"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	api "github.com/ogabrielrodrigues/imobiliary/internal"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
+	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 )
 
 func main() {
 	env := environment.Load()
 
-	// ctx := context.Background()
+	pool, err := pgxpool.New(context.Background(), store.PGConnectionString(*env))
+	if err != nil {
+		logger.Log("pgxpool err=", err)
+		return
+	}
 
-	// pool, err := pgxpool.New(ctx, shared.ConnStr(env))
-	// if err != nil {
-	// 	logger.Error(logger.ErrDatabaseConnection, "err", err)
-	// 	os.Exit(1)
-	// }
-
-	// defer pool.Close()
-
-	// if err := pool.Ping(ctx); err != nil {
-	// 	logger.Error(logger.ErrDatabaseConnection, "err", err)
-	// 	os.Exit(1)
-	// }
-
-	handler := api.NewHandler(nil)
+	handler := api.NewHandler(pool)
 
 	go func() {
 		if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
@@ -39,10 +32,10 @@ func main() {
 				panic(err)
 			}
 
-			logger.Info("Starting server on port " + env.SERVER_ADDR)
-			if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(env, handler)); err != nil {
+			logger.Log("Starting server on port " + env.SERVER_ADDR)
+			if err := http.ListenAndServe(env.SERVER_ADDR, handler); err != nil {
 				if !errors.Is(err, http.ErrServerClosed) {
-					logger.Error("err", err)
+					logger.Log("err", err)
 					os.Exit(1)
 				}
 			}

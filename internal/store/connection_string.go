@@ -6,11 +6,12 @@ import (
 	types "github.com/ogabrielrodrigues/imobiliary/internal/types/config"
 )
 
-func ConnectionString(env types.Environment) string {
-	return fmt.Sprintf("user=%s password=%s host=%s dbname=%s",
+func PGConnectionString(env types.Environment) string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
 		env.DATABASE_USER,
 		env.DATABASE_PWD,
 		env.DATABASE_HOST,
+		env.DATABASE_PORT,
 		env.DATABASE_NAME,
 	)
 }

@@ -1,14 +1,11 @@
-.PHONY: build build-unix build-win services-up services-down
+include .env
 
-build: build-unix build-win
+.PHONY: default run services-up services-down migrate-up migrate-down
 
-build-unix:
-	@go build -o ./dist/reportgenerator cmd/reportgenerator/main.go
-	@go build -o ./dist/rentgenerator cmd/rentgenerator/main.go
+default: run
 
-build-win:
-	@GOOS=windows go build -o ./dist/reportgenerator.exe cmd/reportgenerator/main.go
-	@GOOS=windows go build -o ./dist/rentgenerator.exe cmd/rentgenerator/main.go
+run:
+	@go run cmd/api/main.go
 
 services-up:
 	@docker compose up -d
@@ -17,8 +14,21 @@ services-down:
 	@docker compose down
 
 migrate-up:
-	@go run cmd/tools/ternup/main.go
+	@DATABASE_HOST="${DATABASE_HOST}" \
+	DATABASE_PORT="${DATABASE_PORT}" \
+	DATABASE_NAME="${DATABASE_NAME}" \
+	DATABASE_USER="${DATABASE_USER}" \
+	DATABASE_PWD="${DATABASE_PWD}" \
+	tern migrate --migrations internal/store/pg/migrations \
+	--config internal/store/pg/migrations/tern.conf
+	@go run ./cmd/migrate/main.go
 
 migrate-down:
-	@go run cmd/tools/terndn/main.go
+	DATABASE_HOST="${DATABASE_HOST}" \
+	DATABASE_PORT="${DATABASE_PORT}" \
+	DATABASE_NAME="${DATABASE_NAME}" \
+	DATABASE_USER="${DATABASE_USER}" \
+	DATABASE_PWD="${DATABASE_PWD}" \
+	tern migrate --migrations internal/store/pg/migrations \
+	--config internal/store/pg/migrations/tern.conf -d -1
 

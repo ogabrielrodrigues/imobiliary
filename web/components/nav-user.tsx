@@ -32,13 +32,15 @@ import {
 import { User } from "@/types/user"
 
 import { logout } from "@/actions/auth"
+import { Plan } from "@/types/plan"
 import { ProPlanDialog } from "./pro-plan-dialog"
 
 type NavUserProps = {
   user: User | undefined
+  plan: Plan
 }
 
-export function NavUser({ user }: NavUserProps) {
+export function NavUser({ user, plan }: NavUserProps) {
   const { isMobile } = useSidebar()
 
   return (
@@ -80,7 +82,7 @@ export function NavUser({ user }: NavUserProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {user?.plan.kind === "free" && (
+            {plan.kind === "free" && (
               <>
                 <DropdownMenuGroup>
                   <ProPlanDialog>

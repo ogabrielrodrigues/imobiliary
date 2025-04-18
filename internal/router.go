@@ -2,47 +2,37 @@ package api
 
 import (
 	"net/http"
+	"os"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/ogabrielrodrigues/imobiliary/internal/factory"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	property_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/property"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
 )
 
-func Register(h *Handler, mux *http.ServeMux) {
-	registerUserRoutes(mux)
+func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
+	registerUserRoutes(mux, pool)
 
 	registerPropertyRoutes(mux)
 }
 
-func registerUserRoutes(mux *http.ServeMux) {
-	userHandler := user.NewHandler(
-		user.NewService(
-			user_repository.NewMemUserRepository(),
-			user_repository.NewLocalUserAvatarRepository("./tmp"),
-		),
-	)
+func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
+	user_handler, err := factory.NewUserHandlerFactory(pool)
+	if err != nil {
+		os.Exit(1)
+	}
 
-	mux.HandleFunc("GET /users", userHandler.FindBy)
-	mux.HandleFunc("POST /users", userHandler.Create)
-	mux.HandleFunc("PUT /users/{param}", userHandler.Update)
-	mux.HandleFunc("DELETE /users/{id}", userHandler.Delete)
-	mux.HandleFunc("POST /users/auth", userHandler.Authenticate)
-	mux.HandleFunc("POST /users/avatar", userHandler.UpdateAvatar)
-	mux.HandleFunc("GET /users/{user_id}/avatar", userHandler.GetAvatar)
+	mux.Handle("GET /users", middleware.CORSMiddleware(http.HandlerFunc(user_handler.FindBy)))
+	mux.Handle("POST /users", middleware.CORSMiddleware(http.HandlerFunc(user_handler.Create)))
+	mux.Handle("POST /users/auth", middleware.CORSMiddleware(http.HandlerFunc(user_handler.Authenticate)))
+
+	mux.Handle("POST /users/avatar", middleware.CORSMiddleware(http.HandlerFunc(user_handler.UpdateAvatar)))
+	mux.Handle("GET /users/plan", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(user_handler.GetUserPlan))))
 }
 
 func registerPropertyRoutes(mux *http.ServeMux) {
-	propertyHandler := property.NewHandler(
-		property.NewService(
-			property_repository.NewMemPropertyRepository(),
-		),
-	)
+	property_handler := factory.NewPropertyHandlerFactory()
 
-	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.FindAllByUserID)))
-	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.FindByID)))
-	mux.Handle("POST /properties", middleware.AuthMiddleware(http.HandlerFunc(propertyHandler.Create)))
-	mux.HandleFunc("PUT /properties/{property_id}", propertyHandler.Update)
-	mux.HandleFunc("DELETE /properties/{property_id}", propertyHandler.Delete)
+	mux.Handle("GET /properties", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID))))
+	mux.Handle("GET /properties/{property_id}", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID))))
+	mux.Handle("POST /properties", middleware.CORSMiddleware(middleware.AuthMiddleware(http.HandlerFunc(property_handler.Create))))
 }

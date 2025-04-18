@@ -2,28 +2,18 @@ package user
 
 import (
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
 )
 
 type DTO struct {
-	ID        string   `json:"id"`
-	CreciID   string   `json:"creci_id"`
-	Fullname  string   `json:"fullname"`
-	Cellphone string   `json:"cellphone"`
-	Email     string   `json:"email"`
-	Avatar    string   `json:"avatar,omitempty"`
-	Plan      plan.DTO `json:"plan"`
+	ID        string `json:"id"`
+	CreciID   string `json:"creci_id"`
+	Fullname  string `json:"fullname"`
+	Cellphone string `json:"cellphone"`
+	Email     string `json:"email"`
+	Avatar    string `json:"avatar,omitempty"`
 }
 
 func (d *DTO) ToUser() *User {
-	p := plan.New(
-		d.Plan.Kind,
-		d.Plan.PropertiesTotalQuota,
-		d.Plan.PropertiesUsedQuota,
-		d.Plan.PropertiesRemainingQuota,
-	)
-	p.Price = d.Plan.Price
-
 	return &User{
 		ID:        uuid.MustParse(d.ID),
 		CreciID:   d.CreciID,
@@ -31,7 +21,6 @@ func (d *DTO) ToUser() *User {
 		Cellphone: d.Cellphone,
 		Email:     d.Email,
 		Avatar:    d.Avatar,
-		Plan:      *p,
 	}
 }
 

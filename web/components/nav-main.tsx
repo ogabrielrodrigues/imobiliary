@@ -18,7 +18,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
-import { User } from "@/types/user"
+import { Plan } from "@/types/plan"
 import { usePathname } from "next/navigation"
 
 type NavMainItemType = {
@@ -86,10 +86,10 @@ const item: NavMainType = {
 }
 
 type NavMainProps = {
-  user: User | undefined
+  plan: Plan
 }
 
-export function NavMain({ user }: NavMainProps) {
+export function NavMain({ plan }: NavMainProps) {
   const pathname = usePathname()
 
   return (
@@ -113,7 +113,7 @@ export function NavMain({ user }: NavMainProps) {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.filter(item => item.visibility === user?.plan.kind).map((subItem) => (
+                  {item.items?.filter(item => item.visibility === plan.kind).map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
                         <a href={subItem.url}>

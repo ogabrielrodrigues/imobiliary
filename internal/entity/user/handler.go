@@ -11,16 +11,20 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
 type Handler struct {
-	service IService
+	service      IService
+	plan_service plan.IService
 }
 
-func NewHandler(service IService) *Handler {
-	return &Handler{service: service}
+func NewHandler(service IService, plan_service plan.IService) *Handler {
+	return &Handler{
+		service:      service,
+		plan_service: plan_service,
+	}
 }
 
 func (h *Handler) FindBy(w http.ResponseWriter, r *http.Request) {
@@ -88,16 +92,15 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	plan := plan.New(plan.PlanKindFree, 30, 0, 30)
+	err = h.plan_service.AssignPlanToUser(ctx, string(plan.Kind), id, plan)
+	if err != nil {
+		response.End(w, err.Code, err)
+		return
+	}
+
 	w.Header().Set("Location", fmt.Sprintf("/users/%s", id))
 	w.WriteHeader(http.StatusCreated)
-}
-
-func (h *Handler) Update(w http.ResponseWriter, r *http.Request) {
-	h.service.Update(nil, &UpdateDTO{})
-}
-
-func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	h.service.Delete(nil, uuid.MustParse(r.PathValue("id")))
 }
 
 func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
@@ -161,7 +164,6 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 
 	r_err := h.service.SaveAvatar(ctx, uuid.MustParse(user_id), file)
 	if r_err != nil {
-		logger.Error("Error saving avatar", "error", r_err)
 		response.End(w, r_err.Code, r_err)
 		return
 	}
@@ -169,22 +171,21 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *Handler) GetAvatar(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-	id := r.PathValue("user_id")
+func (h *Handler) GetUserPlan(w http.ResponseWriter, r *http.Request) {
+	user_id := r.Context().Value("user_id").(string)
 
-	user_id, err := uuid.Parse(id)
+	uid, err := uuid.Parse(user_id)
 	if err != nil {
-		err := response.NewErr(http.StatusBadRequest, ERR_UUID_INVALID)
-		response.End(w, err.Code, err)
+		r_err := response.NewErr(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		response.End(w, r_err.Code, r_err)
 		return
 	}
 
-	avatar_path, r_err := h.service.GetAvatar(ctx, user_id)
+	plan, r_err := h.plan_service.GetUserPlan(context.Background(), uid)
 	if r_err != nil {
 		response.End(w, r_err.Code, r_err)
 		return
 	}
 
-	http.ServeFile(w, r, avatar_path)
+	response.End(w, http.StatusOK, plan)
 }

@@ -1,12 +1,16 @@
 package test
 
 import (
+	"path/filepath"
 	"testing"
 
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 )
 
 func TestUser(t *testing.T) {
+	environment.LoadFile(filepath.Join("..", "..", ".env"))
+
 	t.Run("should be able to create a user", func(t *testing.T) {
 		_, err := user.New(
 			"12345-F",

@@ -7,17 +7,21 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"testing"
 
-	"github.com/joho/godotenv"
+	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
+	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
 	res "github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
 func TestE2ECreateUser(t *testing.T) {
-	repo := repository.NewMemUserRepository()
-	storage := repository.NewLocalUserAvatarRepository("./tmp")
+	environment.LoadFile(filepath.Join("..", "..", ".env"))
+
+	repo := user_repository.NewMemUserRepository()
+	storage := avatar_repository.NewLocalUserAvatarRepository("./tmp")
 	service := user.NewService(repo, storage)
 	userHandler := user.NewHandler(service)
 
@@ -352,8 +356,10 @@ func TestE2ECreateUser(t *testing.T) {
 }
 
 func TestE2EFindByUser(t *testing.T) {
-	repo := repository.NewMemUserRepository()
-	storage := repository.NewLocalUserAvatarRepository("./tmp")
+	environment.LoadFile(filepath.Join("..", "..", ".env"))
+
+	repo := user_repository.NewMemUserRepository()
+	storage := avatar_repository.NewLocalUserAvatarRepository("./tmp")
 	service := user.NewService(repo, storage)
 	userHandler := user.NewHandler(service)
 
@@ -529,10 +535,10 @@ func TestE2EFindByUser(t *testing.T) {
 }
 
 func TestE2EAuthenticateUser(t *testing.T) {
-	godotenv.Load("../../../.env")
+	environment.LoadFile(filepath.Join("..", "..", ".env"))
 
-	repo := repository.NewMemUserRepository()
-	storage := repository.NewLocalUserAvatarRepository("./tmp")
+	repo := user_repository.NewMemUserRepository()
+	storage := avatar_repository.NewLocalUserAvatarRepository("./tmp")
 	service := user.NewService(repo, storage)
 	userHandler := user.NewHandler(service)
 
