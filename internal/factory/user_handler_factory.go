@@ -8,7 +8,7 @@ import (
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar"
 	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user/pg"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
