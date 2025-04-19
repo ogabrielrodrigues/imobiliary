@@ -2,13 +2,6 @@ package address
 
 import "fmt"
 
-type Kind string
-
-const (
-	Residential Kind = "Residencial"
-	Comercial   Kind = "Comercial"
-)
-
 type Address struct {
 	FullAddress  string
 	MiniAddress  string
@@ -19,10 +12,9 @@ type Address struct {
 	City         string
 	State        string
 	ZipCode      string
-	Kind         Kind
 }
 
-func New(street, number, neighboorhood, complement, city, state, zip_code string, kind Kind) *Address {
+func New(street, number, neighboorhood, complement, city, state, zip_code string) *Address {
 	fulladdress := genFullAddress(street, number, neighboorhood, city, state, zip_code)
 	miniaddress := genMiniAddress(street, number, neighboorhood, city, state)
 
@@ -36,7 +28,6 @@ func New(street, number, neighboorhood, complement, city, state, zip_code string
 		City:         city,
 		State:        state,
 		ZipCode:      zip_code,
-		Kind:         kind,
 	}
 }
 
@@ -58,7 +49,6 @@ type DTO struct {
 	City         string `json:"city"`
 	State        string `json:"state"`
 	ZipCode      string `json:"zip_code"`
-	Kind         Kind   `json:"kind"`
 }
 
 type CreateDTO struct {
@@ -69,11 +59,10 @@ type CreateDTO struct {
 	City         string `json:"city"`
 	State        string `json:"state"`
 	ZipCode      string `json:"zip_code"`
-	Kind         Kind   `json:"kind"`
 }
 
 func (d *CreateDTO) ToAddress() *Address {
-	return New(d.Street, d.Number, d.Neighborhood, d.Complement, d.City, d.State, d.ZipCode, d.Kind)
+	return New(d.Street, d.Number, d.Neighborhood, d.Complement, d.City, d.State, d.ZipCode)
 }
 
 func (a *Address) ToDTO() *DTO {
@@ -87,7 +76,6 @@ func (a *Address) ToDTO() *DTO {
 		City:         a.City,
 		State:        a.State,
 		ZipCode:      a.ZipCode,
-		Kind:         a.Kind,
 	}
 }
 
@@ -100,7 +88,6 @@ func (a *DTO) ToAddress() *Address {
 		a.City,
 		a.State,
 		a.ZipCode,
-		a.Kind,
 	)
 
 	return address

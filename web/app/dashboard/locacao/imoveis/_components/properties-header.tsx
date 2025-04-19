@@ -7,10 +7,10 @@ interface PropertiesHeaderProps {
 
 export function PropertiesHeader({ properties }: PropertiesHeaderProps) {
   const occupied = properties.filter(property => property.status === 'Ocupado')
-  const occupied_percent = ((occupied.length / properties.length) * 100).toFixed(0)
+  const occupied_percent = ((occupied.length / properties.length) * 100) || 0
 
   const available = properties.filter(property => property.status === 'Disponível')
-  const available_percent = ((available.length / properties.length) * 100).toFixed(0)
+  const available_percent = ((available.length / properties.length) * 100) || 0
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -32,7 +32,7 @@ export function PropertiesHeader({ properties }: PropertiesHeaderProps) {
         </CardHeader>
         <CardContent>
           <div className="text-4xl font-bold">{occupied.length}</div>
-          <p className="text-sm text-muted-foreground mt-2">{occupied_percent || "0"}% do total de imóveis</p>
+          <p className="text-sm text-muted-foreground mt-2">{occupied_percent.toFixed(0)}% do total de imóveis</p>
         </CardContent>
       </Card>
 
@@ -43,7 +43,7 @@ export function PropertiesHeader({ properties }: PropertiesHeaderProps) {
         </CardHeader>
         <CardContent>
           <div className="text-4xl font-bold">{available.length}</div>
-          <p className="text-sm text-muted-foreground mt-2">{available_percent || "0"}% do total de imóveis</p>
+          <p className="text-sm text-muted-foreground mt-2">{available_percent.toFixed(0)}% do total de imóveis</p>
         </CardContent>
       </Card>
     </div>

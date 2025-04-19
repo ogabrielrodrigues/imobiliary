@@ -12,7 +12,7 @@ import (
 func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 	registerUserRoutes(mux, pool)
 
-	registerPropertyRoutes(mux)
+	registerPropertyRoutes(mux, pool)
 }
 
 func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
@@ -29,8 +29,8 @@ func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 	mux.Handle("GET /users/plan", middleware.AuthMiddleware(http.HandlerFunc(user_handler.GetUserPlan)))
 }
 
-func registerPropertyRoutes(mux *http.ServeMux) {
-	property_handler := factory.NewPropertyHandlerFactory()
+func registerPropertyRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
+	property_handler := factory.NewPropertyHandlerFactory(pool)
 
 	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID)))
 	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID)))

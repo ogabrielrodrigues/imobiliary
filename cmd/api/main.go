@@ -13,13 +13,13 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	api "github.com/ogabrielrodrigues/imobiliary/internal"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/store"
+	store "github.com/ogabrielrodrigues/imobiliary/internal/store/postgres"
 )
 
 func main() {
 	env := environment.Load()
 
-	pool, err := pgxpool.New(context.Background(), store.PGConnectionString(*env))
+	pool, err := pgxpool.New(context.Background(), store.PostgresConnectionString(*env))
 	if err != nil {
 		logger.Log("error initializing database", err)
 		return

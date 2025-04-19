@@ -32,6 +32,8 @@ export async function getProperty(id: string): Promise<Property> {
     }
   })
 
+  console.log(response.status)
+
   return response.json()
 }
 
@@ -55,5 +57,5 @@ export async function createProperty(data: z.infer<typeof property_schema>): Pro
     }
   })
 
-  return 200
+  return response.status
 }

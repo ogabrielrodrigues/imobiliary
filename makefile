@@ -19,8 +19,8 @@ migrate-up:
 	DATABASE_NAME="${DATABASE_NAME}" \
 	DATABASE_USER="${DATABASE_USER}" \
 	DATABASE_PWD="${DATABASE_PWD}" \
-	tern migrate --migrations internal/store/pg/migrations \
-	--config internal/store/pg/migrations/tern.conf
+	tern migrate --migrations internal/store/postgres/migrations \
+	--config internal/store/postgres/migrations/tern.conf
 	@go run ./cmd/migrate/main.go
 
 migrate-down:
@@ -29,6 +29,6 @@ migrate-down:
 	DATABASE_NAME="${DATABASE_NAME}" \
 	DATABASE_USER="${DATABASE_USER}" \
 	DATABASE_PWD="${DATABASE_PWD}" \
-	tern migrate --migrations internal/store/pg/migrations \
-	--config internal/store/pg/migrations/tern.conf -d -1
+	tern migrate --migrations internal/store/postgres/migrations \
+	--config internal/store/postgres/migrations/tern.conf -d -1
 

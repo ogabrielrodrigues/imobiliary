@@ -27,7 +27,8 @@ import { toast } from "sonner"
 export const property_schema = z.object({
   water_id: z.string().min(3, "O código da água deve conter ao menos 3 caracteres"),
   energy_id: z.string().min(3, "O código da energia deve conter ao menos 3 caracteres"),
-  status: z.enum(["Disponível", "Ocupado", "Indisponível"]),
+  status: z.enum(['Disponível', 'Ocupado', 'Indisponível', 'Reservado', 'Reformando']),
+  kind: z.enum(['Residencial', 'Comercial', 'Industrial', 'Terreno', 'Rural']),
   address: z.object({
     street: z.string().min(3, "O nome da rua deve conter ao menos 3 caracteres"),
     number: z.string().min(1, "O número da rua deve conter ao menos 1 caracter"),
@@ -36,7 +37,6 @@ export const property_schema = z.object({
     city: z.string().min(3, "A cidade deve conter ao menos 3 caracteres"),
     state: z.string().optional(),
     zip_code: z.string().min(8, "O CEP deve conter ao menos 8 caracteres"),
-    kind: z.enum(["Residencial", "Comercial"]),
   }),
 })
 
@@ -49,6 +49,7 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
       water_id: "",
       energy_id: "",
       status: "Disponível",
+      kind: "Residencial",
       address: {
         street: "",
         number: "",
@@ -56,8 +57,7 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
         complement: "",
         city: "",
         state: "",
-        zip_code: "",
-        kind: "Residencial"
+        zip_code: ""
       }
     }
   })
@@ -66,14 +66,17 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
     const status = await createProperty(values)
 
     switch (status) {
-      case 200:
+      case 201:
         toast.success("Imóvel criado com sucesso", { duration: 1500 })
+
+        setTimeout(() => {
+          router.push("/dashboard/locacao/imoveis")
+        }, 1500)
+        break
+      default:
+        toast.error("Erro ao criar imóvel", { description: "Confira os dados e tente novamente", duration: 1500 })
         break
     }
-
-    setTimeout(() => {
-      router.push("/dashboard/locacao/imoveis")
-    }, 1500)
   }
 
   return (
@@ -94,6 +97,7 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
                   className="text-sm md:text-base"
                   placeholder="Logradouro"
                   autoComplete="off"
+                  autoFocus
                   {...field}
                 />
               </FormControl>
@@ -241,7 +245,7 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
 
         <FormField
           control={form.control}
-          name="address.kind"
+          name="kind"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Tipo</FormLabel>
@@ -257,6 +261,9 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
                   <SelectContent className="text-sm md:text-base">
                     <SelectItem value="Residencial">Residencial</SelectItem>
                     <SelectItem value="Comercial">Comercial</SelectItem>
+                    <SelectItem value="Industrial">Industrial</SelectItem>
+                    <SelectItem value="Terreno">Terreno</SelectItem>
+                    <SelectItem value="Rural">Rural</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -283,6 +290,8 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
                     <SelectItem value="Disponível">Disponível</SelectItem>
                     <SelectItem value="Ocupado">Ocupado</SelectItem>
                     <SelectItem value="Indisponível">Indisponível</SelectItem>
+                    <SelectItem value="Reservado">Reservado</SelectItem>
+                    <SelectItem value="Reformando">Reformando</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>

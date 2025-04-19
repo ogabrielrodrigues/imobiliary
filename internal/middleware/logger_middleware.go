@@ -14,7 +14,7 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 
 		fmt.Printf(
 			"[%s] %dms > %s %s\n",
-			time.Now().Format("01/02006 15:04:05"),
+			time.Now().Format("01/02/2006 15:04:05"),
 			duration,
 			r.Method,
 			r.URL.Path,

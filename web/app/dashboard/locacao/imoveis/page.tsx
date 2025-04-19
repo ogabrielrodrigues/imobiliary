@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 }
 
 export default async function PropertiesPage() {
-  const property = await getProperties()
+  const found = await getProperties()
 
-  const properties = Array.isArray(property) ? property : [property]
+  const properties = found.length > 0 ? found : []
 
   return (
     <div className="container mx-auto flex flex-col space-y-4">

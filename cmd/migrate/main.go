@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/store"
+	store "github.com/ogabrielrodrigues/imobiliary/internal/store/postgres"
 )
 
 func createPlans(ctx context.Context, pool *pgxpool.Pool) {
@@ -41,7 +41,7 @@ func main() {
 
 	ctx := context.Background()
 
-	pool, err := pgxpool.New(ctx, store.PGConnectionString(*env))
+	pool, err := pgxpool.New(ctx, store.PostgresConnectionString(*env))
 	if err != nil {
 		os.Exit(1)
 	}

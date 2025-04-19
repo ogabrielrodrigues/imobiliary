@@ -6,7 +6,7 @@ import (
 	types "github.com/ogabrielrodrigues/imobiliary/internal/types/config"
 )
 
-func PGConnectionString(env types.Environment) string {
+func PostgresConnectionString(env types.Environment) string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
 		env.DATABASE_USER,
 		env.DATABASE_PWD,

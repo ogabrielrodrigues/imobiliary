@@ -35,7 +35,7 @@ const columns: ColumnDef<Property>[] = [
   },
   {
     header: "Tipo",
-    accessorKey: "address.kind",
+    accessorKey: "kind",
   },
   {
     header: "Cód. Água",

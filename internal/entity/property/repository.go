@@ -8,9 +8,9 @@ import (
 )
 
 type IRepository interface {
-	FindAllByUserID(ctx context.Context, user_id uuid.UUID) ([]DTO, *response.Err)
-	FindByID(ctx context.Context, id uuid.UUID) (*Property, *response.Err)
-	Create(ctx context.Context, property *Property) (*Property, *response.Err)
+	FindAllByUserID(ctx context.Context) ([]DTO, *response.Err)
+	FindByID(ctx context.Context, id uuid.UUID) (*DTO, *response.Err)
+	Create(ctx context.Context, property *Property) *response.Err
 }
 
 type Repository struct{}

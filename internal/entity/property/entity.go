@@ -7,30 +7,41 @@ import (
 )
 
 type Status string
+type Kind string
 
 const (
 	StatusAvailable   Status = "Disponível"
 	StatusOccupied    Status = "Ocupado"
 	StatusUnavailable Status = "Indisponível"
+	StatusReserved    Status = "Reservado"
+	StatusRenovating  Status = "Reformando"
+
+	KindResidential Kind = "Residencial"
+	KindComercial   Kind = "Comercial"
+	KindIndustrial  Kind = "Industrial"
+	KindTerreno     Kind = "Terreno"
+	KindRural       Kind = "Rural"
 )
 
 type Property struct {
 	ID       uuid.UUID
-	Address  *address.Address
 	Status   Status
+	Kind     Kind
 	WaterID  string
 	EnergyID string
 	UserID   uuid.UUID
+	Address  *address.Address
 }
 
-func New(address *address.Address, status Status, water_id, energy_id string, user_id uuid.UUID) (*Property, *response.Err) {
+func New(status Status, kind Kind, water_id, energy_id string, user_id uuid.UUID, address *address.Address) (*Property, *response.Err) {
 	p := &Property{
 		ID:       uuid.New(),
-		Address:  address,
 		Status:   status,
+		Kind:     kind,
 		WaterID:  water_id,
 		EnergyID: energy_id,
 		UserID:   user_id,
+		Address:  address,
 	}
 
 	err := p.validate()
@@ -44,10 +55,11 @@ func New(address *address.Address, status Status, water_id, energy_id string, us
 func (p *Property) ToDTO() *DTO {
 	return &DTO{
 		ID:       p.ID.String(),
-		Address:  *p.Address.ToDTO(),
+		Kind:     p.Kind,
 		Status:   p.Status,
 		WaterID:  p.WaterID,
 		EnergyID: p.EnergyID,
 		UserID:   p.UserID.String(),
+		Address:  *p.Address.ToDTO(),
 	}
 }

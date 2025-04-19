@@ -5,7 +5,8 @@ export const property_schema = z.object({
   water_id: z.string(),
   energy_id: z.string(),
   user_id: z.string().uuid(),
-  status: z.enum(["Disponível", "Ocupado", "Indisponível"]),
+  kind: z.enum(['Residencial', 'Comercial', 'Industrial', 'Terreno', 'Rural']),
+  status: z.enum(['Disponível', 'Ocupado', 'Indisponível', 'Reservado', 'Reformando']),
   address: z.object({
     full_address: z.string(),
     mini_address: z.string(),
@@ -17,7 +18,6 @@ export const property_schema = z.object({
     state: z.string(),
     state_abbr: z.string(),
     zip_code: z.string(),
-    kind: z.enum(["Residencial", "Comercial"]),
   }),
 });
 

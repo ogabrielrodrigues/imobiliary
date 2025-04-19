@@ -13,6 +13,10 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
   const { property_id } = await params
   const property = await getProperty(property_id)
 
+  if (!property) {
+    return <div className="container mx-auto">Imóvel não encontrado</div>
+  }
+
   return <div className="mx-auto max-w-3xl w-full flex flex-col space-y-4">
     <div className="flex justify-between gap-4">
       <h1 className="text-2xl font-bold">{property.address.mini_address}</h1>
@@ -34,7 +38,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
     </div>
     <div className="flex space-x-2">
       <StatusBadge status={property.status} />
-      <Badge className="h-8" variant="outline">{property.address.kind}</Badge>
+      <Badge className="h-8" variant="outline">{property.kind}</Badge>
     </div>
   </div>
 }
