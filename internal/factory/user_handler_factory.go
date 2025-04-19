@@ -3,10 +3,10 @@ package factory
 import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
+	plan_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/plan/service"
 	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar"
+	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar/cloudflare_r2"
 	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan"
 	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user/pg"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
@@ -38,6 +38,6 @@ func NewUserHandlerFactory(pool *pgxpool.Pool) (*user_handler.Handler, *response
 
 	return user_handler.NewHandler(
 		user_service.NewService(user_repo, avatar_repo),
-		plan.NewService(plan_repo),
+		plan_service.NewService(plan_repo),
 	), nil
 }

@@ -11,19 +11,24 @@ import (
 	"testing"
 
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
+	plan_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/plan/service"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user"
+	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
+	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
+	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar/in_memory"
+	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan/in_memory"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user/in_memory"
 	res "github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
 func TestE2ECreateUser(t *testing.T) {
 	environment.LoadFile(filepath.Join("..", "..", ".env"))
 
-	repo := user_repository.NewMemUserRepository()
-	storage := avatar_repository.NewLocalUserAvatarRepository("./tmp")
-	service := user.NewService(repo, storage)
-	userHandler := user.NewHandler(service)
+	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
+	ur := user_repository.NewInMemoryUserRepository()
+	us := user_service.NewService(ur, ar)
+	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
+	uh := user_handler.NewHandler(us, ps)
 
 	t.Run("should be able to create a user", func(t *testing.T) {
 		body := bytes.NewBuffer([]byte(`{
@@ -37,7 +42,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -58,7 +63,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -86,7 +91,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -114,7 +119,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -142,7 +147,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -170,7 +175,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -198,7 +203,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -226,7 +231,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -254,7 +259,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -282,7 +287,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -310,7 +315,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -338,7 +343,7 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		userHandler.Create(recorder, request)
+		uh.Create(recorder, request)
 
 		response := recorder.Result()
 
@@ -358,13 +363,14 @@ func TestE2ECreateUser(t *testing.T) {
 func TestE2EFindByUser(t *testing.T) {
 	environment.LoadFile(filepath.Join("..", "..", ".env"))
 
-	repo := user_repository.NewMemUserRepository()
-	storage := avatar_repository.NewLocalUserAvatarRepository("./tmp")
-	service := user.NewService(repo, storage)
-	userHandler := user.NewHandler(service)
+	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
+	ur := user_repository.NewInMemoryUserRepository()
+	us := user_service.NewService(ur, ar)
+	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
+	uh := user_handler.NewHandler(us, ps)
 
 	t.Run("should not be able to find a user by providing both ID and email together", func(t *testing.T) {
-		id, _ := service.Create(context.Background(), &user.CreateDTO{
+		id, _ := us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -377,7 +383,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -394,7 +400,7 @@ func TestE2EFindByUser(t *testing.T) {
 	})
 
 	t.Run("should be able to find a user by email", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -407,7 +413,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -417,7 +423,7 @@ func TestE2EFindByUser(t *testing.T) {
 	})
 
 	t.Run("should not be able to find a user with invalid email", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -430,7 +436,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -452,7 +458,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -462,7 +468,7 @@ func TestE2EFindByUser(t *testing.T) {
 	})
 
 	t.Run("should be able to find a user by id", func(t *testing.T) {
-		id, _ := service.Create(context.Background(), &user.CreateDTO{
+		id, _ := us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -475,7 +481,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -485,7 +491,7 @@ func TestE2EFindByUser(t *testing.T) {
 	})
 
 	t.Run("should not be able to find a user with invalid id", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -498,7 +504,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -511,7 +517,7 @@ func TestE2EFindByUser(t *testing.T) {
 	})
 
 	t.Run("should not be able to find a user by id if not exists", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -524,7 +530,7 @@ func TestE2EFindByUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		userHandler.FindBy(recorder, request)
+		uh.FindBy(recorder, request)
 
 		response := recorder.Result()
 
@@ -537,13 +543,14 @@ func TestE2EFindByUser(t *testing.T) {
 func TestE2EAuthenticateUser(t *testing.T) {
 	environment.LoadFile(filepath.Join("..", "..", ".env"))
 
-	repo := user_repository.NewMemUserRepository()
-	storage := avatar_repository.NewLocalUserAvatarRepository("./tmp")
-	service := user.NewService(repo, storage)
-	userHandler := user.NewHandler(service)
+	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
+	ur := user_repository.NewInMemoryUserRepository()
+	us := user_service.NewService(ur, ar)
+	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
+	uh := user_handler.NewHandler(us, ps)
 
 	t.Run("should be able to authenticate a user", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -559,7 +566,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		userHandler.Authenticate(recorder, request)
+		uh.Authenticate(recorder, request)
 
 		response := recorder.Result()
 
@@ -573,7 +580,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 	})
 
 	t.Run("should not be able to authenticate a user with invalid body", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -589,7 +596,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		userHandler.Authenticate(recorder, request)
+		uh.Authenticate(recorder, request)
 
 		response := recorder.Result()
 
@@ -607,7 +614,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		userHandler.Authenticate(recorder, request)
+		uh.Authenticate(recorder, request)
 
 		response := recorder.Result()
 
@@ -617,7 +624,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 	})
 
 	t.Run("should not be able to authenticate a user with invalid email or password", func(t *testing.T) {
-		service.Create(context.Background(), &user.CreateDTO{
+		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
 			Cellphone: "(11) 99999-9999",
@@ -633,7 +640,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		userHandler.Authenticate(recorder, request)
+		uh.Authenticate(recorder, request)
 
 		response := recorder.Result()
 

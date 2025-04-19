@@ -17,7 +17,9 @@ export async function getProperties(): Promise<Property[]> {
     }
   })
 
-  return response.json()
+  const properties = await response.json() as Property[]
+
+  return properties
 }
 
 export async function getProperty(id: string): Promise<Property> {

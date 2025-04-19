@@ -14,5 +14,7 @@ export async function getPlan() {
     }
   })
 
-  return await response.json() as Plan
+  const plan = await response.json() as Plan
+
+  return plan
 }

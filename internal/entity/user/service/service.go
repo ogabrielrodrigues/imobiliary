@@ -19,7 +19,7 @@ type IService interface {
 	FindByEmail(ctx context.Context, email string) (*user.DTO, *response.Err)
 	Create(ctx context.Context, dto *user.CreateDTO) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, email, password string) (string, *response.Err)
-	SaveAvatar(ctx context.Context, avatarFile multipart.File) *response.Err
+	SaveAvatar(ctx context.Context, avatarFile multipart.File) (string, *response.Err)
 }
 
 func NewService(repo user.IRepository, storage user.IAvatarStorageRepository) *Service {

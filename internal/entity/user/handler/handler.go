@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
+	plan "github.com/ogabrielrodrigues/imobiliary/internal/entity/plan/service"
 	user "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 )
 

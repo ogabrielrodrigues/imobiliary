@@ -2,9 +2,11 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -17,17 +19,18 @@ func (h *Handler) UpdateAvatar(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	r_err := h.service.SaveAvatar(r.Context(), file)
+	token, r_err := h.service.SaveAvatar(r.Context(), file)
 	if r_err != nil {
 		response.End(w, r_err.Code, r_err)
 		return
 	}
 
+	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	w.WriteHeader(http.StatusOK)
 }
 
 func (h *Handler) GetUserPlan(w http.ResponseWriter, r *http.Request) {
-	user_id := r.Context().Value("user_id").(string)
+	user_id := r.Context().Value(middleware.UserIDKey).(string)
 
 	uid, err := uuid.Parse(user_id)
 	if err != nil {

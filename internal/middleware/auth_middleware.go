@@ -5,9 +5,18 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
+	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+)
+
+type contextKey string
+
+func (c contextKey) String() string {
+	return string(c)
+}
+
+var (
+	UserIDKey = contextKey("user_id")
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -18,26 +27,16 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		authorization := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
+		token := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 
-		token, err := jwt.Parse(authorization, func(token *jwt.Token) (interface{}, error) {
-			return []byte(environment.Environment.SECRET_KEY), nil
-		})
+		user_id, err := lib.ParseToken(token)
 		if err != nil {
-			err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
 			response.End(w, err.Code, err)
 			return
 		}
 
-		user_id, err := token.Claims.GetSubject()
-		if err != nil {
-			err := response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
-			response.End(w, err.Code, err)
-			return
-		}
+		ctx := context.WithValue(r.Context(), UserIDKey, user_id)
 
-		req := r.WithContext(context.WithValue(r.Context(), "user_id", user_id))
-
-		next.ServeHTTP(w, req)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

@@ -1,4 +1,5 @@
 import { auth } from "@/actions/auth"
+import { getPlan } from "@/actions/plan"
 import { FreePlan, ProPlan } from "@/components/plan-describe"
 import { ProPlanDialog } from "@/components/pro-plan-dialog"
 import { Button } from "@/components/ui/button"
@@ -16,6 +17,8 @@ export const metadata: Metadata = {
 export default async function SubscriptionPage() {
   const user = await auth()
 
+  const plan = await getPlan()
+
   return (
     <div>
       <div className="max-w-4xl mx-auto space-y-6">
@@ -26,9 +29,9 @@ export default async function SubscriptionPage() {
         <Card>
           <CardHeader>
             <CardDescription>
-              {user?.plan.kind === "free"
+              {plan.kind === "free"
                 ? (<>Atualmente você está utilizando o Imobiliary no plano <strong className="text-primary">FREE</strong>.<br /><br />Para ter acesso a todas as funcionalidades, assine o plano <strong className="text-primary">PRO</strong>.</>)
-                : (<>Parabéns! Você já possui o plano <strong className="text-primary">{user?.plan.kind.toUpperCase()}</strong> e já tendo acesso a todas as funcionalidades.</>)
+                : (<>Parabéns! Você já possui o plano <strong className="text-primary">{plan.kind.toUpperCase()}</strong> e já tendo acesso a todas as funcionalidades.</>)
               }
             </CardDescription>
           </CardHeader>
@@ -36,17 +39,17 @@ export default async function SubscriptionPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Plano {user?.plan.kind.toUpperCase()}</CardTitle>
+            <CardTitle>Plano {plan.kind.toUpperCase()}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {user?.plan.kind === 'free' && (
+            {plan.kind === 'free' && (
               <>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <p className="inline-flex items-center">{user?.plan.properties_used_quota === 0 ? "0" : user?.plan.properties_used_quota.toString().padStart(2, "0")}/{user?.plan.properties_total_quota.toString().padStart(2, "0")}</p>
+                    <p className="inline-flex items-center">{plan.properties_used_quota === 0 ? "0" : plan.properties_used_quota.toString().padStart(2, "0")}/{plan.properties_total_quota.toString().padStart(2, "0")}</p>
                     <p>imóveis</p>
                   </div>
-                  <Progress value={(user?.plan.properties_used_quota ?? 0) / (user?.plan.properties_total_quota ?? 1) * 100} />
+                  <Progress value={(plan.properties_used_quota ?? 0) / (plan.properties_total_quota ?? 1) * 100} />
                 </div>
 
                 <Separator />
@@ -55,13 +58,13 @@ export default async function SubscriptionPage() {
 
             <div>
               <ul className="space-y-1">
-                {user?.plan.kind === "free"
+                {plan.kind === "free"
                   ? (<FreePlan />)
                   : (<ProPlan />)}
               </ul>
             </div>
           </CardContent>
-          {user?.plan.kind === "free" && (
+          {plan.kind === "free" && (
             <CardFooter className="justify-end">
               <ProPlanDialog>
                 <Button>

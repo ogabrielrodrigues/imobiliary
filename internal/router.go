@@ -12,7 +12,7 @@ import (
 func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 	registerUserRoutes(mux, pool)
 
-	// registerPropertyRoutes(mux)
+	registerPropertyRoutes(mux)
 }
 
 func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {

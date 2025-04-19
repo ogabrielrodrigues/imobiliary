@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -19,7 +20,7 @@ func NewHandler(service IService) *Handler {
 }
 
 func (h *Handler) FindAllByUserID(w http.ResponseWriter, r *http.Request) {
-	user_id := r.Context().Value("user_id").(string)
+	user_id := r.Context().Value(middleware.UserIDKey).(string)
 
 	uid, err := uuid.Parse(user_id)
 	if err != nil {
@@ -58,7 +59,7 @@ func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
 	var body *CreateDTO
-	user_id := r.Context().Value("user_id").(string)
+	user_id := r.Context().Value(middleware.UserIDKey).(string)
 
 	uid, err := uuid.Parse(user_id)
 	if err != nil {
