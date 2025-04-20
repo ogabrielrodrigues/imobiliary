@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export default async function NewPropertyPage() {
   return (
     <div className="container mx-auto xl:max-w-xl flex flex-col space-y-4">
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Novo Imóvel</h1>
         <Link href="/dashboard/locacao/imoveis">

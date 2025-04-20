@@ -22,7 +22,7 @@ export async function getProperties(): Promise<Property[]> {
   return properties
 }
 
-export async function getProperty(id: string): Promise<Property> {
+export async function getProperty(id: string): Promise<{ status: number, property: Property }> {
   const auth_token = await token()
 
   const response = await fetch(`${env.SERVER_ADDR}/properties/${id}`, {
@@ -32,9 +32,7 @@ export async function getProperty(id: string): Promise<Property> {
     }
   })
 
-  console.log(response.status)
-
-  return response.json()
+  return { status: response.status, property: await response.json() as Property }
 }
 
 export async function createProperty(data: z.infer<typeof property_schema>): Promise<number> {

@@ -1,7 +1,9 @@
 import { getProperties } from "@/actions/properties"
+import { Separator } from "@/components/ui/separator"
 import { Metadata } from "next"
 import { PropertiesHeader } from "./_components/properties-header"
-import { PropertiesTable } from "./_components/properties-table"
+import { PropertiesSection } from "./_components/properties-section"
+
 
 export const metadata: Metadata = {
   title: "Imóveis",
@@ -14,10 +16,12 @@ export default async function PropertiesPage() {
   const properties = found.length > 0 ? found : []
 
   return (
-    <div className="container mx-auto flex flex-col space-y-4">
+    <div className="container mx-auto flex flex-col space-y-10">
       <PropertiesHeader properties={properties} />
 
-      <PropertiesTable properties={properties} />
-    </div >
+      <Separator />
+
+      <PropertiesSection properties={properties} />
+    </div>
   )
 }
