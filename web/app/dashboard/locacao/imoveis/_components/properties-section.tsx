@@ -1,57 +1,57 @@
 'use client'
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { cn } from "@/lib/utils"
 import { Property } from "@/types/property"
-import { ArrowUpRight, CircleCheck, CircleMinus, CircleX, Hammer, LockKeyhole, Plus } from "lucide-react"
+import { CircleCheck, CircleMinus, CircleX, Hammer, LockKeyhole, Plus } from "lucide-react"
 import Link from "next/link"
-import { ChangeEvent, useState } from "react"
-import { bgColorStatusDetail, StatusBadge } from "./status-badge"
+import { ChangeEvent, useCallback, useMemo, useState } from "react"
+import { PropertyList } from "./properties-list"
 
 type PropertiesSectionProps = {
   properties: Property[]
 }
 
 export function PropertiesSection({ properties }: PropertiesSectionProps) {
-  const [filtered, setFiltered] = useState<Property[]>(properties)
+  const [searchTerm, setSearchTerm] = useState<string>("")
+  const [selectedKind, setSelectedKind] = useState<string>("Todos")
+  const [selectedStatus, setSelectedStatus] = useState<string>("Todos")
 
-  function handleSearch(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
+  const filtered = useMemo(() => {
+    return properties.filter(property => {
+      const matchesSearch = searchTerm.trim() === "" ||
+        property.address.mini_address.toLowerCase().includes(searchTerm.toLowerCase())
 
-    if (value.trim() === "") {
-      setFiltered(properties)
-      return
-    }
+      const matchesKind = selectedKind === "Todos" ||
+        property.kind === selectedKind
 
-    const term = value.toLowerCase()
-    setFiltered(properties.filter(property => property.address.mini_address.toLowerCase().includes(term)))
-  }
+      const matchesStatus = selectedStatus === "Todos" ||
+        property.status === selectedStatus
 
-  function handleFilterKind(value: string) {
-    if (value === "Todos") {
-      setFiltered(properties)
-      return
-    }
+      return matchesSearch && matchesKind && matchesStatus
+    })
+  }, [properties, searchTerm, selectedKind, selectedStatus])
 
-    setFiltered(properties.filter(property => property.kind === value))
-  }
+  const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }, [])
 
-  function handleFilterStatus(value: string) {
-    if (value === "Todos") {
-      setFiltered(properties)
-      return
-    }
+  const handleFilterKind = useCallback((value: string) => {
+    setSelectedKind(value)
+  }, [])
 
-    setFiltered(properties.filter(property => property.status === value))
-  }
+  const handleFilterStatus = useCallback((value: string) => {
+    setSelectedStatus(value)
+  }, [])
 
-  function handleClearFilter() {
-    setFiltered(properties)
-  }
+  const handleClearFilter = useCallback(() => {
+    setSearchTerm("")
+    setSelectedKind("Todos")
+    setSelectedStatus("Todos")
+  }, [])
+
+  const isFilterActive = searchTerm !== "" || selectedKind !== "Todos" || selectedStatus !== "Todos"
 
   return (
     <section className="flex flex-col gap-6">
@@ -61,14 +61,15 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
             placeholder="Procurar..."
             onChange={handleSearch}
             className="w-4/5 sm:w-1/4"
+            value={searchTerm}
           />
           <div className="hidden lg:flex gap-2">
-            <Select onValueChange={handleFilterKind}>
+            <Select onValueChange={handleFilterKind} value={selectedKind}>
               <SelectTrigger>
-                <SelectValue placeholder="Tipo" defaultChecked />
+                <SelectValue placeholder="Tipo" />
               </SelectTrigger>
               <SelectContent className="text-sm md:text-base">
-                <SelectItem value="Todos" defaultChecked>Todos</SelectItem>
+                <SelectItem value="Todos">Todos</SelectItem>
                 <SelectItem value="Residencial">Residencial</SelectItem>
                 <SelectItem value="Comercial">Comercial</SelectItem>
                 <SelectItem value="Industrial">Industrial</SelectItem>
@@ -77,25 +78,50 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
               </SelectContent>
             </Select>
 
-            <Select onValueChange={handleFilterStatus}>
+            <Select onValueChange={handleFilterStatus} value={selectedStatus}>
               <SelectTrigger>
-                <SelectValue placeholder="Status" defaultChecked />
+                <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent className="text-sm md:text-base">
-                <SelectItem value="Todos" defaultChecked>Todos</SelectItem>
-                <SelectItem value="Disponível"><CircleCheck className="!size-4 text-emerald-500" />Disponível</SelectItem>
-                <SelectItem value="Ocupado"><CircleMinus className="!size-4 text-yellow-500" />Ocupado</SelectItem>
-                <SelectItem value="Indisponível"><CircleX className="!size-4 text-red-500" />Indisponível</SelectItem>
-                <SelectItem value="Reservado"><LockKeyhole className="!size-4 text-sky-500" />Reservado</SelectItem>
-                <SelectItem value="Reformando"><Hammer className="!size-4 text-orange-500" />Reformando</SelectItem>
+                <SelectItem value="Todos">Todos</SelectItem>
+                <SelectItem value="Disponível">
+                  <div className="flex items-center gap-2">
+                    <CircleCheck className="size-4 text-emerald-500" />
+                    <span>Disponível</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Ocupado">
+                  <div className="flex items-center gap-2">
+                    <CircleMinus className="size-4 text-yellow-500" />
+                    <span>Ocupado</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Indisponível">
+                  <div className="flex items-center gap-2">
+                    <CircleX className="size-4 text-red-500" />
+                    <span>Indisponível</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Reservado">
+                  <div className="flex items-center gap-2">
+                    <LockKeyhole className="size-4 text-sky-500" />
+                    <span>Reservado</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="Reformando">
+                  <div className="flex items-center gap-2">
+                    <Hammer className="size-4 text-orange-500" />
+                    <span>Reformando</span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
 
             <Button
               onClick={handleClearFilter}
-              disabled={filtered.length === properties.length}
+              disabled={!isFilterActive}
             >
-              <CircleX className="!size-4" />
+              <CircleX className="size-4 mr-1" />
               Limpar Filtros
             </Button>
           </div>
@@ -103,35 +129,13 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
 
         <Link href="/dashboard/locacao/imoveis/novo">
           <Button>
-            <Plus className="w-4 h-4" />
+            <Plus className="size-4 mr-1" />
             <p className="hidden lg:block">Novo Imóvel</p>
           </Button>
         </Link>
       </div>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {filtered.map((property) => (
-          <Card key={property.id} className="bg-zinc-900/20 backdrop-blur-2xl relative z-20 overflow-hidden">
-            <div className={cn(["absolute z-10 w-10 h-10 blur-3xl bottom-0 right-0", bgColorStatusDetail(property.status)])} />
-            <CardHeader className="flex flex-col gap-4 h-20">
-              <CardTitle className="max-h-12">{property.address.mini_address}</CardTitle>
-              <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
-                <StatusBadge status={property.status} />
-                <Badge className="h-8" variant="outline">{property.kind}</Badge>
-              </div>
-            </CardHeader>
-            <CardFooter className="flex justify-end">
-              <div className="flex justify-end">
-                <Link href={`/dashboard/locacao/imoveis/${property.id}`}>
-                  <Button variant="outline">
-                    <ArrowUpRight className="size-4" />
-                    <p className="hidden sm:block">Detalhes</p>
-                  </Button>
-                </Link>
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+
+      <PropertyList properties={filtered} />
     </section>
   )
 }
