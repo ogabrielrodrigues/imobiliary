@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { ArrowLeft, EllipsisVertical } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { colorStatusDetail, StatusBadge } from "../_components/status-badge"
+import { bgColorStatusDetail, StatusBadge } from "../_components/status-badge"
 
 type PropertyDetailsPageParams = {
   params: Promise<{ property_id: string }>
@@ -19,7 +19,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
   return (
     <>
-      <div className={cn(["absolute z-10 w-1/2 h-3 blur-[92px] top-0 left-1/2 -translate-x-1/2"], `bg-${colorStatusDetail(property.status)}`)} />
+      <div className={cn(["absolute z-10 w-1/2 h-3 blur-[92px] top-0 left-1/2 -translate-x-1/2", bgColorStatusDetail(property.status)])} />
       <div className="mx-auto max-w-3xl w-full flex flex-col space-y-4">
         <div className="flex justify-between gap-4">
           <h1 className="text-2xl font-bold">{property.address.mini_address}</h1>

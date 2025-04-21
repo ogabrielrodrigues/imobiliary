@@ -16,7 +16,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
         <SiteHeader />
         <div className="flex flex-1">
           <AppSidebar user={user} plan={plan} />
-          <SidebarInset className="p-8">
+          <SidebarInset className="p-4 sm:p-8 overflow-x-hidden">
             {children}
           </SidebarInset>
         </div>

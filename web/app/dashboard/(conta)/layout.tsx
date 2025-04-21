@@ -20,7 +20,7 @@ export default async function ContaLayout({ children }: PropsWithChildren) {
   const pathname = (await headers()).get('x-pathname')
 
   return (
-    <div className="[--header-height:calc(theme(spacing.14))] max-w-max mx-auto">
+    <div className="[--header-height:calc(theme(spacing.14))] mx-auto">
       <div className="flex flex-col space-y-5 lg:flex-row lg:space-x-5">
         <SidebarMenu className="flex flex-row lg:flex-col gap-1 w-max">
           {paths.map((path) => (

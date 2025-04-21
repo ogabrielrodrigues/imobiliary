@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { Property } from "@/types/property"
-import { ArrowUpRight, Plus } from "lucide-react"
+import { ArrowUpRight, CircleCheck, CircleMinus, CircleX, Hammer, LockKeyhole, Plus } from "lucide-react"
 import Link from "next/link"
 import { ChangeEvent, useState } from "react"
-import { colorStatusDetail, StatusBadge } from "./status-badge"
+import { bgColorStatusDetail, StatusBadge } from "./status-badge"
 
 type PropertiesSectionProps = {
   properties: Property[]
@@ -20,17 +20,18 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
   const [filtered, setFiltered] = useState<Property[]>(properties)
 
   function handleSearch(event: ChangeEvent<HTMLInputElement>) {
-    if (event.target.value === "") {
+    const value = event.target.value
+
+    if (value.trim() === "") {
       setFiltered(properties)
       return
     }
 
-    const term = event.target.value.toLowerCase()
-    const filter = filtered.filter(property => property.address.mini_address.toLowerCase().includes(term))
-    setFiltered(filter)
+    const term = value.toLowerCase()
+    setFiltered(properties.filter(property => property.address.mini_address.toLowerCase().includes(term)))
   }
 
-  function handleFilter(value: string) {
+  function handleFilterKind(value: string) {
     if (value === "Todos") {
       setFiltered(properties)
       return
@@ -39,8 +40,21 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
     setFiltered(properties.filter(property => property.kind === value))
   }
 
+  function handleFilterStatus(value: string) {
+    if (value === "Todos") {
+      setFiltered(properties)
+      return
+    }
+
+    setFiltered(properties.filter(property => property.status === value))
+  }
+
+  function handleClearFilter() {
+    setFiltered(properties)
+  }
+
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div className="w-full flex gap-2">
           <Input
@@ -48,10 +62,10 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
             onChange={handleSearch}
             className="w-4/5 sm:w-1/4"
           />
-          <div className="hidden lg:flex">
-            <Select onValueChange={handleFilter}>
+          <div className="hidden lg:flex gap-2">
+            <Select onValueChange={handleFilterKind}>
               <SelectTrigger>
-                <SelectValue placeholder="Todos" defaultChecked />
+                <SelectValue placeholder="Tipo" defaultChecked />
               </SelectTrigger>
               <SelectContent className="text-sm md:text-base">
                 <SelectItem value="Todos" defaultChecked>Todos</SelectItem>
@@ -62,6 +76,28 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
                 <SelectItem value="Rural">Rural</SelectItem>
               </SelectContent>
             </Select>
+
+            <Select onValueChange={handleFilterStatus}>
+              <SelectTrigger>
+                <SelectValue placeholder="Status" defaultChecked />
+              </SelectTrigger>
+              <SelectContent className="text-sm md:text-base">
+                <SelectItem value="Todos" defaultChecked>Todos</SelectItem>
+                <SelectItem value="Disponível"><CircleCheck className="!size-4 text-emerald-500" />Disponível</SelectItem>
+                <SelectItem value="Ocupado"><CircleMinus className="!size-4 text-yellow-500" />Ocupado</SelectItem>
+                <SelectItem value="Indisponível"><CircleX className="!size-4 text-red-500" />Indisponível</SelectItem>
+                <SelectItem value="Reservado"><LockKeyhole className="!size-4 text-sky-500" />Reservado</SelectItem>
+                <SelectItem value="Reformando"><Hammer className="!size-4 text-orange-500" />Reformando</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              onClick={handleClearFilter}
+              disabled={filtered.length === properties.length}
+            >
+              <CircleX className="!size-4" />
+              Limpar Filtros
+            </Button>
           </div>
         </div>
 
@@ -72,10 +108,10 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
           </Button>
         </Link>
       </div>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {filtered.map((property) => (
           <Card key={property.id} className="bg-zinc-900/20 backdrop-blur-2xl relative z-20 overflow-hidden">
-            <div className={cn(["absolute z-10 w-10 h-10 blur-3xl bottom-0 right-0", `bg-${colorStatusDetail(property.status)}`])} />
+            <div className={cn(["absolute z-10 w-10 h-10 blur-3xl bottom-0 right-0", bgColorStatusDetail(property.status)])} />
             <CardHeader className="flex flex-col gap-4 h-20">
               <CardTitle className="max-h-12">{property.address.mini_address}</CardTitle>
               <div className="flex flex-col gap-2 lg:flex-row lg:items-center">

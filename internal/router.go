@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/factory"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 )
@@ -18,6 +19,7 @@ func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 	user_handler, err := factory.NewUserHandlerFactory(pool)
 	if err != nil {
+		logger.Log(err)
 		os.Exit(1)
 	}
 

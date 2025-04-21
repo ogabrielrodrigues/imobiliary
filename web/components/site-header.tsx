@@ -135,7 +135,7 @@ export function SiteHeader() {
             )}
           </BreadcrumbList>
         </Breadcrumb>
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
+        <SearchForm className="w-full sm:ml-auto sm:w-1/6" />
       </div>
     </header>
   )
