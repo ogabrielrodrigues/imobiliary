@@ -45,22 +45,6 @@ func (d *CreateDTO) ToUser() *User {
 	return u
 }
 
-type UpdateDTO struct {
-	CreciID   string `json:"creci_id,omitempty"`
-	Fullname  string `json:"fullname,omitempty"`
-	Cellphone string `json:"cellphone,omitempty"`
-	Avatar    string `json:"avatar,omitempty"`
-}
-
-func (d *UpdateDTO) ToUser() *User {
-	return &User{
-		CreciID:   d.CreciID,
-		Fullname:  d.Fullname,
-		Cellphone: d.Cellphone,
-		Avatar:    d.Avatar,
-	}
-}
-
 type AuthDTO struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`

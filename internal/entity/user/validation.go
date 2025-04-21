@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"net/http"
 	"regexp"
 
@@ -38,8 +37,6 @@ func (u *User) validate() *response.Err {
 	}
 
 	if match, _ := regexp.MatchString(`^\(\d{2}\)\s\d{4,5}-\d{4}$`, u.Cellphone); !match {
-		fmt.Println(u.Cellphone)
-		fmt.Println(match)
 		return response.NewErr(http.StatusUnprocessableEntity, ERR_CELLPHONE_INVALID)
 	}
 

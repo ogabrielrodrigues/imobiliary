@@ -6,9 +6,9 @@ import (
 	plan_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/plan/service"
 	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar/cloudflare"
-	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan/postgres"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user/postgres"
+	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/cloudflare"
+	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/plan/postgres"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/postgres"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 

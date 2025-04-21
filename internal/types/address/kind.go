@@ -40,12 +40,12 @@ func genMiniAddress(street, number, neighborhood, city, state string) string {
 }
 
 type DTO struct {
-	FullAddress  string `json:"full_address"`
+	FullAddress  string `json:"full_address,omitempty"`
 	MiniAddress  string `json:"mini_address"`
 	Street       string `json:"street"`
 	Number       string `json:"number"`
 	Neighborhood string `json:"neighborhood"`
-	Complement   string `json:"complement"`
+	Complement   string `json:"complement,omitempty"`
 	City         string `json:"city"`
 	State        string `json:"state"`
 	ZipCode      string `json:"zip_code"`

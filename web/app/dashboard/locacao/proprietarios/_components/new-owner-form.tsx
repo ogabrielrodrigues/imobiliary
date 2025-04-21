@@ -19,16 +19,21 @@ import { cn } from "@/lib/utils"
 
 import { Separator } from "@/components/ui/separator"
 
-import { createProperty } from "@/actions/property"
+import { createOwner } from "@/actions/owner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useHookFormMask } from "use-mask-input"
 
-export const property_schema = z.object({
-  water_id: z.string().min(3, "O código da água deve conter ao menos 3 caracteres"),
-  energy_id: z.string().min(3, "O código da energia deve conter ao menos 3 caracteres"),
-  status: z.enum(['Disponível', 'Ocupado', 'Indisponível', 'Reservado', 'Reformando']),
-  kind: z.enum(['Residencial', 'Comercial', 'Industrial', 'Terreno', 'Rural']),
+export const owner_schema = z.object({
+  fullname: z.string().min(10, "O nome deve conter ao menos 10 caracteres").max(100, "Máximo de 100 caracteres"),
+  cpf: z.string().length(14),
+  rg: z.string().min(5, "o rg deve ter no minimo 5 caracteres").max(15, "o rg deve ter no máximo 15 caracteres"),
+  email: z.string().email("o e-mail digitado deve ser válido"),
+  cellphone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
+    .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
+  occupation: z.string().min(3, "A ocupação deve conter ao menos 3 caracteres").max(50, "Máximo de 50 caracteres"),
+  marital_status: z.enum(["Solteiro(a)", "Casado(a)", "Amasiado(a)", "Divorciado(a)", "Viúvo(a)", "União Estável"]),
   address: z.object({
     street: z.string().min(3, "O nome da rua deve conter ao menos 3 caracteres"),
     number: z.string().min(1, "O número da rua deve conter ao menos 1 caracter"),
@@ -40,16 +45,19 @@ export const property_schema = z.object({
   }),
 })
 
-export function NewPropertyForm({ className, ...props }: React.ComponentProps<"form">) {
+export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter()
 
-  const form = useForm<z.infer<typeof property_schema>>({
-    resolver: zodResolver(property_schema),
+  const form = useForm<z.infer<typeof owner_schema>>({
+    resolver: zodResolver(owner_schema),
     defaultValues: {
-      water_id: "",
-      energy_id: "",
-      status: "Disponível",
-      kind: "Residencial",
+      fullname: "",
+      cpf: "",
+      rg: "",
+      email: "",
+      cellphone: "",
+      occupation: "",
+      marital_status: "Solteiro(a)",
       address: {
         street: "",
         number: "",
@@ -62,19 +70,21 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
     }
   })
 
-  async function onSubmit(values: z.infer<typeof property_schema>) {
-    const status = await createProperty(values)
+  const registerWithMask = useHookFormMask(form.register);
+
+  async function onSubmit(values: z.infer<typeof owner_schema>) {
+    const status = await createOwner(values)
 
     switch (status) {
       case 201:
-        toast.success("Imóvel criado com sucesso", { duration: 1500 })
+        toast.success("Proprietário criado com sucesso", { duration: 1500 })
 
         setTimeout(() => {
-          router.push("/dashboard/locacao/imoveis")
+          router.push("/dashboard/locacao/proprietarios")
         }, 1500)
         break
       default:
-        toast.error("Erro ao criar imóvel", { description: "Confira os dados e tente novamente", duration: 1500 })
+        toast.error("Erro ao criar proprietário", { description: "Confira os dados e tente novamente", duration: 1500 })
         break
     }
   }
@@ -86,6 +96,161 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
         {...props}
         onSubmit={form.handleSubmit(onSubmit)}
       >
+
+        <FormField
+          control={form.control}
+          name="fullname"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome Completo</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="Nome completo"
+                  autoComplete="off"
+                  autoFocus
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="cpf"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>CPF</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="CPF"
+                  autoComplete="off"
+                  {...field}
+                  {...registerWithMask("cpf", '999.999.999-99', {
+                    required: true
+                  })}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="rg"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>RG</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="RG"
+                  autoComplete="off"
+                  autoFocus
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="cellphone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Telefone / Celular</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="Telefone ou celular"
+                  autoComplete="off"
+                  {...field}
+                  {...registerWithMask("cellphone", ['(99) 9999-9999', '(99) 99999-9999'], {
+                    required: true
+                  })}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-mail</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="E-mail de contato"
+                  autoComplete="off"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="occupation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Profissão / Ocupação</FormLabel>
+              <FormControl>
+                <Input
+                  className="text-sm md:text-base"
+                  placeholder="Ocupação"
+                  autoComplete="off"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="marital_status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Estado Civil</FormLabel>
+              <FormControl>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={field.onChange}
+                  {...field}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o estado civil" />
+                  </SelectTrigger>
+                  <SelectContent className="text-sm md:text-base">
+                    <SelectItem value="Solteiro(a)">Solteiro(a)</SelectItem>
+                    <SelectItem value="Casado(a)">Casado(a)</SelectItem>
+                    <SelectItem value="Amasiado(a)">Amasiado(a)</SelectItem>
+                    <SelectItem value="Divorciado(a)">Divorciado(a)</SelectItem>
+                    <SelectItem value="Viúvo(a)">Viúvo(a)</SelectItem>
+                    <SelectItem value="União Estável">União Estável</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Separator className="col-span-1 sm:col-span-2" />
+
         <FormField
           control={form.control}
           name="address.street"
@@ -201,104 +366,6 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
           )}
         />
 
-        <Separator className="col-span-1 sm:col-span-2" />
-
-        <FormField
-          control={form.control}
-          name="water_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cód. Água</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Cód. água"
-                  autoComplete="off"
-                  autoFocus
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="energy_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cód. Energia</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Cód. energia"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Separator className="col-span-1 sm:col-span-2" />
-
-        <FormField
-          control={form.control}
-          name="kind"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo</FormLabel>
-              <FormControl>
-                <Select
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                  {...field}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                  <SelectContent className="text-sm md:text-base">
-                    <SelectItem value="Residencial">Residencial</SelectItem>
-                    <SelectItem value="Comercial">Comercial</SelectItem>
-                    <SelectItem value="Industrial">Industrial</SelectItem>
-                    <SelectItem value="Terreno">Terreno</SelectItem>
-                    <SelectItem value="Rural">Rural</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <FormControl>
-                <Select
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                  {...field}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                  <SelectContent className="text-sm md:text-base">
-                    <SelectItem value="Disponível">Disponível</SelectItem>
-                    <SelectItem value="Ocupado">Ocupado</SelectItem>
-                    <SelectItem value="Indisponível">Indisponível</SelectItem>
-                    <SelectItem value="Reservado">Reservado</SelectItem>
-                    <SelectItem value="Reformando">Reformando</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit" className="sm:col-start-2">
           Cadastrar
         </Button>

@@ -44,19 +44,3 @@ func (d *CreateDTO) ToProperty() *Property {
 		Address:  d.Address.ToAddress(),
 	}
 }
-
-type UpdateDTO struct {
-	Address  address.DTO `json:"address"`
-	Status   Status      `json:"status"`
-	WaterID  string      `json:"water_id"`
-	EnergyID string      `json:"energy_id"`
-}
-
-func (d *UpdateDTO) ToProperty() *Property {
-	return &Property{
-		Address:  d.Address.ToAddress(),
-		Status:   d.Status,
-		WaterID:  d.WaterID,
-		EnergyID: d.EnergyID,
-	}
-}

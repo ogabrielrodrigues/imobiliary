@@ -1,4 +1,4 @@
-import { getProperty } from "@/actions/properties"
+import { getProperty } from "@/actions/property"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"

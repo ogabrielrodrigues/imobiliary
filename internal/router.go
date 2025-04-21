@@ -14,6 +14,8 @@ func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 	registerUserRoutes(mux, pool)
 
 	registerPropertyRoutes(mux, pool)
+
+	registerOwnerRoutes(mux, pool)
 }
 
 func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
@@ -37,4 +39,12 @@ func registerPropertyRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID)))
 	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID)))
 	mux.Handle("POST /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.Create)))
+}
+
+func registerOwnerRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
+	owner_handler := factory.NewOwnerHandlerFactory(pool)
+
+	mux.Handle("GET /owners/{owner_id}", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindByID)))
+	mux.Handle("GET /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindAllByManagerID)))
+	mux.Handle("POST /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.Create)))
 }
