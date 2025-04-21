@@ -15,9 +15,9 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/avatar/in_memory"
-	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/plan/in_memory"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/repository/user/in_memory"
+	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/in_memory"
+	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/plan/in_memory"
+	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/in_memory"
 	res "github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
