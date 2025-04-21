@@ -32,19 +32,6 @@ type CreateDTO struct {
 	Password  string `json:"password"`
 }
 
-func (d *CreateDTO) ToUser() *User {
-	u := &User{
-		CreciID:   d.CreciID,
-		Fullname:  d.Fullname,
-		Cellphone: d.Cellphone,
-		Email:     d.Email,
-	}
-
-	u.SetPassword(d.Password)
-
-	return u
-}
-
 type AuthDTO struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`

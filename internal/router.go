@@ -34,7 +34,11 @@ func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 }
 
 func registerPropertyRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
-	property_handler := factory.NewPropertyHandlerFactory(pool)
+	property_handler, err := factory.NewPropertyHandlerFactory(pool)
+	if err != nil {
+		logger.Log(err)
+		os.Exit(1)
+	}
 
 	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID)))
 	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID)))
@@ -42,7 +46,11 @@ func registerPropertyRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 }
 
 func registerOwnerRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
-	owner_handler := factory.NewOwnerHandlerFactory(pool)
+	owner_handler, err := factory.NewOwnerHandlerFactory(pool)
+	if err != nil {
+		logger.Log(err)
+		os.Exit(1)
+	}
 
 	mux.Handle("GET /owners/{owner_id}", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindByID)))
 	mux.Handle("GET /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindAllByManagerID)))

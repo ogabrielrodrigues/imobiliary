@@ -12,9 +12,3 @@ type IRepository interface {
 	FindByID(ctx context.Context, id uuid.UUID) (*DTO, *response.Err)
 	Create(ctx context.Context, property *Property) *response.Err
 }
-
-type Repository struct{}
-
-func NewRepository() *Repository {
-	return &Repository{}
-}

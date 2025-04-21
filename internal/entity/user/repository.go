@@ -8,8 +8,6 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-type Repository struct{}
-
 type IRepository interface {
 	FindByID(ctx context.Context, id uuid.UUID) (*User, *response.Err)
 	FindByEmail(ctx context.Context, email string) (*User, *response.Err)
@@ -20,8 +18,4 @@ type IRepository interface {
 
 type IAvatarStorageRepository interface {
 	SaveAvatar(ctx context.Context, avatar multipart.File) (string, *response.Err)
-}
-
-func NewRepository() *Repository {
-	return &Repository{}
 }

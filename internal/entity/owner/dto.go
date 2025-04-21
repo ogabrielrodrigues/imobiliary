@@ -3,20 +3,20 @@ package owner
 import (
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
-	maritalstatus "github.com/ogabrielrodrigues/imobiliary/internal/types/marital_status"
+	types "github.com/ogabrielrodrigues/imobiliary/internal/types/marital_status"
 )
 
 type DTO struct {
-	ID            uuid.UUID                   `json:"id"`
-	Fullname      string                      `json:"fullname"`
-	CPF           string                      `json:"cpf"`
-	RG            string                      `json:"rg"`
-	Email         string                      `json:"email"`
-	Cellphone     string                      `json:"cellphone"`
-	Occupation    string                      `json:"occupation"`
-	MaritalStatus maritalstatus.MaritalStatus `json:"marital_status"`
-	ManagerID     uuid.UUID                   `json:"manager_id"`
-	Address       address.DTO                 `json:"address"`
+	ID            uuid.UUID           `json:"id"`
+	Fullname      string              `json:"fullname"`
+	CPF           string              `json:"cpf"`
+	RG            string              `json:"rg"`
+	Email         string              `json:"email"`
+	Cellphone     string              `json:"cellphone"`
+	Occupation    string              `json:"occupation"`
+	MaritalStatus types.MaritalStatus `json:"marital_status"`
+	ManagerID     uuid.UUID           `json:"manager_id"`
+	Address       address.DTO         `json:"address"`
 }
 
 func (dto *DTO) ToOwner() *Owner {
@@ -34,12 +34,12 @@ func (dto *DTO) ToOwner() *Owner {
 }
 
 type CreateDTO struct {
-	Fullname      string                      `json:"fullname"`
-	CPF           string                      `json:"cpf"`
-	RG            string                      `json:"rg"`
-	Email         string                      `json:"email"`
-	Cellphone     string                      `json:"cellphone"`
-	Occupation    string                      `json:"occupation"`
-	MaritalStatus maritalstatus.MaritalStatus `json:"marital_status"`
-	Address       address.DTO                 `json:"address"`
+	Fullname      string              `json:"fullname"`
+	CPF           string              `json:"cpf"`
+	RG            string              `json:"rg"`
+	Email         string              `json:"email"`
+	Cellphone     string              `json:"cellphone"`
+	Occupation    string              `json:"occupation"`
+	MaritalStatus types.MaritalStatus `json:"marital_status"`
+	Address       address.DTO         `json:"address"`
 }

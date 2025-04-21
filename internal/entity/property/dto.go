@@ -34,13 +34,3 @@ type CreateDTO struct {
 	EnergyID string            `json:"energy_id"`
 	Address  address.CreateDTO `json:"address"`
 }
-
-func (d *CreateDTO) ToProperty() *Property {
-	return &Property{
-		Status:   d.Status,
-		Kind:     d.Kind,
-		WaterID:  d.WaterID,
-		EnergyID: d.EnergyID,
-		Address:  d.Address.ToAddress(),
-	}
-}
