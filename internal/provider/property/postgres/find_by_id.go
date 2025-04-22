@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
@@ -25,6 +24,7 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 		pr.kind,
 		pr.water_id,
 		pr.energy_id,
+		pr.owner_id,
 		ad.street,
 		ad.number,
 		ad.complement,
@@ -43,6 +43,7 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 
 	row := pg.pool.QueryRow(ctx, query, id, user_id)
 
+	var owner_id *string
 	var p property.DTO
 	if err := row.Scan(
 		&p.ID,
@@ -50,6 +51,7 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 		&p.Kind,
 		&p.WaterID,
 		&p.EnergyID,
+		&owner_id,
 		&p.Address.Street,
 		&p.Address.Number,
 		&p.Address.Complement,
@@ -63,9 +65,11 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 			return nil, response.NewErr(http.StatusNotFound, property.ERR_PROPERTY_NOT_FOUND_OR_NOT_EXISTS)
 		}
 
-		logger.Log(p)
-
 		return nil, response.NewErr(http.StatusInternalServerError, err.Error())
+	}
+
+	if owner_id != nil {
+		p.OwnerID = *owner_id
 	}
 
 	return &p, nil

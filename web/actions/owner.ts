@@ -6,9 +6,14 @@ import { env } from "@/lib/env"
 import { z } from "zod"
 import { owner_schema } from "@/app/dashboard/locacao/proprietarios/_components/new-owner-form"
 import { searchCEP } from "@/lib/cep/api-brasil"
+import { assign_property_schema } from "@/app/dashboard/locacao/imoveis/[property_id]/_components/assign-property-form"
 
 export async function getOwner(owner_id: string): Promise<{ status: number, owner: Owner }> {
   const auth_token = await token()
+
+  if (!owner_id) {
+    return { status: 400, owner: {} as Owner }
+  }
 
   const response = await fetch(`${env.SERVER_ADDR}/owners/${owner_id}`, {
     method: "GET",
@@ -32,9 +37,10 @@ export async function getOwners(): Promise<{ status: number, owners: Owner[] }> 
     }
   })
 
-  const properties = await response.json() as Owner[]
+  const owners = await response.json() as Owner[]
 
-  return { status: response.status, owners: properties }
+
+  return { status: response.status, owners: owners || [] }
 }
 
 export async function createOwner(data: z.infer<typeof owner_schema>): Promise<number> {
@@ -55,6 +61,25 @@ export async function createOwner(data: z.infer<typeof owner_schema>): Promise<n
     headers: {
       "Authorization": `Bearer ${auth_token}`,
     },
+  })
+
+  return response.status
+}
+
+export async function assignOwner(property_id: string, data: z.infer<typeof assign_property_schema>): Promise<number> {
+  const auth_token = await token()
+
+  const body = {
+    ...data,
+    property_id
+  }
+
+  const response = await fetch(`${env.SERVER_ADDR}/owners/assign`, {
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: {
+      "Authorization": `Bearer ${auth_token}`,
+    }
   })
 
   return response.status

@@ -15,8 +15,6 @@ type OwnersSectionProps = {
 
 export function OwnersSection({ owners }: OwnersSectionProps) {
   const [searchTerm, setSearchTerm] = useState<string>("")
-  const [selectedKind, setSelectedKind] = useState<string>("Todos")
-  const [selectedStatus, setSelectedStatus] = useState<string>("Todos")
 
   const filtered = useMemo(() => {
     return owners.filter(owner => {
@@ -66,7 +64,13 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
         </Link>
       </div>
 
-      <OwnersList owners={filtered} />
+      {owners.length > 0
+        ? (<OwnersList owners={filtered} />)
+        : (<div className="col-span-full text-center py-8">
+          <p className="text-muted-foreground">Nenhum propretário encontrado.</p>
+        </div>)}
+
+
     </section>
   )
 }

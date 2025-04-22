@@ -12,6 +12,7 @@ type DTO struct {
 	WaterID  string      `json:"water_id"`
 	EnergyID string      `json:"energy_id"`
 	UserID   string      `json:"user_id"`
+	OwnerID  string      `json:"owner_id"`
 	Address  address.DTO `json:"address"`
 }
 
@@ -23,6 +24,7 @@ func (d *DTO) ToProperty() *Property {
 		WaterID:  d.WaterID,
 		EnergyID: d.EnergyID,
 		UserID:   uuid.MustParse(d.UserID),
+		OwnerID:  uuid.MustParse(d.OwnerID),
 		Address:  d.Address.ToAddress(),
 	}
 }

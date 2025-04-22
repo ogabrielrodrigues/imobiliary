@@ -1,6 +1,6 @@
 import { getOwner } from "@/actions/owner"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, EllipsisVertical } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -37,18 +37,17 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
           </div>
         </div>
         <Card className="bg-zinc-900/20 backdrop-blur-2xl relative z-20 overflow-hidden">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold">Dados p/ contato</CardTitle>
+          </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-2">
-              <h2 className="text-lg font-bold">Dados p/ contato</h2>
-              <p><strong>Email:</strong> {owner.email}</p>
-              <p><strong>Telefone:</strong> {owner.cellphone}</p>
+              <p className="text-muted-foreground"><strong className="text-primary">Email:</strong> {owner.email}</p>
+              <p className="text-muted-foreground"><strong className="text-primary">Telefone:</strong> {owner.cellphone}</p>
+              <p className="text-muted-foreground"><strong className="text-primary">Endereço:</strong> {owner.address.mini_address}</p>
             </div>
           </CardContent>
         </Card>
-        <div className="flex space-x-2">
-          {/* <StatusBadge status={property.status} />
-          <Badge className="h-8" variant="outline">{property.kind}</Badge> */}
-        </div>
       </div>
     </>
   )

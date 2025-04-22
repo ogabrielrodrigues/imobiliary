@@ -30,6 +30,7 @@ type Property struct {
 	WaterID  string
 	EnergyID string
 	UserID   uuid.UUID
+	OwnerID  uuid.UUID
 	Address  *address.Address
 }
 
@@ -60,6 +61,7 @@ func (p *Property) ToDTO() *DTO {
 		WaterID:  p.WaterID,
 		EnergyID: p.EnergyID,
 		UserID:   p.UserID.String(),
+		OwnerID:  p.OwnerID.String(),
 		Address:  *p.Address.ToDTO(),
 	}
 }

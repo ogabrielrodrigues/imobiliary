@@ -43,3 +43,8 @@ type CreateDTO struct {
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
 	Address       address.DTO         `json:"address"`
 }
+
+type AssignOwnerDTO struct {
+	OwnerID    string `json:"owner_id"`
+	PropertyID string `json:"property_id"`
+}

@@ -241,8 +241,6 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
           )}
         />
 
-        <Separator className="col-span-1 sm:col-span-2" />
-
         <FormField
           control={form.control}
           name="kind"

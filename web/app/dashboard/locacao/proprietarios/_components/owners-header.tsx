@@ -8,7 +8,7 @@ interface OwnersHeaderProps {
 
 export function OwnersHeader({ owners, propertiesCount }: OwnersHeaderProps) {
   const ownersCount = owners.length
-  const propertiesPerOwner = propertiesCount / ownersCount
+  const propertiesPerOwner = owners.length > 0 ? (propertiesCount / owners.length) : propertiesCount
   const propertiesPerOwnerLabel = propertiesCount === 0 ? "Nenhum imóvel cadastrado" : `${propertiesCount} imóveis para ${ownersCount} proprietários`
 
   return (

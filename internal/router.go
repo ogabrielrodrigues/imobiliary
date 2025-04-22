@@ -55,4 +55,5 @@ func registerOwnerRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 	mux.Handle("GET /owners/{owner_id}", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindByID)))
 	mux.Handle("GET /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindAllByManagerID)))
 	mux.Handle("POST /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.Create)))
+	mux.Handle("PUT /owners/assign", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.AssignOwnerToProperty)))
 }
