@@ -1,4 +1,4 @@
-import { auth } from "@/actions/auth"
+import { getPlan } from "@/actions/queries/plan/get-plan"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Metadata } from "next"
 import { redirect } from "next/navigation"
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
 }
 
 export default async function VistoriasPage() {
-  const user = await auth()
+  const { status, plan } = await getPlan()
 
-  if (user?.plan.kind !== 'pro') {
-    return redirect('/dashboard')
+  if (status !== 200 || plan?.kind !== "pro") {
+    redirect("/auth/login")
   }
 
   return (

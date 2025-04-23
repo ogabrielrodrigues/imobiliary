@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { AuthHeader } from "../_components/auth-header"
-import { AuthForm } from "./_components/auth-form"
+import { LoginForm } from "./_components/login-form"
 
 export const metadata: Metadata = {
   title: "Login"
@@ -18,7 +18,7 @@ export default function LoginPage() {
             url="/cadastro"
             urlText="Cadastrar"
           />
-          <AuthForm />
+          <LoginForm />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -24,6 +25,10 @@ func (pg *PostgresUserRepository) Create(ctx context.Context, user *user.User) (
 
 	var id string
 	if err := row.Scan(&id); err != nil {
+		if store.IsUniqueConstraint(err) {
+			return uuid.Nil, response.NewErr(http.StatusConflict, "user already exists")
+		}
+
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, err.Error()) // TODO: Handle specific error
 	}
 

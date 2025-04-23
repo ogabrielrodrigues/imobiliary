@@ -31,7 +31,7 @@ import {
 
 import { User } from "@/types/user"
 
-import { logout } from "@/actions/auth"
+import { logout } from "@/actions/queries/logout"
 import { Plan } from "@/types/plan"
 import { ProPlanDialog } from "./pro-plan-dialog"
 

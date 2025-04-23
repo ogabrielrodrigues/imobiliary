@@ -18,14 +18,14 @@ import { Input } from "@/components/ui/input"
 
 import { cn } from "@/lib/utils"
 
-import { sign } from "@/actions/auth"
-import { AlertCircle } from "lucide-react"
+import { sign } from "@/actions/mutations/sign"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useHookFormMask } from 'use-mask-input'
 
 export const sign_schema = z.object({
   fullname: z.string().min(10, "Seu nome deve contem ao menos 10 caracteres").max(100, "Seu nome deve contem menos de 100 caracteres"),
-  creci_id: z.string().min(7, "Seu CRECI deve ser válido"),
+  creci_id: z.string().min(7, "Seu CRECI ter 7 digitos").regex(/^\d{5}-[FJ]$/, "Seu CRECI deve conter apenas números e o sufixo F ou J"),
   email: z.string().email("o e-mail digitado deve ser válido"),
   cellphone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
     .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
@@ -37,6 +37,8 @@ export const sign_schema = z.object({
 })
 
 export function SignForm({ className, ...props }: React.ComponentProps<"form">) {
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof sign_schema>>({
     resolver: zodResolver(sign_schema),
     defaultValues: {
@@ -54,12 +56,28 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
   async function onSubmit(values: z.infer<typeof sign_schema>) {
     const status = await sign(values)
 
-    if (status != 201) {
-      toast("Erro ao cadastrar usuário", {
-        className: "login-error",
-        description: "Verifique os dados e tente novamente.",
-        icon: <AlertCircle className="size-4" />,
-      })
+    switch (status) {
+      case 201:
+        toast.success("Usuário cadastrado com sucesso", {
+          description: "Você já pode acessar sua conta.",
+          duration: 1500
+        })
+        setTimeout(() => {
+          router.push("/login")
+        }, 1500)
+        break
+      case 409:
+        toast.error("Erro ao cadastrar usuário", {
+          description: "Já existe um usuário com esse e-mail ou CRECI.",
+          duration: 2000
+        })
+        break
+      default:
+        toast.error("Erro ao cadastrar usuário", {
+          description: "Verifique os dados e tente novamente.",
+          duration: 2000
+        })
+        break
     }
   }
 
@@ -102,6 +120,11 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   maxLength={7}
                   autoComplete="off"
                   {...field}
+                  {...registerWithMask("creci_id", ["99999-F", "99999-J"], {
+                    showMaskOnHover: false,
+                    showMaskOnFocus: false,
+                    required: true,
+                  })}
                 />
               </FormControl>
               <FormMessage />
@@ -139,6 +162,8 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   autoComplete="off"
                   {...field}
                   {...registerWithMask("cellphone", ['(99) 9999-9999', '(99) 99999-9999'], {
+                    showMaskOnHover: false,
+                    showMaskOnFocus: false,
                     required: true
                   })}
                 />

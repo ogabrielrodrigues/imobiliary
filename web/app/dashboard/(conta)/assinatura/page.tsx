@@ -1,5 +1,4 @@
-import { auth } from "@/actions/auth"
-import { getPlan } from "@/actions/plan"
+import { getPlan } from "@/actions/queries/plan/get-plan"
 import { FreePlan, ProPlan } from "@/components/plan-describe"
 import { ProPlanDialog } from "@/components/pro-plan-dialog"
 import { Button } from "@/components/ui/button"
@@ -15,9 +14,7 @@ export const metadata: Metadata = {
 }
 
 export default async function SubscriptionPage() {
-  const user = await auth()
-
-  const plan = await getPlan()
+  const { status, plan } = await getPlan()
 
   return (
     <div>
@@ -29,9 +26,9 @@ export default async function SubscriptionPage() {
         <Card>
           <CardHeader>
             <CardDescription>
-              {plan.kind === "free"
+              {status === 200 && plan?.kind === "free"
                 ? (<>Atualmente você está utilizando o Imobiliary no plano <strong className="text-primary">FREE</strong>.<br /><br />Para ter acesso a todas as funcionalidades, assine o plano <strong className="text-primary">PRO</strong>.</>)
-                : (<>Parabéns! Você já possui o plano <strong className="text-primary">{plan.kind.toUpperCase()}</strong> e já tendo acesso a todas as funcionalidades.</>)
+                : (<>Parabéns! Você já possui o plano <strong className="text-primary">{plan?.kind.toUpperCase()}</strong> e já tendo acesso a todas as funcionalidades.</>)
               }
             </CardDescription>
           </CardHeader>
@@ -39,10 +36,10 @@ export default async function SubscriptionPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Plano {plan.kind.toUpperCase()}</CardTitle>
+            <CardTitle>Plano {status === 200 && plan?.kind.toUpperCase()}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {plan.kind === 'free' && (
+            {status === 200 && plan?.kind === 'free' && (
               <>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -58,13 +55,13 @@ export default async function SubscriptionPage() {
 
             <div>
               <ul className="space-y-1">
-                {plan.kind === "free"
+                {status === 200 && plan?.kind === "free"
                   ? (<FreePlan />)
                   : (<ProPlan />)}
               </ul>
             </div>
           </CardContent>
-          {plan.kind === "free" && (
+          {status === 200 && plan?.kind === "free" && (
             <CardFooter className="justify-end">
               <ProPlanDialog>
                 <Button>

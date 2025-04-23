@@ -1,4 +1,4 @@
-import { auth } from "@/actions/auth"
+import { getPlan } from "@/actions/queries/plan/get-plan"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart, LineChart, PieChart } from "lucide-react"
@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 }
 
 export default async function RelatoriosPage() {
-  const user = await auth()
+  const { status, plan } = await getPlan()
 
-  if (user?.plan.kind !== 'pro') {
-    return redirect('/dashboard')
+  if (status !== 200 || plan?.kind !== "pro") {
+    redirect("/auth/login")
   }
 
   return (

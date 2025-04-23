@@ -1,12 +1,12 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
-const protectedRoutes = ['/dashboard']
+const protectedRoutes = '/dashboard'
 const publicRoutes = ['/login', '/cadastro']
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
-  const isProtectedRoute = protectedRoutes.includes(path)
+  const isProtectedRoute = path.includes(protectedRoutes)
   const isPublicRoute = publicRoutes.includes(path)
 
   const cookieStore = await cookies()

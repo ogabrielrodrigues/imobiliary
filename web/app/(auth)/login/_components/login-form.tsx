@@ -16,45 +16,46 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-import { login } from "@/actions/auth"
+import { login } from "@/actions/queries/login"
 import { cn } from "@/lib/utils"
-import { AlertCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-const auth_schema = z.object({
+export const login_schema = z.object({
   email: z.string().email("o e-mail digitado deve ser válido"),
   password: z.string().min(8, "A senha deve contem ao menos 8 caracteres")
 })
 
-export function AuthForm({ className, ...props }: React.ComponentProps<"form">) {
-  const form = useForm<z.infer<typeof auth_schema>>({
-    resolver: zodResolver(auth_schema),
+export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof login_schema>>({
+    resolver: zodResolver(login_schema),
     defaultValues: {
       email: "",
       password: ""
     }
   })
 
-  async function onSubmit(values: z.infer<typeof auth_schema>) {
-    const status = await login(values.email, values.password)
+  async function onSubmit(values: z.infer<typeof login_schema>) {
+    const status = await login(values)
 
-    let message = ""
-
-    if (status != 200) {
-      switch (status) {
-        case 401:
-          message = "E-mail ou senha inválidos."
-          break
-        case 404:
-          message = "Usuário não encontrado."
-          break
-      }
-
-      toast(message, {
-        className: "login-error",
-        description: "Verifique os dados e tente novamente.",
-        icon: <AlertCircle className="size-4" />,
-      })
+    switch (status) {
+      case 200:
+        toast.success("Login realizado com sucesso!", { duration: 1500 })
+        setTimeout(() => {
+          router.push("/dashboard")
+        }, 1500)
+        break
+      case 401:
+        toast.error("E-mail ou senha inválidos.", { duration: 1500 })
+        break
+      case 404:
+        toast.error("Usuário não encontrado.", { duration: 1500 })
+        break
+      default:
+        toast.error("Erro ao realizar login.", { duration: 1500 })
+        break
     }
   }
 

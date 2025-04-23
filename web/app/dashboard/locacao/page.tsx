@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Visão geral dos imóveis alugados",
 }
 
-export default function AlugueresPage() {
+export default function RentalsPage() {
   return (
     <div className="container mx-auto py-6">
       <h1 className="text-3xl font-bold tracking-tight">

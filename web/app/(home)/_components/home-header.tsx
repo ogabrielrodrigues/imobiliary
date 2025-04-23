@@ -4,8 +4,9 @@ import { TooltipContent } from "@/components/ui/tooltip";
 
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { auth, logout } from "@/actions/auth";
-import { getPlan } from "@/actions/plan";
+import { auth } from "@/actions/queries/auth";
+import { logout } from "@/actions/queries/logout";
+import { getPlan } from "@/actions/queries/plan/get-plan";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { TooltipTrigger } from "@/components/ui/tooltip";
@@ -15,7 +16,7 @@ import Link from "next/link";
 export async function HomeHeader() {
   const user = await auth()
 
-  const plan = await getPlan()
+  const { status, plan } = await getPlan()
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full bg-zinc-950/95 backdrop-blur-3xl p-4 flex items-center justify-between gap-4">
@@ -62,7 +63,7 @@ export async function HomeHeader() {
           <h1 className="text-lg font-bold hidden sm:block select-none">
             Imobiliary
           </h1>
-          {plan.kind === 'pro' && (
+          {(status === 200 && plan?.kind === 'pro') && (
             <Sparkles className="size-4 self-start" />
           )}
         </>

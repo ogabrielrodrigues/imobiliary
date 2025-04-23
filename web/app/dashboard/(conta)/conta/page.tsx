@@ -1,4 +1,4 @@
-import { auth } from "@/actions/auth"
+import { auth } from "@/actions/queries/auth"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card"
 import { Metadata } from "next"
 import { AvatarForm } from "./_components/avatar-form"
@@ -59,7 +59,6 @@ export default async function AccountPage() {
           <CardContent className="text-sm sm:text-base">{user?.creci_id}</CardContent>
         </Card>
       </div>
-      {/* </div> */}
     </div>
   )
 }

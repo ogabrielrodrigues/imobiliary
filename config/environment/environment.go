@@ -8,11 +8,15 @@ import (
 	types "github.com/ogabrielrodrigues/imobiliary/internal/types/config"
 )
 
+const (
+	ERR_READING_ENV_FILE = "error loading .env file"
+)
+
 var Environment *types.Environment
 
 func Load() *types.Environment {
 	if err := godotenv.Load(); err != nil {
-		logger.Log("error loading .env file")
+		logger.Log(ERR_READING_ENV_FILE)
 		os.Exit(1)
 	}
 
@@ -39,7 +43,7 @@ func Load() *types.Environment {
 
 func LoadFile(path string) *types.Environment {
 	if err := godotenv.Load(path); err != nil {
-		logger.Log("error loading .env file")
+		logger.Log(ERR_READING_ENV_FILE)
 		os.Exit(1)
 	}
 
