@@ -1,0 +1,62 @@
+---
+title: Autenticação
+description: Sobre a Autenticação utilizada no Imobiliary.
+---
+
+### Sobre a Autenticação
+A autenticação é o processo de verificar a identidade de um usuário
+ou sistema. No Imobiliary, a autenticação é feita através de um
+token JWT (JSON Web Token) que é gerado no momento do login e deve
+ser enviado em todas as requisições subsequentes.
+
+### Como Funciona
+O processo de autenticação no Imobiliary é dividido em duas etapas:
+
+ - **Autenticação**: O usuário envia suas credenciais (e-mail e senha) para o
+    endpoint de [Login](./rotas/usuario/autenticacao). Se as credenciais forem válidas, um token JWT
+    é gerado e retornado ao usuário.
+
+ - **Autorização**: O token JWT deve ser enviado em todas as requisições
+    subsequentes através do Cabeçalho de Requisição `Location` para acessar os endpoints protegidos. O servidor
+    verifica a validade do token e, se for válido, permite o acesso
+    ao recurso solicitado.
+
+### Estrutura do Token JWT
+O token JWT é composto por três partes separadas por pontos (.), que são:
+
+1. **Header**: Contém informações sobre o tipo de token e o algoritmo de
+    assinatura utilizado.
+
+2. **Payload**: Contém as informações do usuário e outras informações
+    relevantes, como a data de expiração do token.
+
+3. **Signature**: É a assinatura do token, que é gerada utilizando o
+    algoritmo especificado no header e uma chave secreta. Essa assinatura
+    garante que o token não foi alterado e que é válido.
+
+### Como é enviado o Token JWT?
+
+O token JWT deve ser enviado em todas as requisições subsequentes
+para acessar os endpoints protegidos. O token deve ser enviado no
+cabeçalho da requisição com o seguinte formato:
+
+```http
+Authorization: Bearer <token>
+```
+
+### Motivação para uso do JWT como Autenticação
+O uso do JWT como método de autenticação traz diversas vantagens,
+como:
+
+  - **Escalabilidade**: O JWT é um token autossuficiente, o que significa
+      que não é necessário armazenar informações do usuário no servidor.
+      Isso torna o sistema mais escalável, pois não há necessidade de
+      manter sessões ativas no servidor.
+
+  - **Desempenho**: O JWT é um token leve e fácil de serializar, o que
+      torna o processo de autenticação mais rápido e eficiente.
+
+  - **Segurança**: O JWT é assinado digitalmente, o que garante a
+      integridade e autenticidade do token. Além disso, o uso de
+      algoritmos de criptografia fortes torna o JWT seguro contra
+      ataques de falsificação e interceptação.

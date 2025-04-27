@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@/components/contexts/theme-provider";
 import { Navbar } from "@/components/navbar";
+import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Space_Grotesk, Space_Mono } from "next/font/google";
@@ -19,7 +20,10 @@ const monoFont = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Imobiliary Docs",
+  title: {
+    template: "Imobiliary Docs | %s",
+    default: "Imobiliary Docs",
+  },
   description:
     "Documentação do Imobiliary, um sistema de gestão imobiliária completo e fácil de usar.",
 };
@@ -50,6 +54,7 @@ export default function RootLayout({
         >
           <Navbar />
           <main className="sm:container mx-auto w-[90vw] h-auto scroll-smooth">
+            <Toaster />
             {children}
           </main>
         </ThemeProvider>

@@ -1,0 +1,73 @@
+---
+title: Alterar Avatar
+description: PUT /users/avatar
+---
+
+<Note title="Nota" type="warning">
+  Esta rota requer autenticação. Você deve estar autenticado para acessá-la.
+</Note>
+
+Esta rota permite que os usuários atualizem seu avatar.
+
+Cabeçalho da requisição:
+```http
+Content-Type: multipart/form-data
+Content-Disposition: form-data; name="avatar"; filename="avatar.png"
+Authorization: Bearer <token>
+```
+
+Esses são os possíveis retornos nessa requisição:
+<Tabs defaultValue="200" className="pb-1">
+  <TabsList>
+    <TabsTrigger value="200">200</TabsTrigger>
+    <TabsTrigger value="400">400</TabsTrigger>
+    <TabsTrigger value="401">401</TabsTrigger>
+    <TabsTrigger value="500">500</TabsTrigger>
+  </TabsList>
+  <TabsContent value="200">
+    Receberá o header `Authorization` atualizado com o novo avatar.
+
+    ```http
+    Authorization: Bearer <token>
+    ```
+  </TabsContent>
+
+  <TabsContent value="400">
+    Receberá essa resposta caso não envie o arquivo de imagem ou envie um arquivo inválido.
+
+    ```json
+    {
+      "code": 400,
+      "message": "Deve enviar um arquivo de imagem válido",
+      "error": "Bad Request"
+    }
+    ```
+    </TabsContent>
+
+    <TabsContent value="401">
+    Receberá essa resposta caso não envie o Cabeçalho `Authorization`.
+
+    ```json
+    {
+      "code": 401,
+      "message": "Token inválido ou expirado",
+      "error": "Unauthorized"
+    }
+    ```
+    </TabsContent>
+
+    <TabsContent value="500">
+    Receberá essa resposta caso ocorra um erro interno no servidor.
+    Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+    Caso o problema persista [Entre em contato](https://imobiliary.com/contato)
+
+    ```json
+    {
+      "code": 500,
+      "message": "Erro interno do servidor",
+      "error": "Internal Server Error"
+    }
+    ```
+    </TabsContent>
+</Tabs>
