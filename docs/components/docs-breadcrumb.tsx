@@ -9,8 +9,6 @@ import {
 import { Fragment } from "react";
 
 export default function DocsBreadcrumb({ paths }: { paths: string[] }) {
-  console.log("paths", paths);
-
   return (
     <div className="pb-5">
       <Breadcrumb>
