@@ -1,0 +1,58 @@
+---
+title: Usuário
+description: Sobre a entidade Usuário.
+---
+
+A entidade Usuário é responsável por gerenciar as informações da plataforma do Imobiliary, atuando como gestor dos imóveis e administrador do fluxo de locação dos mesmos.
+
+### Propriedades
+A entidade Usuário possui as seguintes propriedades:
+
+```go:user.go
+type User struct {
+	ID        uuid.UUID
+	Fullname  string
+	CreciID   string
+	Cellphone string
+	Email     string
+	password  string
+	Avatar    string
+}
+```
+
+### DTOs (Objetos de Transferência de Dados)
+A entidade Usuário possui os seguintes DTOs:
+
+#### DTO padrão de resposta de usuário
+
+```go:dto.go
+type DTO struct {
+  ID        uuid.UUID `json:"id"`
+  Fullname  string    `json:"fullname"`
+  CreciID   string    `json:"creci_id"`
+  Cellphone string    `json:"cellphone"`
+  Email     string    `json:"email"`
+  Avatar    string    `json:"avatar"`
+}
+```
+
+#### DTO para criação de usuário
+
+```go:dto.go
+type CreateUserDTO struct {
+  Fullname  string `json:"fullname"`
+  CreciID   string `json:"creci_id"`
+  Cellphone string `json:"cellphone"`
+  Email     string `json:"email"`
+  Password  string `json:"password"`
+}
+```
+
+#### DTO para autenticação (login) de usuário
+
+```go:dto.go
+type AuthDTO struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+```

@@ -1,0 +1,80 @@
+---
+title: Buscar Usuário
+description: GET /users
+---
+
+Nessa rota você pode buscar um usuário através do
+`id` ou do `email`.
+
+Esses são os possíveis retornos nessa requisição:
+<Tabs defaultValue="200" className="pb-1">
+  <TabsList>
+    <TabsTrigger value="200">200</TabsTrigger>
+    <TabsTrigger value="400">400</TabsTrigger>
+    <TabsTrigger value="404">404</TabsTrigger>
+    <TabsTrigger value="500">500</TabsTrigger>
+  </TabsList>
+  <TabsContent value="200">
+    Receberá essa resposta caso informe o `id` ou `email` de um usuário existente.
+
+    ```json
+    {
+      "id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
+      "creci_id": "00000-F",
+      "fullname": "Fulano de Tal",
+      "cellphone": "(01) 12345-6789",
+      "email": "fulanodetal@email.com",
+      "avatar": "https://urldoavatar.com/fulanodetal"
+    }
+    ```
+  </TabsContent>
+
+  <TabsContent value="400">
+    Receberá essa resposta caso não informe o `id` ou `email` do usúario.
+
+    ```json
+    {
+      "code": 400,
+      "message": "Informe id ou email do usuário",
+      "error": "Bad Request"
+    }
+    ```
+
+    Caso informe `id` e `email` de um usuário ao mesmo tempo, receberá essa resposta.
+
+    ```json
+    {
+      "code": 400,
+      "message": "Informe apenas id ou email do usuário",
+      "error": "Bad Request"
+    }
+    ```
+    </TabsContent>
+
+    <TabsContent value="404">
+    Receberá essa resposta caso informe um `id` ou `email` de um usuário que não existe.
+
+    ```json
+    {
+      "code": 404,
+      "message": "Usuário não encontrado",
+      "error": "Not Found"
+    }
+    ```
+    </TabsContent>
+
+    <TabsContent value="500">
+    Receberá essa resposta caso ocorra um erro interno no servidor.
+    Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+    Caso o problema persista [Entre em contato](https://imobiliary.com/contato)
+
+    ```json
+    {
+      "code": 500,
+      "message": "Erro interno do servidor",
+      "error": "Internal Server Error"
+    }
+    ```
+    </TabsContent>
+</Tabs>

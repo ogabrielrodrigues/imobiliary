@@ -1,0 +1,101 @@
+---
+title: Criar Usuário
+description: POST /users
+---
+
+Nessa rota você pode criar um novo usuário no imobiliary.
+
+Corpo da requisição:
+```json
+{
+  "creci_id": "00000-F",
+  "fullname": "Fulano de Tal",
+  "cellphone": "(01) 12345-6789",
+  "email": "fulanodetal@email.com",
+  "password": "12345678"
+}
+```
+
+Esses são os possíveis retornos nessa requisição:
+<Tabs defaultValue="201" className="pb-1">
+  <TabsList>
+    <TabsTrigger value="201">201</TabsTrigger>
+    <TabsTrigger value="400">400</TabsTrigger>
+    <TabsTrigger value="422">422</TabsTrigger>
+    <TabsTrigger value="500">500</TabsTrigger>
+  </TabsList>
+  <TabsContent value="201">
+    Receberá o header `Location` essa resposta caso envie um corpo de requisição válido.
+
+    ```http
+    Location: /users/0fabb50f-d83b-4c77-a2c9-c62bfecfac1c
+    ```
+  </TabsContent>
+
+  <TabsContent value="400">
+    Receberá essa resposta caso informe sem algum campo obrigatório ou um corpo de requisição inválido.
+
+    Corpo da faltando o campo `password`:
+
+    ```json
+    {
+      "creci_id": "00000-F",
+      "fullname": "Fulano de Tal",
+      "cellphone": "(01) 12345-6789",
+      "email": "fulanodetal@email.com"
+      // sem o campo password
+    }
+    ```
+
+    Resposta:
+
+    ```json
+    {
+      "code": 400,
+      "message": "Senha não pode ser vazia",
+      "error": "Bad Request"
+    }
+    ```
+    </TabsContent>
+
+    <TabsContent value="422">
+    Receberá essa resposta caso informe um campo em formato inválido.
+
+    Corpo da requisição com o campo `email` inválido:
+
+    ```json
+    {
+      "creci_id": "00000-F",
+      "fullname": "Fulano de Tal",
+      "cellphone": "(01) 12345-6789",
+      "email": "fulanodetalemail.com",
+      "password": "12345678"
+    }
+    ```
+
+    Resposta:
+
+    ```json
+    {
+      "code": 400,
+      "message": "Email deve ser válido",
+      "error": "Bad Request"
+    }
+    ```
+    </TabsContent>
+
+    <TabsContent value="500">
+    Receberá essa resposta caso ocorra um erro interno no servidor.
+    Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+    Caso o problema persista [Entre em contato](https://imobiliary.com/contato)
+
+    ```json
+    {
+      "code": 500,
+      "message": "Erro interno do servidor",
+      "error": "Internal Server Error"
+    }
+    ```
+    </TabsContent>
+</Tabs>
