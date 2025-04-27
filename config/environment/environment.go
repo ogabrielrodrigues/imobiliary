@@ -15,9 +15,11 @@ const (
 var Environment *types.Environment
 
 func Load() *types.Environment {
-	if err := godotenv.Load(); err != nil {
-		logger.Log(ERR_READING_ENV_FILE)
-		os.Exit(1)
+	if os.Getenv("ENVIRONMENT") == "development" {
+		if err := godotenv.Load(); err != nil {
+			logger.Log(ERR_READING_ENV_FILE)
+			os.Exit(1)
+		}
 	}
 
 	Environment = &types.Environment{
@@ -42,9 +44,11 @@ func Load() *types.Environment {
 }
 
 func LoadFile(path string) *types.Environment {
-	if err := godotenv.Load(path); err != nil {
-		logger.Log(ERR_READING_ENV_FILE)
-		os.Exit(1)
+	if os.Getenv("ENVIRONMENT") == "development" {
+		if err := godotenv.Load(path); err != nil {
+			logger.Log(ERR_READING_ENV_FILE)
+			os.Exit(1)
+		}
 	}
 
 	Environment = &types.Environment{
