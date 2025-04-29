@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/contexts/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Space_Grotesk, Space_Mono } from "next/font/google";
 
@@ -54,6 +55,7 @@ export default function RootLayout({
         >
           <Navbar />
           <main className="sm:container mx-auto w-[90vw] h-auto scroll-smooth">
+            <Analytics />
             <Toaster />
             {children}
           </main>

@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { page_routes } from "@/lib/routes-config";
 import Link from "next/link";
 
@@ -12,11 +12,8 @@ export default function HomePage() {
         Aqui você encontrará informações sobre como usar a API do Imobiliary, incluindo exemplos de requisições e respostas, além de detalhes sobre os endpoints disponíveis.
       </p>
       <div className="sm:flex sm:flex-row grid grid-cols-2 items-center sm;gap-5 gap-3 mb-8">
-        <Link
-          href={`/docs${page_routes[0].href}`}
-          className={buttonVariants({ className: "px-6", size: "lg" })}
-        >
-          Primeiros passos
+        <Link href={`/docs${page_routes[0].href}`}>
+          <Button className="font-bold" size="lg">Primeiros passos</Button>
         </Link>
       </div>
     </div>
