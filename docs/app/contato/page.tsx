@@ -1,5 +1,10 @@
+import { Metadata } from "next";
 
-export default function Contato() {
+export const metadata: Metadata = {
+  title: "Contato"
+};
+
+export default async function ContactPage() {
   return (
     <div className="mt-16 flex items-center justify-center">
       <main className="max-w-2xl w-full flex flex-col items-center gap-4 p-4">
