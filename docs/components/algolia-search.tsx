@@ -1,7 +1,7 @@
 "use client";
 
-import { DocSearch } from "@docsearch/react";
 import "@docsearch/css";
+import { DocSearch } from "@docsearch/react";
 
 type AlgoliaProps = {
   appId: string;
@@ -20,10 +20,11 @@ export default function AlgoliaSearch(props: AlgoliaProps) {
           K
         </div>
       </div>
-      <DocSearch {...props} maxResultsPerGroup={8} />
-      <div className="absolute top-[0.42rem] left-24 text-muted-foreground font-code -tracking-[0.1rem] text-sm pl-[0.081rem] pointer-events-none">
-        ...
-      </div>
+      <DocSearch {...props} maxResultsPerGroup={8} translations={{
+        button: {
+          buttonText: "Buscar ..."
+        }
+      }} />
     </div>
   );
 }

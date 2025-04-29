@@ -1,5 +1,3 @@
-import { Separator } from "@/components/ui/separator"
-import { ContactForm } from "./_components/contact-form"
 
 export default function Contato() {
   return (
@@ -10,17 +8,9 @@ export default function Contato() {
           Para entrar em contato, envie um e-mail para{" "}
           <a
             href="mailto:contato@imobiliary.com"
-            className="text-white hover:underline"
+            className="text-primary hover:underline"
           >contato@imobiliary.com</a>.
         </p>
-
-        <div className="w-full my-6 flex items-center justify-center gap-2 text-muted-foreground">
-          <Separator className="w-1/3" />
-          ou
-          <Separator className="w-1/3" />
-        </div>
-
-        <ContactForm />
       </main>
     </div>
   )
