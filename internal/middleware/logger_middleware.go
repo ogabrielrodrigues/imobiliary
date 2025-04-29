@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 )
 
 func LoggerMiddleware(next http.Handler) http.Handler {
@@ -12,9 +13,8 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 
 		duration := uint(time.Since(start).Milliseconds())
 
-		fmt.Printf(
-			"[%s] %dms > %s %s\n",
-			time.Now().Format("01/02/2006 15:04:05"),
+		logger.Logf(
+			"%dms > %s %s\n",
 			duration,
 			r.Method,
 			r.URL.Path,
