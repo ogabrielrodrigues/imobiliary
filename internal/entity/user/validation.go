@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	ERR_INTERNAL_SERVER_ERROR                    string = "erro interno do servidor"
 	ERR_FULLNAME_EMPTY                           string = "user fullname is empty"
 	ERR_FULLNAME_INVALID                         string = "user fullname must be between 10 and 100 characters"
 	ERR_EMAIL_EMPTY                              string = "user email is empty"
@@ -18,12 +19,12 @@ const (
 	ERR_CELLPHONE_INVALID                        string = "user cellphone is invalid format"
 	ERR_PASSWORD_EMPTY                           string = "user password is empty"
 	ERR_PASSWORD_INVALID                         string = "user password is invalid must be at least 8 characters"
-	ERR_USER_NOT_FOUND_OR_NOT_EXISTS             string = "user not found or not exists"
+	ERR_USER_NOT_FOUND_OR_NOT_EXISTS             string = "usuário não encontrado ou não existente"
 	ERR_PASSWORD_DONT_MATCH                      string = "user password don't match"
 	ERR_ONLY_ONE_MUST_PARAMETER_MUST_BE_PROVIDED string = "only one of the parameters must be provided"
 	ERR_FAILED_GENERATE_TOKEN                    string = "failed to generate token"
 	ERR_FAILED_TO_PROCESS_USER                   string = "failed to process user"
-	ERR_UUID_INVALID                             string = "user uuid is invalid"
+	ERR_UUID_INVALID                             string = "informe um id de usuário válido"
 	ERR_INVALID_USER_REQUEST_BODY                string = "user request body is invalid"
 	ERR_AVATAR_NOT_FOUND                         string = "avatar not found"
 )
