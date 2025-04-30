@@ -29,7 +29,7 @@ func main() {
 
 	go func() {
 		logger.Log("server running on", env.SERVER_ADDR)
-		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.LoggerMiddleware(middleware.CORSMiddleware(handler))); err != nil {
+		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(middleware.LoggerMiddleware(handler))); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
 				logger.Log(err.Error())
 				os.Exit(1)
