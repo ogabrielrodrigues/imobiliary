@@ -25,7 +25,7 @@ func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 		os.Exit(1)
 	}
 
-	mux.Handle("GET /users", http.HandlerFunc(user_handler.FindBy))
+	mux.Handle("GET /users/{user_id}", http.HandlerFunc(user_handler.FindByID))
 	mux.Handle("POST /users", http.HandlerFunc(user_handler.Create))
 	mux.Handle("POST /users/auth", http.HandlerFunc(user_handler.Authenticate))
 

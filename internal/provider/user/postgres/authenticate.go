@@ -9,7 +9,7 @@ import (
 )
 
 func (pg *PostgresUserRepository) Authenticate(ctx context.Context, email, password string) (*user.User, *response.Err) {
-	found, err := pg.FindByEmail(ctx, email)
+	found, err := pg.findByEmail(ctx, email)
 	if err != nil {
 		return nil, err
 	}

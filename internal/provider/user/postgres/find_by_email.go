@@ -10,7 +10,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (pg *PostgresUserRepository) FindByEmail(ctx context.Context, email string) (*user.User, *response.Err) {
+func (pg *PostgresUserRepository) findByEmail(ctx context.Context, email string) (*user.User, *response.Err) {
 	row := pg.pool.QueryRow(ctx, `
 		SELECT
 			*
