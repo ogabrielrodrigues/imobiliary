@@ -16,7 +16,6 @@ type Service struct {
 
 type IService interface {
 	FindByID(ctx context.Context, id uuid.UUID) (*user.DTO, *response.Err)
-	FindByEmail(ctx context.Context, email string) (*user.DTO, *response.Err)
 	Create(ctx context.Context, dto *user.CreateDTO) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, email, password string) (string, *response.Err)
 	SaveAvatar(ctx context.Context, avatarFile multipart.File) (string, *response.Err)

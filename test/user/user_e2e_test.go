@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	plan_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/plan/service"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
@@ -360,7 +361,7 @@ func TestE2ECreateUser(t *testing.T) {
 	})
 }
 
-func TestE2EFindByUser(t *testing.T) {
+func TestE2EFindByIDUser(t *testing.T) {
 	environment.LoadFile(filepath.Join("..", "..", ".env"))
 
 	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
@@ -369,37 +370,7 @@ func TestE2EFindByUser(t *testing.T) {
 	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
 	uh := user_handler.NewHandler(us, ps)
 
-	t.Run("should not be able to find a user by providing both ID and email together", func(t *testing.T) {
-		id, _ := us.Create(context.Background(), &user.CreateDTO{
-			CreciID:   "12345-F",
-			Fullname:  "John Doe of Silva",
-			Cellphone: "(11) 99999-9999",
-			Email:     "john.doe@example.com",
-			Password:  "password",
-		})
-
-		url := fmt.Sprintf("/users?id=%s&email=%s", id, "john.doe@example.com")
-
-		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
-
-		uh.FindBy(recorder, request)
-
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_ONLY_ONE_MUST_PARAMETER_MUST_BE_PROVIDED {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_ONLY_ONE_MUST_PARAMETER_MUST_BE_PROVIDED, res_err.Message)
-		}
-
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
-		}
-	})
-
-	t.Run("should be able to find a user by email", func(t *testing.T) {
+	t.Run("should not be able to find a user with invalid id", func(t *testing.T) {
 		us.Create(context.Background(), &user.CreateDTO{
 			CreciID:   "12345-F",
 			Fullname:  "John Doe of Silva",
@@ -408,43 +379,20 @@ func TestE2EFindByUser(t *testing.T) {
 			Password:  "password",
 		})
 
-		url := fmt.Sprintf("/users?email=%s", "john.doe@example.com")
+		url := fmt.Sprintf("/users/%s", "hdhsdhsdhshsd")
 
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, url, nil)
 
-		uh.FindBy(recorder, request)
-
-		response := recorder.Result()
-
-		if response.StatusCode != http.StatusOK {
-			t.Errorf("expected status: %d, got: %d", http.StatusOK, response.StatusCode)
-		}
-	})
-
-	t.Run("should not be able to find a user with invalid email", func(t *testing.T) {
-		us.Create(context.Background(), &user.CreateDTO{
-			CreciID:   "12345-F",
-			Fullname:  "John Doe of Silva",
-			Cellphone: "(11) 99999-9999",
-			Email:     "john.doe@example.com",
-			Password:  "password",
-		})
-
-		url := fmt.Sprintf("/users?email=%s", "johnjohn")
-
-		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
-
-		uh.FindBy(recorder, request)
+		uh.FindByID(recorder, request)
 
 		response := recorder.Result()
 
 		var res_err res.Err
 		json.NewDecoder(response.Body).Decode(&res_err)
 
-		if res_err.Message != user.ERR_EMAIL_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_EMAIL_INVALID, res_err.Message)
+		if res_err.Message != user.ERR_UUID_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_UUID_INVALID, res_err.Message)
 		}
 
 		if response.StatusCode != http.StatusBadRequest {
@@ -452,13 +400,14 @@ func TestE2EFindByUser(t *testing.T) {
 		}
 	})
 
-	t.Run("should not be able to find a user by email if not exists", func(t *testing.T) {
-		url := fmt.Sprintf("/users?email=%s", "john.doe2@example.com")
+	t.Run("should not be able to find a user by id if not exists", func(t *testing.T) {
+		id := uuid.New().String()
 
 		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
+		request := httptest.NewRequest(http.MethodGet, "/users/{user_id}", nil)
+		request.SetPathValue("user_id", id)
 
-		uh.FindBy(recorder, request)
+		uh.FindByID(recorder, request)
 
 		response := recorder.Result()
 
@@ -476,66 +425,16 @@ func TestE2EFindByUser(t *testing.T) {
 			Password:  "password",
 		})
 
-		url := fmt.Sprintf("/users?id=%s", id)
-
 		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
+		request := httptest.NewRequest(http.MethodGet, "/users/{user_id}", nil)
+		request.SetPathValue("user_id", id.String())
 
-		uh.FindBy(recorder, request)
+		uh.FindByID(recorder, request)
 
 		response := recorder.Result()
 
 		if response.StatusCode != http.StatusOK {
 			t.Errorf("expected status: %d, got: %d", http.StatusOK, response.StatusCode)
-		}
-	})
-
-	t.Run("should not be able to find a user with invalid id", func(t *testing.T) {
-		us.Create(context.Background(), &user.CreateDTO{
-			CreciID:   "12345-F",
-			Fullname:  "John Doe of Silva",
-			Cellphone: "(11) 99999-9999",
-			Email:     "john.doe@example.com",
-			Password:  "password",
-		})
-
-		url := fmt.Sprintf("/users?id=%s", "blablabla")
-
-		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
-
-		uh.FindBy(recorder, request)
-
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
-		}
-	})
-
-	t.Run("should not be able to find a user by id if not exists", func(t *testing.T) {
-		us.Create(context.Background(), &user.CreateDTO{
-			CreciID:   "12345-F",
-			Fullname:  "John Doe of Silva",
-			Cellphone: "(11) 99999-9999",
-			Email:     "john.doe@example.com",
-			Password:  "password",
-		})
-
-		url := fmt.Sprintf("/users?id=%s", "00000000-0000-0000-0000-000000000000")
-
-		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
-
-		uh.FindBy(recorder, request)
-
-		response := recorder.Result()
-
-		if response.StatusCode != http.StatusNotFound {
-			t.Errorf("expected status: %d, got: %d", http.StatusNotFound, response.StatusCode)
 		}
 	})
 }
