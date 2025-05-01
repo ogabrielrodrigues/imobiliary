@@ -28,8 +28,7 @@ func registerUserRoutes(mux *http.ServeMux, pool *pgxpool.Pool) {
 	mux.Handle("GET /users/{user_id}", http.HandlerFunc(user_handler.FindByID))
 	mux.Handle("POST /users", http.HandlerFunc(user_handler.Create))
 	mux.Handle("POST /users/auth", http.HandlerFunc(user_handler.Authenticate))
-
-	mux.Handle("POST /users/avatar", middleware.AuthMiddleware(http.HandlerFunc(user_handler.UpdateAvatar)))
+	mux.Handle("PUT /users/avatar", middleware.AuthMiddleware(http.HandlerFunc(user_handler.ChangeAvatar)))
 	mux.Handle("GET /users/plan", middleware.AuthMiddleware(http.HandlerFunc(user_handler.GetUserPlan)))
 }
 

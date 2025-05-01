@@ -10,6 +10,10 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
+const (
+	ERR_TOKEN_INVALID_OR_EXPIRED string = "token inválido ou expirado"
+)
+
 func GenerateToken(claim *user.User) (string, *response.Err) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":  claim.ID,
@@ -30,18 +34,13 @@ func ParseToken(token string) (string, *response.Err) {
 		return []byte(environment.Environment.SECRET_KEY), nil
 	})
 	if err != nil {
-		return "", response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		return "", response.NewErr(http.StatusUnauthorized, ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	user_id, err := parsed.Claims.GetSubject()
 	if err != nil {
-		return "", response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		return "", response.NewErr(http.StatusUnauthorized, ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	return user_id, nil
 }
-
-// func GetUserFromContext(ctx context.Context) (string, bool) {
-// 	user_id, ok := ctx.Value(UserIDKey).(string)
-// 	return user_id, ok
-// }

@@ -18,7 +18,7 @@ type IService interface {
 	FindByID(ctx context.Context, id uuid.UUID) (*user.DTO, *response.Err)
 	Create(ctx context.Context, dto *user.CreateDTO) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, email, password string) (string, *response.Err)
-	SaveAvatar(ctx context.Context, avatarFile multipart.File) (string, *response.Err)
+	ChangeAvatar(ctx context.Context, avatarFile multipart.File, mime string) *response.Err
 }
 
 func NewService(repo user.IRepository, storage user.IAvatarStorageRepository) *Service {

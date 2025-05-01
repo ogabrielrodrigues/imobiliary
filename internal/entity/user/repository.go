@@ -16,5 +16,5 @@ type IRepository interface {
 }
 
 type IAvatarStorageRepository interface {
-	SaveAvatar(ctx context.Context, avatar multipart.File) (string, *response.Err)
+	ChangeAvatar(ctx context.Context, avatar multipart.File, mime string) (string, *response.Err)
 }

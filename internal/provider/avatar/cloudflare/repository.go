@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	ERR_STORAGE_INTERNAL_ERROR = "storage internal error"
+	ERR_STORAGE_INTERNAL_ERROR = "erro interno ao salvar o avatar"
 )
 
 type CloudflareR2AvatarRepository struct {

@@ -14,7 +14,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (r2 *CloudflareR2AvatarRepository) SaveAvatar(ctx context.Context, avatar multipart.File) (string, *response.Err) {
+func (r2 *CloudflareR2AvatarRepository) ChangeAvatar(ctx context.Context, avatar multipart.File, mime string) (string, *response.Err) {
 	id := ctx.Value(middleware.UserIDKey).(string)
 	user_id, err := uuid.Parse(id)
 	if err != nil {
@@ -23,17 +23,14 @@ func (r2 *CloudflareR2AvatarRepository) SaveAvatar(ctx context.Context, avatar m
 
 	file_key := fmt.Sprintf("avatars/%s", user_id)
 
-	out, err := r2.manager.Upload(ctx, &s3.PutObjectInput{
+	r2.client.PutObject(ctx, &s3.PutObjectInput{
 		Bucket:      aws.String(r2.s3_bucket),
 		Key:         aws.String(file_key),
-		ContentType: aws.String("image/png"),
+		ContentType: aws.String(mime),
 		Body:        avatar,
 	})
-	if err != nil {
-		return "", response.NewErr(http.StatusInternalServerError, ERR_STORAGE_INTERNAL_ERROR)
-	}
 
-	avatar_url := fmt.Sprintf("%s/%s", r2.s3_public_url, *out.Key)
+	avatar_url := fmt.Sprintf("%s/%s", r2.s3_public_url, file_key)
 
 	return avatar_url, nil
 }

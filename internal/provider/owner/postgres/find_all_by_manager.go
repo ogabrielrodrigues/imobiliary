@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
+	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -36,7 +37,7 @@ func (pg *PostgresOwnerRepository) FindAllByManagerID(ctx context.Context) ([]ow
 
 	manager_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
-		return nil, response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		return nil, response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	rows, err := pg.pool.Query(ctx, query, manager_id)

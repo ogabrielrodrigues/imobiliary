@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -18,7 +19,7 @@ func (pg *PostgresOwnerRepository) AssignOwnerToProperty(ctx context.Context, ow
 
 	user_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
-		return response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		return response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	_, err := pg.pool.Exec(ctx, query, owner_id, property_id, user_id)

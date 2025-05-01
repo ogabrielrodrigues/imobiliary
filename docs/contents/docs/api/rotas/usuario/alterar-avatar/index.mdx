@@ -1,73 +1,89 @@
 ---
 title: Alterar Avatar
-description: PUT /users/avatar
+description: Esta rota você pode alterar o avatar do usuário.
 ---
 
+```http
+PUT https://api.imobiliary.com/users/avatar
+```
+
 <Note title="Nota" type="warning">
-  Esta rota requer autenticação. Você deve estar autenticado para acessá-la.
+  Esta rota requer autenticação. Você deve fornecer o cabeçalho `Authorization` com um token de autenticação válido.
+  O token deve ser obtido através da rota de autenticação.
 </Note>
 
-Esta rota permite que os usuários alterem seu avatar.
+### Requisição
+Para realizar essa requisição, deve-se enviar o arquivo de imagem nos formatos
+permitidos: `png`, `jpg`, `jpeg` ou `webp`, com tamanho máximo de 3MB
+no cabeçalho da requisição, no seguinte formato:
 
-Cabeçalho da requisição:
 ```http
 Content-Type: multipart/form-data
 Content-Disposition: form-data; name="avatar"; filename="avatar.png"
-Authorization: Bearer <token>
 ```
 
-Esses são os possíveis retornos nessa requisição:
-<Tabs defaultValue="200" className="pb-1">
-  <TabsList>
-    <TabsTrigger value="200">200</TabsTrigger>
-    <TabsTrigger value="400">400</TabsTrigger>
-    <TabsTrigger value="401">401</TabsTrigger>
-    <TabsTrigger value="500">500</TabsTrigger>
-  </TabsList>
-  <TabsContent value="200">
-    Receberá o header `Authorization` atualizado com o novo avatar.
+### Respostas
+Esses são as possíveis respostas desta requisição.
 
-    ```http
-    Authorization: Bearer <token>
-    ```
-  </TabsContent>
+#### 200
+Receberá essa resposta caso forneça um arquivo de imagem em formato válido.
 
-  <TabsContent value="400">
-    Receberá essa resposta caso não envie o arquivo de imagem ou envie um arquivo inválido.
+```http
+HTTP/1.1 200 OK
+```
 
-    ```json
-    {
-      "code": 400,
-      "message": "Deve enviar um arquivo de imagem válido",
-      "error": "Bad Request"
-    }
-    ```
-    </TabsContent>
+#### 400
+Receberá essas respostas caso não forneça um arquivo de imagem,
+envie um arquivo de imagem em formato inválido ou com tamanho maior que `3MB`.
 
-    <TabsContent value="401">
-    Receberá essa resposta caso não envie o Cabeçalho `Authorization`.
+Exemplo de resposta por não enviar um arquivo de imagem:
+```json
+{
+  "code": 400,
+  "message": "deve enviar um arquivo de avatar",
+  "error": "Bad Request"
+}
+```
 
-    ```json
-    {
-      "code": 401,
-      "message": "Token inválido ou expirado",
-      "error": "Unauthorized"
-    }
-    ```
-    </TabsContent>
+Exemplo de resposta por enviar um arquivo em formato inválido:
+```json
+{
+  "code": 400,
+  "message": "o formato do avatar deve ser .jpeg, .png, .jpg ou .webp",
+  "error": "Bad Request"
+}
+```
 
-    <TabsContent value="500">
-    Receberá essa resposta caso ocorra um erro interno no servidor.
-    Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+Exemplo de resposta por enviar um arquivo com tamanho maior que `3MB`:
+```json
+{
+  "code": 400,
+  "message": "o tamanho do arquivo de avatar deve ser menor que 3MB",
+  "error": "Bad Request"
+}
+```
 
-    Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
+#### 401
+Receberá essa resposta caso não envie o token de autenticação no cabecalho `Authorization`,
+caso o token enviado não seja válido ou tenha expirado.
 
-    ```json
-    {
-      "code": 500,
-      "message": "Erro interno do servidor",
-      "error": "Internal Server Error"
-    }
-    ```
-    </TabsContent>
-</Tabs>
+```json
+{
+  "code": 401,
+  "message": "token inválido ou expirado",
+  "error": "Unauthorized"
+}
+```
+
+#### 500
+Receberá essa resposta caso ocorra um erro interno no servidor.
+Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
+```json
+{
+  "code": 500,
+  "message": "erro interno do servidor",
+  "error": "Internal Server Error"
+}
+```

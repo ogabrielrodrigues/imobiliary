@@ -1,0 +1,105 @@
+---
+title: Autenticar Usuário
+description: Nessa rota você pode autenticar um usuário.
+---
+
+```http
+POST https://api.imobiliary.com/users/auth
+```
+
+### Requisição
+Para realizar essa requisição, deve-se fornecer o corpo da
+requisição no seguinte formato.
+
+```json
+{
+  "email": "fulanodetal@email.com",
+  "password": "12345678"
+}
+```
+
+### Respostas
+Esses são as possíveis respostas desta requisição.
+
+#### 200
+Receberá essa resposta caso forneça um corpo da requisição válido.
+
+```http
+HTTP/1.1 200 OK
+Authorization: Bearer <token>
+```
+
+#### 400
+Receberá essa resposta caso não forneça o corpo da requisição ou informe
+algum dos campos de forma incorreta. Exemplo:
+
+```json
+{
+  "email": "fulanodetal@email.com",
+  "password": 12345678 // não é uma string
+}
+```
+
+Resposta:
+
+```json
+{
+  "code": 400,
+  "message": "informe um corpo de requisição válido",
+  "error": "Bad Request"
+}
+```
+
+#### 401
+Receberá essa resposta caso forneça o corpo da requisição com a `password`
+incorreta. Exemplo:
+
+```json
+{
+  "email": "fulanodetal@email.com",
+  "password": "123456789" // senha incorreta
+}
+```
+
+Resposta:
+
+```json
+{
+  "code": 401,
+  "message": "a senha do usuário não coincide com a cadastrada",
+  "error": "Unauthorized"
+}
+```
+
+#### 404
+Receberá essa resposta caso o corpo da requisição contenha um `email`
+que não esteja cadastrado. Exemplo:
+
+```json
+{
+  "email": "fulanodetal04@email.com", // email inexistente
+  "password": "12345678"
+}
+```
+
+Resposta:
+```json
+{
+  "code": 404,
+  "message": "usuário já existe",
+  "error": "Not Found"
+}
+```
+
+#### 500
+Receberá essa resposta caso ocorra um erro interno no servidor.
+Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
+```json
+{
+  "code": 500,
+  "message": "erro interno do servidor",
+  "error": "Internal Server Error"
+}
+```

@@ -6,6 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
+	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -13,7 +14,7 @@ import (
 func (pg *PostgresPropertyRepository) FindAllByUserID(ctx context.Context) ([]property.DTO, *response.Err) {
 	user_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
-		return nil, response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		return nil, response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	query := `

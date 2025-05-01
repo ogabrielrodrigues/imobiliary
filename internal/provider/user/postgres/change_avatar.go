@@ -25,7 +25,7 @@ func (pg *PostgresUserRepository) ChangeAvatar(ctx context.Context, avatar_url s
 		user_id,
 	)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, err.Error()) // TODO: Handle specific error
+		return response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	return nil

@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
+	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -48,7 +49,7 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 
 	manager_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
-		return uuid.Nil, response.NewErr(http.StatusUnauthorized, http.StatusText(http.StatusUnauthorized))
+		return uuid.Nil, response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	row = tx.QueryRow(ctx, owner_query,
