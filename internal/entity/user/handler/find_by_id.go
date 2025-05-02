@@ -9,22 +9,19 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) *response.Err {
 	ctx := context.Background()
 	id := r.PathValue("user_id")
 
 	uid, u_err := uuid.Parse(id)
 	if u_err != nil {
-		err := response.NewErr(http.StatusBadRequest, user.ERR_UUID_INVALID)
-		response.End(w, err.Code, err)
-		return
+		return response.NewErr(http.StatusBadRequest, user.ERR_UUID_INVALID)
 	}
 
 	user, err := h.service.FindByID(ctx, uid)
 	if err != nil {
-		response.End(w, err.Code, err)
-		return
+		return err
 	}
 
-	response.End(w, http.StatusOK, user)
+	return response.End(w, http.StatusOK, user)
 }

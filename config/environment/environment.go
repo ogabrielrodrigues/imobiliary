@@ -22,7 +22,6 @@ func Load() *types.Environment {
 	}
 
 	Environment = &types.Environment{
-		SERVER_PROTOCOL:  os.Getenv("SERVER_PROTOCOL"),
 		SERVER_ADDR:      os.Getenv("SERVER_ADDR"),
 		SECRET_KEY:       os.Getenv("SECRET_KEY"),
 		CORS_ORIGIN:      os.Getenv("CORS_ORIGIN"),
@@ -50,7 +49,6 @@ func LoadFile(path string) *types.Environment {
 	}
 
 	Environment = &types.Environment{
-		SERVER_PROTOCOL:  os.Getenv("SERVER_PROTOCOL"),
 		SERVER_ADDR:      os.Getenv("SERVER_ADDR"),
 		SECRET_KEY:       os.Getenv("SECRET_KEY"),
 		CORS_ORIGIN:      os.Getenv("CORS_ORIGIN"),

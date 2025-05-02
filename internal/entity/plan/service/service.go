@@ -14,7 +14,7 @@ type Service struct {
 
 type IService interface {
 	AssignPlanToUser(ctx context.Context, kind string, user_id uuid.UUID, plan *plan.Plan) *response.Err
-	GetUserPlan(ctx context.Context, user_id uuid.UUID) (*plan.DTO, *response.Err)
+	GetUserPlan(ctx context.Context) (*plan.DTO, *response.Err)
 }
 
 func NewService(repo plan.IRepository) *Service {

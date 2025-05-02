@@ -10,27 +10,21 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) *response.Err {
 	var dto user.AuthDTO
 	ctx := context.Background()
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		err := response.NewErr(http.StatusBadRequest, user.ERR_INVALID_USER_REQUEST_BODY)
-		response.End(w, err.Code, err)
-		return
+		return response.NewErr(http.StatusBadRequest, user.ERR_INVALID_USER_REQUEST_BODY)
 	}
 
 	token, err := h.service.Authenticate(ctx, dto.Email, dto.Password)
 	if err != nil {
-		if err.Message == user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS {
-			response.End(w, err.Code, err)
-			return
-		}
-
-		response.End(w, err.Code, err)
-		return
+		return err
 	}
 
 	w.Header().Add("Authorization", fmt.Sprintf("Bearer %s", token))
 	w.WriteHeader(http.StatusOK)
+
+	return nil
 }

@@ -9,5 +9,5 @@ import (
 
 type IRepository interface {
 	AssignPlanToUser(ctx context.Context, kind string, user_id uuid.UUID, plan *Plan) *response.Err
-	GetUserPlan(ctx context.Context, user_id uuid.UUID) (*Plan, *response.Err)
+	GetUserPlan(ctx context.Context) (*Plan, *response.Err)
 }

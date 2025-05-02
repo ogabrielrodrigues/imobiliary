@@ -5,13 +5,15 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
+	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (pg *PostgresPlanRepository) GetUserPlan(ctx context.Context, user_id uuid.UUID) (*plan.Plan, *response.Err) {
+func (pg *PostgresPlanRepository) GetUserPlan(ctx context.Context) (*plan.Plan, *response.Err) {
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
 		tx.Rollback(ctx)
@@ -23,6 +25,11 @@ func (pg *PostgresPlanRepository) GetUserPlan(ctx context.Context, user_id uuid.
 	FROM "user_plan" up
 	JOIN "plan" p ON up.plan_id = p.id
 	WHERE up.user_id = $1`
+
+	user_id, ok := ctx.Value(middleware.UserIDKey).(string)
+	if !ok {
+		return nil, response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
+	}
 
 	row := tx.QueryRow(ctx, query, user_id)
 
@@ -40,11 +47,11 @@ func (pg *PostgresPlanRepository) GetUserPlan(ctx context.Context, user_id uuid.
 			return nil, response.NewErr(http.StatusNotFound, ERR_PLAN_NOT_FOUND)
 		}
 
-		return nil, response.NewErr(http.StatusInternalServerError, err.Error())
+		return nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return nil, response.NewErr(http.StatusInternalServerError, err.Error())
+		return nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	return &plan, nil
