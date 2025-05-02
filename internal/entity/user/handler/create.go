@@ -11,29 +11,27 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) *response.Err {
 	var dto user.CreateDTO
 	ctx := context.Background()
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		err := response.NewErr(http.StatusBadRequest, user.ERR_INVALID_USER_REQUEST_BODY)
-		response.End(w, err.Code, err)
-		return
+		return response.NewErr(http.StatusBadRequest, user.ERR_INVALID_USER_REQUEST_BODY)
 	}
 
 	id, err := h.service.Create(ctx, &dto)
 	if err != nil {
-		response.End(w, err.Code, err)
-		return
+		return err
 	}
 
 	plan := plan.New(plan.PlanKindFree, 30, 0, 30)
 	err = h.plan_service.AssignPlanToUser(ctx, string(plan.Kind), id, plan)
 	if err != nil {
-		response.End(w, err.Code, err)
-		return
+		return err
 	}
 
 	w.Header().Set("Location", fmt.Sprintf("/users/%s", id))
 	w.WriteHeader(http.StatusCreated)
+
+	return nil
 }

@@ -16,10 +16,10 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 		duration := uint(time.Since(start).Milliseconds())
 
 		logger.Logf(
-			"%dms > %s %s\n",
-			duration,
+			"[%s] %s > %dms\n",
 			r.Method,
 			r.URL.Path,
+			duration,
 		)
 	})
 }

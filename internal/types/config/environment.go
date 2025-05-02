@@ -1,7 +1,6 @@
 package types
 
 type Environment struct {
-	SERVER_PROTOCOL  string
 	SERVER_ADDR      string
 	SECRET_KEY       string
 	CORS_ORIGIN      string

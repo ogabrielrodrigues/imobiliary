@@ -1,12 +1,9 @@
 package user
 
 import (
-	"context"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -22,52 +19,27 @@ func haveMimeType(mime_type string) bool {
 	return ok
 }
 
-func (h *Handler) ChangeAvatar(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) ChangeAvatar(w http.ResponseWriter, r *http.Request) *response.Err {
 	file, metadata, err := r.FormFile("avatar")
 	if err != nil {
-		err := response.NewErr(http.StatusBadRequest, user.ERR_MUST_BE_PROVIDE_AVATAR)
-		response.End(w, err.Code, err)
-		return
+		return response.NewErr(http.StatusBadRequest, user.ERR_MUST_BE_PROVIDE_AVATAR)
 	}
 	defer file.Close()
 
 	if metadata.Size > 3*1024*1024 {
-		err := response.NewErr(http.StatusBadRequest, user.ERR_AVATAR_SIZE_INVALID)
-		response.End(w, err.Code, err)
-		return
+		return response.NewErr(http.StatusBadRequest, user.ERR_AVATAR_SIZE_INVALID)
 	}
 
 	file_mime := metadata.Header.Get("Content-Type")
 	if !haveMimeType(file_mime) {
-		err := response.NewErr(http.StatusBadRequest, user.ERR_AVATAR_FORMAT_INVALID)
-		response.End(w, err.Code, err)
-		return
+		return response.NewErr(http.StatusBadRequest, user.ERR_AVATAR_FORMAT_INVALID)
 	}
 
-	r_err := h.service.ChangeAvatar(r.Context(), file, file_mime)
-	if r_err != nil {
-		response.End(w, r_err.Code, r_err)
-		return
+	if err := h.service.ChangeAvatar(r.Context(), file, file_mime); err != nil {
+		return err
 	}
 
 	w.WriteHeader(http.StatusOK)
-}
 
-func (h *Handler) GetUserPlan(w http.ResponseWriter, r *http.Request) {
-	user_id := r.Context().Value(middleware.UserIDKey).(string)
-
-	uid, err := uuid.Parse(user_id)
-	if err != nil {
-		r_err := response.NewErr(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
-		response.End(w, r_err.Code, r_err)
-		return
-	}
-
-	plan, r_err := h.plan_service.GetUserPlan(context.Background(), uid)
-	if r_err != nil {
-		response.End(w, r_err.Code, r_err)
-		return
-	}
-
-	response.End(w, http.StatusOK, plan)
+	return nil
 }

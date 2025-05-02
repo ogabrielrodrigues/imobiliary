@@ -5,6 +5,10 @@ import (
 	"net/http"
 )
 
+const (
+	ERR_SERIALIZING_JSON string = "erro ao serializar a resposta"
+)
+
 type Response map[string]any
 
 type Err struct {
@@ -25,9 +29,13 @@ func NewErr(code int, message string) *Err {
 	}
 }
 
-func End(w http.ResponseWriter, code int, data any) {
+func End(w http.ResponseWriter, code int, data any) *Err {
 	w.Header().Add("content-type", "application/json")
 
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		return NewErr(http.StatusBadRequest, ERR_SERIALIZING_JSON)
+	}
+
+	return nil
 }
