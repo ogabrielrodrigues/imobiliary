@@ -12,12 +12,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	plan_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/plan/service"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/in_memory"
-	plan_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/plan/in_memory"
 	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/in_memory"
 	res "github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -28,8 +26,7 @@ func TestE2ECreateUser(t *testing.T) {
 	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
 	ur := user_repository.NewInMemoryUserRepository()
 	us := user_service.NewService(ur, ar)
-	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
-	uh := user_handler.NewHandler(us, ps)
+	uh := user_handler.NewHandler(us)
 
 	t.Run("should be able to create a user", func(t *testing.T) {
 		body := bytes.NewBuffer([]byte(`{
@@ -367,8 +364,7 @@ func TestE2EFindByIDUser(t *testing.T) {
 	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
 	ur := user_repository.NewInMemoryUserRepository()
 	us := user_service.NewService(ur, ar)
-	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
-	uh := user_handler.NewHandler(us, ps)
+	uh := user_handler.NewHandler(us)
 
 	t.Run("should not be able to find a user with invalid id", func(t *testing.T) {
 		us.Create(context.Background(), &user.CreateDTO{
@@ -445,8 +441,7 @@ func TestE2EAuthenticateUser(t *testing.T) {
 	ar := avatar_repository.NewInMemoryAvatarRepository("./tmp")
 	ur := user_repository.NewInMemoryUserRepository()
 	us := user_service.NewService(ur, ar)
-	ps := plan_service.NewService(plan_repository.NewInMemoryPlanRepository())
-	uh := user_handler.NewHandler(us, ps)
+	uh := user_handler.NewHandler(us)
 
 	t.Run("should be able to authenticate a user", func(t *testing.T) {
 		us.Create(context.Background(), &user.CreateDTO{

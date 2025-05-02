@@ -28,7 +28,6 @@ func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 	mux.Handle("POST /users", makeHandler(user_handler.Create))
 	mux.Handle("POST /users/auth", makeHandler(user_handler.Authenticate))
 	mux.Handle("PUT /users/avatar", middleware.AuthMiddleware(makeHandler(user_handler.ChangeAvatar)))
-	mux.Handle("GET /users/plan", middleware.AuthMiddleware(makeHandler(user_handler.GetUserPlan)))
 
 	property_handler := factory.NewPropertyHandlerFactory(pool)
 

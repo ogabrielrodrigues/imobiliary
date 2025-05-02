@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/plan"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -20,12 +19,6 @@ func (h *Handler) Create(w http.ResponseWriter, r *http.Request) *response.Err {
 	}
 
 	id, err := h.service.Create(ctx, &dto)
-	if err != nil {
-		return err
-	}
-
-	plan := plan.New(plan.PlanKindFree, 30, 0, 30)
-	err = h.plan_service.AssignPlanToUser(ctx, string(plan.Kind), id, plan)
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func (r *InMemoryAvatarRepository) SaveAvatar(ctx context.Context, avatar multipart.File) (string, *response.Err) {
+func (r *InMemoryAvatarRepository) ChangeAvatar(ctx context.Context, avatar multipart.File, mime string) (string, *response.Err) {
 	user_folder := filepath.Join(r.path, ctx.Value("user_id").(string))
 	if _, err := os.Stat(user_folder); os.IsNotExist(err) {
 		if err := os.Mkdir(user_folder, os.ModePerm); err != nil {
