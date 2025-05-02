@@ -1,7 +1,6 @@
 package user
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,13 +11,12 @@ import (
 
 func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) *response.Err {
 	var dto user.AuthDTO
-	ctx := context.Background()
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		return response.NewErr(http.StatusBadRequest, user.ERR_INVALID_USER_REQUEST_BODY)
 	}
 
-	token, err := h.service.Authenticate(ctx, dto.Email, dto.Password)
+	token, err := h.service.Authenticate(r.Context(), &dto)
 	if err != nil {
 		return err
 	}

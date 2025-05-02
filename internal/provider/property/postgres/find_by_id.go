@@ -7,7 +7,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -15,7 +16,7 @@ import (
 func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID) (*property.DTO, *response.Err) {
 	user_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
-		return nil, response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
+		return nil, response.NewErr(http.StatusUnauthorized, jwt.ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	query := `
@@ -66,7 +67,7 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 			return nil, response.NewErr(http.StatusNotFound, property.ERR_PROPERTY_NOT_FOUND_OR_NOT_EXISTS)
 		}
 
-		return nil, response.NewErr(http.StatusInternalServerError, err.Error())
+		return nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if owner_id != nil {

@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
+	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
@@ -14,7 +15,7 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
 		tx.Rollback(ctx)
-		return response.NewErr(http.StatusInternalServerError, err.Error())
+		return response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	address_query := `
@@ -38,12 +39,12 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 	var address_id string
 	if err := row.Scan(&address_id); err != nil {
 		tx.Rollback(ctx)
-		return response.NewErr(http.StatusInternalServerError, err.Error())
+		return response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	user_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
-		return response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
+		return response.NewErr(http.StatusUnauthorized, jwt.ERR_TOKEN_INVALID_OR_EXPIRED)
 	}
 
 	property_query := `
@@ -62,12 +63,12 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 
 	if err != nil {
 		tx.Rollback(ctx)
-		return response.NewErr(http.StatusInternalServerError, err.Error())
+		return response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
 		tx.Rollback(ctx)
-		return response.NewErr(http.StatusInternalServerError, err.Error())
+		return response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	return nil

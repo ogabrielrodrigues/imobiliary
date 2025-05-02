@@ -11,7 +11,7 @@ import (
 type IRepository interface {
 	FindByID(ctx context.Context, id uuid.UUID) (*User, *response.Err)
 	Create(ctx context.Context, user *User) (uuid.UUID, *response.Err)
-	Authenticate(ctx context.Context, email, password string) (*User, *response.Err)
+	Authenticate(ctx context.Context, dto *AuthDTO) (uuid.UUID, *response.Err)
 	ChangeAvatar(ctx context.Context, avatar_url string) *response.Err
 }
 

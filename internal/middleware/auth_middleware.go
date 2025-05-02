@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/lib"
+	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
@@ -22,14 +22,14 @@ var (
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header.Get("Authorization") == "" {
-			err := response.NewErr(http.StatusUnauthorized, lib.ERR_TOKEN_INVALID_OR_EXPIRED)
+			err := response.NewErr(http.StatusUnauthorized, jwt.ERR_TOKEN_INVALID_OR_EXPIRED)
 			response.End(w, err.Code, err)
 			return
 		}
 
 		token := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 
-		user_id, err := lib.ParseToken(token)
+		user_id, err := jwt.ParseToken(token)
 		if err != nil {
 			response.End(w, err.Code, err)
 			return
