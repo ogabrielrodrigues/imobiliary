@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -14,6 +15,33 @@ import (
 const (
 	ERR_TOKEN_INVALID_OR_EXPIRED string = "token inválido ou expirado"
 )
+
+func ExtractToken(authorization string) string {
+	if authorization == "" {
+		return ""
+	}
+
+	authorization = strings.TrimSpace(authorization)
+
+	if !strings.HasPrefix(authorization, "Bearer") {
+		return ""
+	}
+
+	chunk := strings.Fields(authorization)
+
+	if len(chunk) < 2 || chunk[1] == "" {
+		return ""
+	}
+
+	token := chunk[1]
+
+	token = strings.TrimSpace(token)
+	if token == "" {
+		return ""
+	}
+
+	return token
+}
 
 func GenerateToken(user_id uuid.UUID) (string, *response.Err) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

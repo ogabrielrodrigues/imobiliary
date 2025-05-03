@@ -7,18 +7,6 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
-func haveMimeType(mime_type string) bool {
-	mime_types := map[string]struct{}{
-		"image/jpeg": {},
-		"image/png":  {},
-		"image/jpg":  {},
-		"image/webp": {},
-	}
-
-	_, ok := mime_types[mime_type]
-	return ok
-}
-
 func (h *Handler) ChangeAvatar(w http.ResponseWriter, r *http.Request) *response.Err {
 	file, metadata, err := r.FormFile("avatar")
 	if err != nil {

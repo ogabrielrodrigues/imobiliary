@@ -28,7 +28,7 @@ func main() {
 	handler := api.NewHandler(pool)
 
 	go func() {
-		logger.Log("server running on", env.SERVER_ADDR)
+		logger.Log("server running on", env.SERVER_ADDR) //
 		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(middleware.LoggerMiddleware(handler))); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
 				logger.Log(err.Error())
