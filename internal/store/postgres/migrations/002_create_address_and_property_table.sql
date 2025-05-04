@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS "property" (
   "id" UUID NOT NULL PRIMARY KEY,
   "status" property_status NOT NULL,
   "kind" property_kind NOT NULL,
-  "water_id" VARCHAR(20) NOT NULL,
-  "energy_id" VARCHAR(20) NOT NULL,
+  "water_id" VARCHAR(20) NOT NULL UNIQUE,
+  "energy_id" VARCHAR(20) NOT NULL UNIQUE,
   "address_id" UUID NOT NULL UNIQUE,
   "manager_id" UUID NOT NULL,
   FOREIGN KEY ("address_id")

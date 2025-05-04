@@ -16,9 +16,10 @@ type Owner struct {
 	Occupation    string
 	MaritalStatus types.MaritalStatus
 	Address       *types.Address
+	ManagerID     uuid.UUID
 }
 
-func New(fullname, cpf, rg, email, cellphone, occupation string, marital_status types.MaritalStatus, address *types.Address) (*Owner, *response.Err) {
+func New(fullname, cpf, rg, email, cellphone, occupation string, marital_status types.MaritalStatus, address *types.Address, manager_id uuid.UUID) (*Owner, *response.Err) {
 	o := &Owner{
 		ID:            uuid.New(),
 		Fullname:      fullname,
@@ -29,6 +30,7 @@ func New(fullname, cpf, rg, email, cellphone, occupation string, marital_status 
 		Occupation:    occupation,
 		MaritalStatus: marital_status,
 		Address:       address,
+		ManagerID:     manager_id,
 	}
 
 	if err := o.validate(); err != nil {
@@ -49,5 +51,6 @@ func (u *Owner) ToDTO() *DTO {
 		Occupation:    u.Occupation,
 		MaritalStatus: u.MaritalStatus,
 		Address:       *u.Address.ToDTO(),
+		ManagerID:     u.ManagerID,
 	}
 }
