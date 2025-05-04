@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) {

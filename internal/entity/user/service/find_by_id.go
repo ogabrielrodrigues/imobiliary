@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) FindByID(ctx context.Context, id uuid.UUID) (*user.DTO, *response.Err) {

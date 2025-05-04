@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 const (

@@ -2,12 +2,11 @@ package property
 
 import (
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	types "github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type Status string
-type Kind string
 
 const (
 	StatusAvailable   Status = "Disponível"
@@ -15,7 +14,11 @@ const (
 	StatusUnavailable Status = "Indisponível"
 	StatusReserved    Status = "Reservado"
 	StatusRenovating  Status = "Reformando"
+)
 
+type Kind string
+
+const (
 	KindResidential Kind = "Residencial"
 	KindComercial   Kind = "Comercial"
 	KindIndustrial  Kind = "Industrial"
@@ -31,10 +34,10 @@ type Property struct {
 	EnergyID string
 	UserID   uuid.UUID
 	OwnerID  uuid.UUID
-	Address  *address.Address
+	Address  *types.Address
 }
 
-func New(status Status, kind Kind, water_id, energy_id string, user_id uuid.UUID, address *address.Address) (*Property, *response.Err) {
+func New(status Status, kind Kind, water_id, energy_id string, user_id uuid.UUID, address *types.Address) (*Property, *response.Err) {
 	p := &Property{
 		ID:       uuid.New(),
 		Status:   status,

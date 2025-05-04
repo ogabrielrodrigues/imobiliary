@@ -2,18 +2,26 @@ package property
 
 import (
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
+	types "github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type DTO struct {
-	ID       string      `json:"id"`
-	Status   Status      `json:"status"`
-	Kind     Kind        `json:"kind"`
-	WaterID  string      `json:"water_id"`
-	EnergyID string      `json:"energy_id"`
-	UserID   string      `json:"user_id"`
-	OwnerID  string      `json:"owner_id"`
-	Address  address.DTO `json:"address"`
+	ID       string          `json:"id"`
+	Status   Status          `json:"status"`
+	Kind     Kind            `json:"kind"`
+	WaterID  string          `json:"water_id"`
+	EnergyID string          `json:"energy_id"`
+	UserID   string          `json:"user_id"`
+	OwnerID  string          `json:"owner_id"`
+	Address  types.AdressDTO `json:"address"`
+}
+
+type CreateDTO struct {
+	Status   Status                `json:"status"`
+	Kind     Kind                  `json:"kind"`
+	WaterID  string                `json:"water_id"`
+	EnergyID string                `json:"energy_id"`
+	Address  types.AdressCreateDTO `json:"address"`
 }
 
 func (d *DTO) ToProperty() *Property {
@@ -27,12 +35,4 @@ func (d *DTO) ToProperty() *Property {
 		OwnerID:  uuid.MustParse(d.OwnerID),
 		Address:  d.Address.ToAddress(),
 	}
-}
-
-type CreateDTO struct {
-	Status   Status            `json:"status"`
-	Kind     Kind              `json:"kind"`
-	WaterID  string            `json:"water_id"`
-	EnergyID string            `json:"energy_id"`
-	Address  address.CreateDTO `json:"address"`
 }

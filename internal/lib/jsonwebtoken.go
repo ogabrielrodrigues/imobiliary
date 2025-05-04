@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 const (

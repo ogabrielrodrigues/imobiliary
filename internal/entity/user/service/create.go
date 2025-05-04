@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) Create(ctx context.Context, dto *user.CreateDTO) (uuid.UUID, *response.Err) {

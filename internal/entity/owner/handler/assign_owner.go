@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (h *Handler) AssignOwnerToProperty(w http.ResponseWriter, r *http.Request) {

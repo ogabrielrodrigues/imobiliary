@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (r *MemPropertyRepository) FindByID(ctx context.Context, id uuid.UUID) (*property.Property, *response.Err) {

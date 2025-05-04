@@ -8,7 +8,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) Create(ctx context.Context, dto *property.CreateDTO) *response.Err {

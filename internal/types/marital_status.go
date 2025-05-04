@@ -1,4 +1,4 @@
-package maritalstatus
+package types
 
 type MaritalStatus string
 

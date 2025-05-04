@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 func TestProperty(t *testing.T) {
@@ -16,7 +16,7 @@ func TestProperty(t *testing.T) {
 			"water-123",
 			"energy-123",
 			uuid.New(),
-			address.New("street", "number", "neighborhood", "complement", "city", "state", "zip"),
+			types.NewAddress("street", "number", "neighborhood", "complement", "city", "state", "zip"),
 		)
 
 		if err != nil {
@@ -31,7 +31,7 @@ func TestProperty(t *testing.T) {
 			"",
 			"energy-123",
 			uuid.New(),
-			address.New("street", "number", "neighborhood", "complement", "city", "state", "zip"),
+			types.NewAddress("street", "number", "neighborhood", "complement", "city", "state", "zip"),
 		)
 
 		if err.Message != property.ERR_EMPTY_WATER_ID {
@@ -46,7 +46,7 @@ func TestProperty(t *testing.T) {
 			"water-123",
 			"",
 			uuid.New(),
-			address.New("street", "number", "neighborhood", "complement", "city", "state", "zip"),
+			types.NewAddress("street", "number", "neighborhood", "complement", "city", "state", "zip"),
 		)
 
 		if err.Message != property.ERR_EMPTY_ENERGY_ID {

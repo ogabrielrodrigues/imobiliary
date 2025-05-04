@@ -7,7 +7,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/factory"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 type RouteHandler func(w http.ResponseWriter, r *http.Request) *response.Err

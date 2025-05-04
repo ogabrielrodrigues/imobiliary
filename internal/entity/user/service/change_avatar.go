@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) ChangeAvatar(ctx context.Context, file multipart.File, metadata *multipart.FileHeader) *response.Err {

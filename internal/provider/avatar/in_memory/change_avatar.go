@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (r *InMemoryAvatarRepository) ChangeAvatar(ctx context.Context, avatar multipart.File, mime string) (string, *response.Err) {

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {

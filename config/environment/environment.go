@@ -5,7 +5,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
-	types "github.com/ogabrielrodrigues/imobiliary/internal/types/config"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 const (

@@ -2,8 +2,7 @@ package owner
 
 import (
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
-	types "github.com/ogabrielrodrigues/imobiliary/internal/types/marital_status"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type DTO struct {
@@ -16,7 +15,7 @@ type DTO struct {
 	Occupation    string              `json:"occupation"`
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
 	ManagerID     uuid.UUID           `json:"manager_id"`
-	Address       address.DTO         `json:"address"`
+	Address       types.AdressDTO     `json:"address"`
 }
 
 func (dto *DTO) ToOwner() *Owner {
@@ -29,7 +28,7 @@ func (dto *DTO) ToOwner() *Owner {
 		Cellphone:     dto.Cellphone,
 		Occupation:    dto.Occupation,
 		MaritalStatus: dto.MaritalStatus,
-		Address:       address.New(dto.Address.Street, dto.Address.Number, dto.Address.Complement, dto.Address.Neighborhood, dto.Address.City, dto.Address.State, dto.Address.ZipCode),
+		Address:       types.NewAddress(dto.Address.Street, dto.Address.Number, dto.Address.Complement, dto.Address.Neighborhood, dto.Address.City, dto.Address.State, dto.Address.ZipCode),
 	}
 }
 
@@ -41,7 +40,7 @@ type CreateDTO struct {
 	Cellphone     string              `json:"cellphone"`
 	Occupation    string              `json:"occupation"`
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
-	Address       address.DTO         `json:"address"`
+	Address       types.AdressDTO     `json:"address"`
 }
 
 type AssignOwnerDTO struct {
