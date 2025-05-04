@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
@@ -25,7 +24,7 @@ func (pg *PostgresOwnerRepository) AssignOwnerToProperty(ctx context.Context, ow
 
 	_, err := pg.pool.Exec(ctx, query, owner_id, property_id, user_id)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	return nil

@@ -2,8 +2,8 @@ package types
 
 type Environment struct {
 	SERVER_ADDR      string
-	SECRET_KEY       string
 	CORS_ORIGIN      string
+	JWT_SECRET       string
 	S3_PUBLIC_URL    string
 	S3_AVATAR_BUCKET string
 	S3_TOKEN         string

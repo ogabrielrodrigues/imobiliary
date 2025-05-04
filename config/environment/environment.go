@@ -17,13 +17,12 @@ var Environment *types.Environment
 func Load() *types.Environment {
 	err := godotenv.Load()
 	if os.Getenv("ENVIRONMENT") == "development" && err != nil {
-		logger.Log(ERR_READING_ENV_FILE)
-		os.Exit(1)
+		logger.Panic(ERR_READING_ENV_FILE)
 	}
 
 	Environment = &types.Environment{
 		SERVER_ADDR:      os.Getenv("SERVER_ADDR"),
-		SECRET_KEY:       os.Getenv("SECRET_KEY"),
+		JWT_SECRET:       os.Getenv("JWT_SECRET"),
 		CORS_ORIGIN:      os.Getenv("CORS_ORIGIN"),
 		S3_PUBLIC_URL:    os.Getenv("S3_PUBLIC_URL"),
 		S3_AVATAR_BUCKET: os.Getenv("S3_AVATAR_BUCKET"),
@@ -44,13 +43,12 @@ func Load() *types.Environment {
 func LoadFile(path string) *types.Environment {
 	err := godotenv.Load()
 	if os.Getenv("ENVIRONMENT") == "development" && err != nil {
-		logger.Log(ERR_READING_ENV_FILE)
-		os.Exit(1)
+		logger.Panic(ERR_READING_ENV_FILE)
 	}
 
 	Environment = &types.Environment{
 		SERVER_ADDR:      os.Getenv("SERVER_ADDR"),
-		SECRET_KEY:       os.Getenv("SECRET_KEY"),
+		JWT_SECRET:       os.Getenv("JWT_SECRET"),
 		CORS_ORIGIN:      os.Getenv("CORS_ORIGIN"),
 		S3_PUBLIC_URL:    os.Getenv("S3_PUBLIC_URL"),
 		S3_AVATAR_BUCKET: os.Getenv("S3_AVATAR_BUCKET"),

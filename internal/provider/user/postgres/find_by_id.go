@@ -33,7 +33,7 @@ func (pg *PostgresUserRepository) FindByID(ctx context.Context, id uuid.UUID) (*
 			return nil, response.NewErr(http.StatusNotFound, user.ERR_USER_NOT_FOUND_OR_NOT_EXISTS)
 		}
 
-		return nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	found.SetPassword(*pwd)

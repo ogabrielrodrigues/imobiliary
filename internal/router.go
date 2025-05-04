@@ -8,6 +8,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/factory"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"go.uber.org/zap"
 )
 
 type RouteHandler func(w http.ResponseWriter, r *http.Request) *response.Err
@@ -15,7 +16,7 @@ type RouteHandler func(w http.ResponseWriter, r *http.Request) *response.Err
 func makeHandler(handler RouteHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := handler(w, r); err != nil {
-			logger.Logf("[%s] %s | (%d) > err: %s", r.Method, r.URL.Path, err.Code, err.Message)
+			logger.Error(err.Message, zap.String("method", r.Method), zap.String("path", r.URL.Path), zap.Int("response_status", err.Code), zap.String("message", err.Message))
 			response.End(w, err.Code, err)
 		}
 	}

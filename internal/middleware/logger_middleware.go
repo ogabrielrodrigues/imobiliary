@@ -1,10 +1,12 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
+	"go.uber.org/zap"
 )
 
 func LoggerMiddleware(next http.Handler) http.Handler {
@@ -15,11 +17,11 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 
 		duration := uint(time.Since(start).Milliseconds())
 
-		logger.Logf(
-			"[%s] %s > %dms\n",
-			r.Method,
-			r.URL.Path,
-			duration,
+		logger.Info(
+			"request received",
+			zap.String("method", r.Method),
+			zap.String("path", r.URL.Path),
+			zap.String("duration", fmt.Sprintf("%dms", duration)),
 		)
 	})
 }

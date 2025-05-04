@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"net/http"
 	"os"
@@ -14,6 +15,7 @@ import (
 	api "github.com/ogabrielrodrigues/imobiliary/internal"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	store "github.com/ogabrielrodrigues/imobiliary/internal/store/postgres"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -21,17 +23,17 @@ func main() {
 
 	pool, err := pgxpool.New(context.Background(), store.PostgresConnectionString(*env))
 	if err != nil {
-		logger.Log("error initializing database", err)
+		logger.Error("error initializing database", zap.Error(err))
 		return
 	}
 
 	handler := api.NewHandler(pool)
 
 	go func() {
-		logger.Log("server running on", env.SERVER_ADDR)
+		logger.Info(fmt.Sprintf("server running on %s", env.SERVER_ADDR))
 		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(middleware.LoggerMiddleware(handler))); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
-				logger.Log(err.Error())
+				logger.Error(err.Error())
 				os.Exit(1)
 			}
 		}

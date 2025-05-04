@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
@@ -16,7 +15,7 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
 		tx.Rollback(ctx)
-		return uuid.Nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	address_query := `
@@ -40,7 +39,7 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 	var address_id string
 	if err := row.Scan(&address_id); err != nil {
 		tx.Rollback(ctx)
-		return uuid.Nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	owner_query := `
@@ -69,12 +68,12 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 	var owner_id string
 	if err := row.Scan(&owner_id); err != nil {
 		tx.Rollback(ctx)
-		return uuid.Nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
 		tx.Rollback(ctx)
-		return uuid.Nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	return uuid.MustParse(owner_id), nil

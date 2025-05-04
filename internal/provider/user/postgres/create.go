@@ -29,7 +29,7 @@ func (pg *PostgresUserRepository) Create(ctx context.Context, usr *user.User) (u
 			return uuid.Nil, response.NewErr(http.StatusConflict, user.ERR_USER_ALREADY_EXISTS)
 		}
 
-		return uuid.Nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	return uuid.MustParse(id), nil

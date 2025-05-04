@@ -49,7 +49,7 @@ func GenerateToken(user_id uuid.UUID) (string, *response.Err) {
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
-	token, err := claims.SignedString([]byte(environment.Environment.SECRET_KEY))
+	token, err := claims.SignedString([]byte(environment.Environment.JWT_SECRET))
 	if err != nil {
 		return "", response.NewErr(http.StatusInternalServerError, user.ERR_FAILED_GENERATE_TOKEN)
 	}
@@ -59,7 +59,7 @@ func GenerateToken(user_id uuid.UUID) (string, *response.Err) {
 
 func ParseToken(token string) (uuid.UUID, *response.Err) {
 	parsed, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(environment.Environment.SECRET_KEY), nil
+		return []byte(environment.Environment.JWT_SECRET), nil
 	})
 
 	if err != nil {

@@ -5,12 +5,6 @@ import (
 	"net/http"
 )
 
-const (
-	ERR_SERIALIZING_JSON string = "erro ao serializar a resposta"
-)
-
-type Response map[string]any
-
 type Err struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`

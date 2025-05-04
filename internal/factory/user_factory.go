@@ -8,6 +8,7 @@ import (
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/cloudflare"
 	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/postgres"
+	"go.uber.org/zap"
 )
 
 func NewUserHandlerFactory(pool *pgxpool.Pool) *user_handler.Handler {
@@ -15,7 +16,7 @@ func NewUserHandlerFactory(pool *pgxpool.Pool) *user_handler.Handler {
 
 	user_repo, ur_err := user_repository.NewPostgresUserRepository(pool)
 	if ur_err != nil {
-		logger.Panicf("err: %s", ur_err)
+		logger.Error("err: %s", zap.Error(ur_err))
 		return nil
 	}
 
@@ -27,7 +28,7 @@ func NewUserHandlerFactory(pool *pgxpool.Pool) *user_handler.Handler {
 		env.S3_ACCOUNT_ID,
 	)
 	if ar_err != nil {
-		logger.Panicf("err: %s", ar_err)
+		logger.Error("err: %s", zap.Error(ar_err))
 		return nil
 	}
 

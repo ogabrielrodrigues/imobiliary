@@ -6,7 +6,6 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
@@ -45,7 +44,7 @@ func (pg *PostgresPropertyRepository) FindAllByUserID(ctx context.Context) ([]pr
 			return nil, response.NewErr(http.StatusNotFound, http.StatusText(http.StatusNotFound))
 		}
 
-		return nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+		return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 	defer rows.Close()
 
@@ -67,7 +66,7 @@ func (pg *PostgresPropertyRepository) FindAllByUserID(ctx context.Context) ([]pr
 			&p.Address.ZipCode,
 			&p.Address.MiniAddress,
 		); err != nil {
-			return nil, response.NewErr(http.StatusInternalServerError, user.ERR_INTERNAL_SERVER_ERROR)
+			return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 		}
 
 		properties = append(properties, p)

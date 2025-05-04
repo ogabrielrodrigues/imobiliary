@@ -2,6 +2,7 @@
 /dist
 /data
 /tmp
+/logs
 *.csv
 .env
 .env.test
