@@ -6,17 +6,15 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
-func (h *Handler) FindAllByUserID(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) FindAllByUserID(w http.ResponseWriter, r *http.Request) *response.Err {
 	properties, err := h.service.FindAllByUserID(r.Context())
 	if err != nil {
-		response.End(w, err.Code, err)
-		return
+		return err
 	}
 
 	if len(properties) == 0 {
-		response.End(w, http.StatusOK, []any{})
-		return
+		return response.End(w, http.StatusOK, []any{})
 	}
 
-	response.End(w, http.StatusOK, properties)
+	return response.End(w, http.StatusOK, properties)
 }

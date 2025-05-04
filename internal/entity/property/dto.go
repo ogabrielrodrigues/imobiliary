@@ -17,11 +17,11 @@ type DTO struct {
 }
 
 type CreateDTO struct {
-	Status   Status                `json:"status"`
-	Kind     Kind                  `json:"kind"`
-	WaterID  string                `json:"water_id"`
-	EnergyID string                `json:"energy_id"`
-	Address  types.AdressCreateDTO `json:"address"`
+	Status   Status                 `json:"status"`
+	Kind     Kind                   `json:"kind"`
+	WaterID  string                 `json:"water_id"`
+	EnergyID string                 `json:"energy_id"`
+	Address  *types.AdressCreateDTO `json:"address"`
 }
 
 func (d *DTO) ToProperty() *Property {

@@ -4,10 +4,10 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 )
 
-type MemPropertyRepository struct {
+type InMemoryPropertyRepository struct {
 	properties []*property.Property
 }
 
-func NewMemPropertyRepository() *MemPropertyRepository {
-	return &MemPropertyRepository{}
+func NewInMemoryPropertyRepository() *InMemoryPropertyRepository {
+	return &InMemoryPropertyRepository{}
 }

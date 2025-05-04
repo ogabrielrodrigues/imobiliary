@@ -11,7 +11,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
-func (r *MemPropertyRepository) FindAllByUserID(ctx context.Context) ([]property.DTO, *response.Err) {
+func (r *InMemoryPropertyRepository) FindAllByUserID(ctx context.Context) ([]property.DTO, *response.Err) {
 	user_id, ok := ctx.Value(middleware.UserIDKey).(string)
 	if !ok {
 		return nil, response.NewErr(http.StatusUnauthorized, jwt.ERR_TOKEN_INVALID_OR_EXPIRED)

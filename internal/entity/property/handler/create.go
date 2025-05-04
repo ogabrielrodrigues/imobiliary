@@ -8,21 +8,17 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
-func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) *response.Err {
 	var body *property.CreateDTO
 
-	err := json.NewDecoder(r.Body).Decode(&body)
-	if err != nil {
-		r_err := response.NewErr(http.StatusBadRequest, err.Error())
-		response.End(w, r_err.Code, r_err)
-		return
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		return response.NewErr(http.StatusBadRequest, err.Error())
 	}
 
-	r_err := h.service.Create(r.Context(), body)
-	if r_err != nil {
-		response.End(w, r_err.Code, r_err)
-		return
+	if err := h.service.Create(r.Context(), body); err != nil {
+		return err
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	return nil
 }

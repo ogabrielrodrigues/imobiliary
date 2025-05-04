@@ -7,7 +7,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
-func (r *MemPropertyRepository) Create(ctx context.Context, property *property.Property) (*property.Property, *response.Err) {
+func (r *InMemoryPropertyRepository) Create(ctx context.Context, property *property.Property) *response.Err {
 	r.properties = append(r.properties, property)
-	return property, nil
+	return nil
 }

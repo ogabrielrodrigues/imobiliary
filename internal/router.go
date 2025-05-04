@@ -32,9 +32,9 @@ func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 
 	property_handler := factory.NewPropertyHandlerFactory(pool)
 
-	mux.Handle("GET /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindAllByUserID)))
-	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(http.HandlerFunc(property_handler.FindByID)))
-	mux.Handle("POST /properties", middleware.AuthMiddleware(http.HandlerFunc(property_handler.Create)))
+	mux.Handle("GET /properties", middleware.AuthMiddleware(makeHandler(property_handler.FindAllByUserID)))
+	mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(makeHandler(property_handler.FindByID)))
+	mux.Handle("POST /properties", middleware.AuthMiddleware(makeHandler(property_handler.Create)))
 
 	owner_handler := factory.NewOwnerHandlerFactory(pool)
 
