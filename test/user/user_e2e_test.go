@@ -3,8 +3,6 @@ package test
 import (
 	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"path/filepath"
@@ -17,7 +15,6 @@ import (
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/in_memory"
 	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/in_memory"
-	res "github.com/ogabrielrodrigues/imobiliary/internal/types/response"
 )
 
 func TestE2ECreateUser(t *testing.T) {
@@ -61,19 +58,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_FULLNAME_EMPTY {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_FULLNAME_EMPTY, res_err.Message)
+		if err.Message != user.ERR_FULLNAME_EMPTY {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_FULLNAME_EMPTY, err.Message)
 		}
 
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, err.Code)
 		}
 	})
 
@@ -89,19 +81,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_FULLNAME_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_FULLNAME_INVALID, res_err.Message)
+		if err.Message != user.ERR_FULLNAME_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_FULLNAME_INVALID, err.Message)
 		}
 
-		if response.StatusCode != http.StatusUnprocessableEntity {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, response.StatusCode)
+		if err.Code != http.StatusUnprocessableEntity {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, err.Code)
 		}
 	})
 
@@ -117,19 +104,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_FULLNAME_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_FULLNAME_INVALID, res_err.Message)
+		if err.Message != user.ERR_FULLNAME_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_FULLNAME_INVALID, err.Message)
 		}
 
-		if response.StatusCode != http.StatusUnprocessableEntity {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, response.StatusCode)
+		if err.Code != http.StatusUnprocessableEntity {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, err.Code)
 		}
 	})
 
@@ -145,19 +127,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_EMAIL_EMPTY {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_EMAIL_EMPTY, res_err.Message)
+		if err.Message != user.ERR_EMAIL_EMPTY {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_EMAIL_EMPTY, err.Message)
 		}
 
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, err.Code)
 		}
 	})
 
@@ -173,19 +150,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_EMAIL_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_EMAIL_INVALID, res_err.Message)
+		if err.Message != user.ERR_EMAIL_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_EMAIL_INVALID, err.Message)
 		}
 
-		if response.StatusCode != http.StatusUnprocessableEntity {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, response.StatusCode)
+		if err.Code != http.StatusUnprocessableEntity {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, err.Code)
 		}
 	})
 
@@ -201,19 +173,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_CRECIID_EMPTY {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_CRECIID_EMPTY, res_err.Message)
+		if err.Message != user.ERR_CRECIID_EMPTY {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_CRECIID_EMPTY, err.Message)
 		}
 
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, err.Code)
 		}
 	})
 
@@ -229,19 +196,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_CRECIID_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_CRECIID_INVALID, res_err.Message)
+		if err.Message != user.ERR_CRECIID_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_CRECIID_INVALID, err.Message)
 		}
 
-		if response.StatusCode != http.StatusUnprocessableEntity {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, response.StatusCode)
+		if err.Code != http.StatusUnprocessableEntity {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, err.Code)
 		}
 	})
 
@@ -257,19 +219,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_CELLPHONE_EMPTY {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_CELLPHONE_EMPTY, res_err.Message)
+		if err.Message != user.ERR_CELLPHONE_EMPTY {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_CELLPHONE_EMPTY, err.Message)
 		}
 
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, err.Code)
 		}
 	})
 
@@ -285,19 +242,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_CELLPHONE_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_CELLPHONE_INVALID, res_err.Message)
+		if err.Message != user.ERR_CELLPHONE_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_CELLPHONE_INVALID, err.Message)
 		}
 
-		if response.StatusCode != http.StatusUnprocessableEntity {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, response.StatusCode)
+		if err.Code != http.StatusUnprocessableEntity {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, err.Code)
 		}
 	})
 
@@ -313,19 +265,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_PASSWORD_EMPTY {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_PASSWORD_EMPTY, res_err.Message)
+		if err.Message != user.ERR_PASSWORD_EMPTY {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_PASSWORD_EMPTY, err.Message)
 		}
 
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, err.Code)
 		}
 	})
 
@@ -341,19 +288,14 @@ func TestE2ECreateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodPost, "/users", body)
 
-		uh.Create(recorder, request)
+		err := uh.Create(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_PASSWORD_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_PASSWORD_INVALID, res_err.Message)
+		if err.Message != user.ERR_PASSWORD_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_PASSWORD_INVALID, err.Message)
 		}
 
-		if response.StatusCode != http.StatusUnprocessableEntity {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, response.StatusCode)
+		if err.Code != http.StatusUnprocessableEntity {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnprocessableEntity, err.Code)
 		}
 	})
 }
@@ -375,24 +317,14 @@ func TestE2EFindByIDUser(t *testing.T) {
 			Password:  "password",
 		})
 
-		url := fmt.Sprintf("/users/%s", "hdhsdhsdhshsd")
-
 		recorder := httptest.NewRecorder()
-		request := httptest.NewRequest(http.MethodGet, url, nil)
+		request := httptest.NewRequest(http.MethodGet, "/users/{user_id}", nil)
+		request.SetPathValue("user_id", "qualquercoisa")
 
-		uh.FindByID(recorder, request)
+		err := uh.FindByID(recorder, request)
 
-		response := recorder.Result()
-
-		var res_err res.Err
-		json.NewDecoder(response.Body).Decode(&res_err)
-
-		if res_err.Message != user.ERR_UUID_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_UUID_INVALID, res_err.Message)
-		}
-
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Message != user.ERR_UUID_INVALID {
+			t.Errorf("expected error: %s\ngot: %s", user.ERR_UUID_INVALID, err.Message)
 		}
 	})
 
@@ -403,12 +335,10 @@ func TestE2EFindByIDUser(t *testing.T) {
 		request := httptest.NewRequest(http.MethodGet, "/users/{user_id}", nil)
 		request.SetPathValue("user_id", id)
 
-		uh.FindByID(recorder, request)
+		err := uh.FindByID(recorder, request)
 
-		response := recorder.Result()
-
-		if response.StatusCode != http.StatusNotFound {
-			t.Errorf("expected status: %d, got: %d", http.StatusNotFound, response.StatusCode)
+		if err.Code != http.StatusNotFound {
+			t.Errorf("expected status: %d, got: %d", http.StatusNotFound, err.Code)
 		}
 	})
 
@@ -490,12 +420,10 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		uh.Authenticate(recorder, request)
+		err := uh.Authenticate(recorder, request)
 
-		response := recorder.Result()
-
-		if response.StatusCode != http.StatusBadRequest {
-			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, response.StatusCode)
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected status: %d, got: %d", http.StatusBadRequest, err.Code)
 		}
 	})
 
@@ -508,12 +436,10 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		uh.Authenticate(recorder, request)
+		err := uh.Authenticate(recorder, request)
 
-		response := recorder.Result()
-
-		if response.StatusCode != http.StatusNotFound {
-			t.Errorf("expected status: %d, got: %d", http.StatusNotFound, response.StatusCode)
+		if err.Code != http.StatusNotFound {
+			t.Errorf("expected status: %d, got: %d", http.StatusNotFound, err.Code)
 		}
 	})
 
@@ -534,12 +460,10 @@ func TestE2EAuthenticateUser(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		request := httptest.NewRequest(http.MethodGet, "/users/auth", body)
 
-		uh.Authenticate(recorder, request)
+		err := uh.Authenticate(recorder, request)
 
-		response := recorder.Result()
-
-		if response.StatusCode != http.StatusUnauthorized {
-			t.Errorf("expected status: %d, got: %d", http.StatusUnauthorized, response.StatusCode)
+		if err.Code != http.StatusUnauthorized {
+			t.Errorf("expected status: %d, got: %d", http.StatusUnauthorized, err.Code)
 		}
 	})
 }

@@ -24,7 +24,7 @@ func makeHandler(handler RouteHandler) http.HandlerFunc {
 func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 	user_handler := factory.NewUserHandlerFactory(pool)
 
-	mux.Handle("GET /users/{user_id}", middleware.AuthMiddleware(makeHandler(user_handler.FindByID)))
+	mux.Handle("GET /users/{user_id}", makeHandler(user_handler.FindByID))
 	mux.Handle("POST /users", makeHandler(user_handler.Create))
 	mux.Handle("POST /users/auth", makeHandler(user_handler.Authenticate))
 	mux.Handle("PUT /users/avatar", middleware.AuthMiddleware(makeHandler(user_handler.ChangeAvatar)))
