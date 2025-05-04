@@ -4,8 +4,7 @@ import (
 	"testing"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
-	maritalstatus "github.com/ogabrielrodrigues/imobiliary/internal/types/marital_status"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 func TestOwner(t *testing.T) {
@@ -17,8 +16,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err != nil {
@@ -34,8 +33,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_FULLNAME_EMPTY {
@@ -55,8 +54,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_FULLNAME_INVALID {
@@ -76,8 +75,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_FULLNAME_INVALID {
@@ -97,8 +96,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_CPF_EMPTY {
@@ -118,8 +117,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_CPF_INVALID {
@@ -139,8 +138,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_RG_EMPTY {
@@ -160,8 +159,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_RG_INVALID {
@@ -181,8 +180,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_RG_INVALID {
@@ -202,8 +201,8 @@ func TestOwner(t *testing.T) {
 			"",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_EMAIL_EMPTY {
@@ -223,8 +222,8 @@ func TestOwner(t *testing.T) {
 			"johndoeexample",
 			"(01) 12345-6789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_EMAIL_INVALID {
@@ -244,8 +243,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 		if err.Message != owner.ERR_CELLPHONE_EMPTY {
 			t.Errorf("expected an err: %s\ngot error %s", owner.ERR_CELLPHONE_EMPTY, err)
@@ -264,8 +263,8 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"01123456789",
 			"Comerciante",
-			maritalstatus.MaritalStatusSolteiro,
-			address.New("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
+			types.MaritalStatusSolteiro,
+			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 		)
 
 		if err.Message != owner.ERR_CELLPHONE_INVALID {

@@ -2,9 +2,8 @@ package owner
 
 import (
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/address"
-	types "github.com/ogabrielrodrigues/imobiliary/internal/types/marital_status"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type Owner struct {
@@ -16,10 +15,10 @@ type Owner struct {
 	Cellphone     string
 	Occupation    string
 	MaritalStatus types.MaritalStatus
-	Address       *address.Address
+	Address       *types.Address
 }
 
-func New(fullname, cpf, rg, email, cellphone, occupation string, marital_status types.MaritalStatus, address *address.Address) (*Owner, *response.Err) {
+func New(fullname, cpf, rg, email, cellphone, occupation string, marital_status types.MaritalStatus, address *types.Address) (*Owner, *response.Err) {
 	o := &Owner{
 		ID:            uuid.New(),
 		Fullname:      fullname,

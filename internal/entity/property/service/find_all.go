@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) FindAllByUserID(ctx context.Context) ([]property.DTO, *response.Err) {

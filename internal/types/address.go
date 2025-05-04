@@ -1,4 +1,4 @@
-package address
+package types
 
 import "fmt"
 
@@ -14,7 +14,7 @@ type Address struct {
 	ZipCode      string
 }
 
-func New(street, number, neighboorhood, complement, city, state, zip_code string) *Address {
+func NewAddress(street, number, neighboorhood, complement, city, state, zip_code string) *Address {
 	fulladdress := genFullAddress(street, number, neighboorhood, city, state, zip_code)
 	miniaddress := genMiniAddress(street, number, neighboorhood, city, state)
 
@@ -39,7 +39,7 @@ func genMiniAddress(street, number, neighborhood, city, state string) string {
 	return fmt.Sprintf("%s, %s, %s, %s/%s", street, number, neighborhood, city, state)
 }
 
-type DTO struct {
+type AdressDTO struct {
 	FullAddress  string `json:"full_address,omitempty"`
 	MiniAddress  string `json:"mini_address"`
 	Street       string `json:"street"`
@@ -51,7 +51,7 @@ type DTO struct {
 	ZipCode      string `json:"zip_code"`
 }
 
-type CreateDTO struct {
+type AdressCreateDTO struct {
 	Street       string `json:"street"`
 	Number       string `json:"number"`
 	Neighborhood string `json:"neighborhood"`
@@ -61,12 +61,12 @@ type CreateDTO struct {
 	ZipCode      string `json:"zip_code"`
 }
 
-func (d *CreateDTO) ToAddress() *Address {
-	return New(d.Street, d.Number, d.Neighborhood, d.Complement, d.City, d.State, d.ZipCode)
+func (d *AdressCreateDTO) ToAddress() *Address {
+	return NewAddress(d.Street, d.Number, d.Neighborhood, d.Complement, d.City, d.State, d.ZipCode)
 }
 
-func (a *Address) ToDTO() *DTO {
-	return &DTO{
+func (a *Address) ToDTO() *AdressDTO {
+	return &AdressDTO{
 		FullAddress:  a.FullAddress,
 		MiniAddress:  a.MiniAddress,
 		Street:       a.Street,
@@ -79,8 +79,8 @@ func (a *Address) ToDTO() *DTO {
 	}
 }
 
-func (a *DTO) ToAddress() *Address {
-	address := New(
+func (a *AdressDTO) ToAddress() *Address {
+	address := NewAddress(
 		a.Street,
 		a.Number,
 		a.Neighborhood,

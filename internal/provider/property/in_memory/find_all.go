@@ -8,7 +8,7 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (r *MemPropertyRepository) FindAllByUserID(ctx context.Context) ([]property.DTO, *response.Err) {
