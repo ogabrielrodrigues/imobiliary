@@ -13,7 +13,7 @@ func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) *response
 	var dto user.AuthDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		return response.NewErr(http.StatusBadRequest, user.ERR_INVALID_USER_REQUEST_BODY)
+		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_REQUEST_BODY)
 	}
 
 	token, err := h.service.Authenticate(r.Context(), &dto)
@@ -23,6 +23,5 @@ func (h *Handler) Authenticate(w http.ResponseWriter, r *http.Request) *response
 
 	w.Header().Add("Authorization", fmt.Sprintf("Bearer %s", token))
 	w.WriteHeader(http.StatusOK)
-
 	return nil
 }

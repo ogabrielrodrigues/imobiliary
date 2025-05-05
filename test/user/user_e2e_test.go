@@ -15,6 +15,7 @@ import (
 	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
 	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/in_memory"
 	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/in_memory"
+	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func TestE2ECreateUser(t *testing.T) {
@@ -323,8 +324,8 @@ func TestE2EFindByIDUser(t *testing.T) {
 
 		err := uh.FindByID(recorder, request)
 
-		if err.Message != user.ERR_UUID_INVALID {
-			t.Errorf("expected error: %s\ngot: %s", user.ERR_UUID_INVALID, err.Message)
+		if err.Message != response.ERR_INVALID_UUID {
+			t.Errorf("expected error: %s\ngot: %s", response.ERR_INVALID_UUID, err.Message)
 		}
 	})
 

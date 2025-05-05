@@ -11,3 +11,7 @@ type InMemoryPropertyRepository struct {
 func NewInMemoryPropertyRepository() *InMemoryPropertyRepository {
 	return &InMemoryPropertyRepository{}
 }
+
+func (r *InMemoryPropertyRepository) GetProperties() []*property.Property {
+	return r.properties
+}

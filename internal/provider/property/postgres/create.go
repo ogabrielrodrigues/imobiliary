@@ -14,7 +14,6 @@ import (
 func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *property.Property) *response.Err {
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
-		logger.Error(err.Error())
 		tx.Rollback(ctx)
 		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
@@ -39,7 +38,6 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 
 	var address_id string
 	if err := row.Scan(&address_id); err != nil {
-		logger.Error(err.Error())
 		tx.Rollback(ctx)
 		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
@@ -66,13 +64,11 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 	)
 
 	if err != nil {
-		logger.Error(err.Error())
 		tx.Rollback(ctx)
 		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		logger.Error(err.Error())
 		tx.Rollback(ctx)
 		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}

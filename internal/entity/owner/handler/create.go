@@ -9,21 +9,19 @@ import (
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
-func (h *Handler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Create(w http.ResponseWriter, r *http.Request) *response.Err {
 	var dto owner.CreateDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		r_err := response.NewErr(http.StatusBadRequest, owner.ERR_OWNER_BODY_INVALID)
-		response.End(w, r_err.Code, r_err)
-		return
+		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_REQUEST_BODY)
 	}
 
 	id, err := h.service.Create(r.Context(), dto)
 	if err != nil {
-		response.End(w, err.Code, err)
-		return
+		return err
 	}
 
 	w.Header().Set("Location", fmt.Sprintf("/owners/%s", id))
 	w.WriteHeader(http.StatusCreated)
+	return nil
 }

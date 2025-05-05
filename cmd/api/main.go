@@ -33,7 +33,7 @@ func main() {
 		logger.Info(fmt.Sprintf("server running on %s", env.SERVER_ADDR))
 		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(middleware.LoggerMiddleware(handler))); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
-				logger.Error(err.Error())
+				logger.Error("error starting server", zap.Error(err))
 				os.Exit(1)
 			}
 		}

@@ -8,11 +8,9 @@ import (
 )
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) *response.Err {
-	property_id := r.PathValue("property_id")
-
-	uid, err := uuid.Parse(property_id)
+	uid, err := uuid.Parse(r.PathValue("property_id"))
 	if err != nil {
-		return response.NewErr(http.StatusBadRequest, err.Error())
+		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_UUID)
 	}
 
 	property, r_err := h.service.FindByID(r.Context(), uid)

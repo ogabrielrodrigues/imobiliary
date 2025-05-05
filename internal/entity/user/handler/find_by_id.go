@@ -1,24 +1,19 @@
 package user
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) *response.Err {
-	ctx := context.Background()
-	id := r.PathValue("user_id")
-
-	uid, u_err := uuid.Parse(id)
+	uid, u_err := uuid.Parse(r.PathValue("user_id"))
 	if u_err != nil {
-		return response.NewErr(http.StatusBadRequest, user.ERR_UUID_INVALID)
+		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_UUID)
 	}
 
-	user, err := h.service.FindByID(ctx, uid)
+	user, err := h.service.FindByID(r.Context(), uid)
 	if err != nil {
 		return err
 	}

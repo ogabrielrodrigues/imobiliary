@@ -18,6 +18,5 @@ func (h *Handler) ChangeAvatar(w http.ResponseWriter, r *http.Request) *response
 	}
 
 	w.WriteHeader(http.StatusOK)
-
 	return nil
 }

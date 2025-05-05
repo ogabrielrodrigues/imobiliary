@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
@@ -18,7 +17,7 @@ func (r2 *CloudflareR2AvatarRepository) ChangeAvatar(ctx context.Context, avatar
 	id := ctx.Value(middleware.UserIDKey).(string)
 	user_id, err := uuid.Parse(id)
 	if err != nil {
-		return "", response.NewErr(http.StatusBadRequest, user.ERR_UUID_INVALID)
+		return "", response.NewErr(http.StatusBadRequest, response.ERR_INVALID_UUID)
 	}
 
 	file_key := fmt.Sprintf("avatars/%s", user_id)

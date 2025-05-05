@@ -38,8 +38,8 @@ func Register(h *Handler, mux *http.ServeMux, pool *pgxpool.Pool) {
 
 	owner_handler := factory.NewOwnerHandlerFactory(pool)
 
-	mux.Handle("GET /owners/{owner_id}", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindByID)))
-	mux.Handle("GET /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.FindAllByManagerID)))
-	mux.Handle("POST /owners", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.Create)))
-	mux.Handle("PUT /owners/assign", middleware.AuthMiddleware(http.HandlerFunc(owner_handler.AssignOwnerToProperty)))
+	mux.Handle("GET /owners/{owner_id}", middleware.AuthMiddleware(makeHandler(owner_handler.FindByID)))
+	mux.Handle("GET /owners", middleware.AuthMiddleware(makeHandler(owner_handler.FindAllByManagerID)))
+	mux.Handle("POST /owners", middleware.AuthMiddleware(makeHandler(owner_handler.Create)))
+	mux.Handle("PUT /owners/assign", middleware.AuthMiddleware(makeHandler(owner_handler.AssignOwnerToProperty)))
 }

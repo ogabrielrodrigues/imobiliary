@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
@@ -14,7 +13,7 @@ func (pg *PostgresUserRepository) ChangeAvatar(ctx context.Context, avatar_url s
 	id := ctx.Value(middleware.UserIDKey).(string)
 	user_id, r_err := uuid.Parse(id)
 	if r_err != nil {
-		return response.NewErr(http.StatusBadRequest, user.ERR_UUID_INVALID)
+		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_UUID)
 	}
 
 	_, err := pg.pool.Exec(ctx, `
