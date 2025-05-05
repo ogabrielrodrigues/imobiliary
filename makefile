@@ -21,7 +21,6 @@ migrate-up:
 	DATABASE_PWD="${DATABASE_PWD}" \
 	tern migrate --migrations internal/store/postgres/migrations \
 	--config internal/store/postgres/migrations/tern.conf
-	@go run ./cmd/migrate/main.go
 
 migrate-down:
 	DATABASE_HOST="${DATABASE_HOST}" \

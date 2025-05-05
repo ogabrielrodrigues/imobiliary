@@ -39,6 +39,8 @@ func main() {
 			if !errors.Is(err, http.ErrServerClosed) {
 				logger.Panic("error starting server", zap.Error(err))
 			}
+
+			logger.Error("server error on listen", zap.Error(err))
 		}
 	}()
 
