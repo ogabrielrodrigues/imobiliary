@@ -13,20 +13,18 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar"
 
-import { Plan } from "@/types/plan"
 import { User } from "@/types/user"
-import { House, HousePlus, Sparkles } from "lucide-react"
+import { House, HousePlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-  user: User | undefined
-  plan: Plan
+  user: User
 }
 
-export function AppSidebar({ user, plan, ...props }: AppSidebarProps) {
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   const pathname = usePathname()
 
   return (
@@ -41,7 +39,6 @@ export function AppSidebar({ user, plan, ...props }: AppSidebarProps) {
               <Link href="/" className="flex items-center gap-2">
                 <HousePlus className="!size-5" />
                 Imobiliary
-                {plan.kind === 'pro' && <Sparkles className="size-4 self-start" />}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -52,17 +49,17 @@ export function AppSidebar({ user, plan, ...props }: AppSidebarProps) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild isActive={pathname === "/dashboard"}>
-                <Link href="/dashboard">
+                <a href="/dashboard">
                   <House />
-                  Dashboard</Link>
+                  Dashboard</a>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <NavMain plan={plan} />
+        <NavMain />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} plan={plan} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

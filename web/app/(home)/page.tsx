@@ -15,7 +15,7 @@ export default async function HomePage() {
     <Fragment>
       <HomeHeader />
       <main className="sm:container mx-auto w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
-        <div className="px-4 sm:px-0">
+        <div className="px-4 sm:px-0 flex flex-col items-center">
           <h1 className="text-[1.80rem] leading-8 sm:px-8 md:leading-[4.5rem] font-bold mb-4 sm:text-6xl text-left sm:text-center">
             Bem-vindo ao Imobiliary!
           </h1>
@@ -33,7 +33,7 @@ export default async function HomePage() {
           target="_blank"
           href="https://github.com/ogabrielrodrigues/imobiliary"
           className="text-primary"
-        >Github</Link>
+        ><Button variant="ghost">Github</Button></Link>
       </footer>
     </Fragment>
   )

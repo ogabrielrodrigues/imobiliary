@@ -15,16 +15,16 @@ export function AuthHeader({ title, description, url, urlText }: AuthHeaderProps
       <div className="flex flex-col items-center gap-2">
         <div className="flex flex-col items-center gap-2 font-medium">
           <Link href="/" className="flex size-8 items-center justify-center rounded-md">
-            <Button variant="ghost" size="icon">
-              <HousePlus className="size-8" />
+            <Button variant="ghost" size="sm" className="flex items-center gap-2">
+              <HousePlus className="size-5" />
+              <span className="sr-only">Imobiliary</span>
+              <h1 className="text-2xl font-bold select-none">Imobiliary</h1>
             </Button>
           </Link>
-          <span className="sr-only">Imobiliary</span>
         </div>
-        <h1 className="text-xl font-bold text-center">{title}</h1>
-        <div className="text-center text-sm">
+        <div className="text-center text-sm mt-4 text-muted-foreground">
           {description}{" "}
-          <a href={url} id="auth-option" className="underline underline-offset-4">
+          <a href={url} id="auth-option" className="underline underline-offset-4 text-primary">
             {urlText}
           </a>
         </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { Banknote, BarChart, BookOpenText, Building, ChevronRight, ClipboardCheck, FileText, type LucideIcon, UserRoundCheck, UsersRound } from "lucide-react"
+import { Banknote, BookOpenText, Building, ChevronRight, type LucideIcon, UserRoundCheck, UsersRound } from "lucide-react"
 
 import {
   Collapsible,
@@ -18,14 +18,12 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
-import { Plan } from "@/types/plan"
 import { usePathname } from "next/navigation"
 
 type NavMainItemType = {
   title: string
   url: string
   icon: LucideIcon
-  visibility: 'free' | 'pro'
 }
 
 type NavMainType = {
@@ -44,52 +42,26 @@ const item: NavMainType = {
       title: "Alugueres",
       url: "/dashboard/locacao",
       icon: Banknote,
-      visibility: 'free',
-    },
-    {
-      title: "Contratos",
-      url: "/dashboard/locacao/contratos",
-      icon: FileText,
-      visibility: 'free',
     },
     {
       title: "Inquilinos",
       url: "/dashboard/locacao/inquilinos",
       icon: UsersRound,
-      visibility: 'free',
     },
     {
       title: "Imóveis",
       url: "/dashboard/locacao/imoveis",
       icon: Building,
-      visibility: 'free',
     },
     {
       title: "Proprietários",
       url: "/dashboard/locacao/proprietarios",
       icon: UserRoundCheck,
-      visibility: 'free',
-    },
-    {
-      title: "Vistorias",
-      url: "/dashboard/locacao/vistorias",
-      icon: ClipboardCheck,
-      visibility: 'pro',
-    },
-    {
-      title: "Relatórios",
-      url: "/dashboard/locacao/relatorios",
-      icon: BarChart,
-      visibility: 'pro',
     },
   ],
 }
 
-type NavMainProps = {
-  plan: Plan
-}
-
-export function NavMain({ plan }: NavMainProps) {
+export function NavMain() {
   const pathname = usePathname()
 
   return (
@@ -113,7 +85,7 @@ export function NavMain({ plan }: NavMainProps) {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.filter(item => item.visibility === plan.kind).map((subItem) => (
+                  {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
                         <a href={subItem.url}>

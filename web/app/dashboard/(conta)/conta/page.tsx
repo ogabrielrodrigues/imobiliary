@@ -1,6 +1,8 @@
 import { auth } from "@/actions/queries/auth"
+import { getUser } from "@/actions/queries/user/get-user"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card"
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
 import { AvatarForm } from "./_components/avatar-form"
 
 export const metadata: Metadata = {
@@ -9,7 +11,15 @@ export const metadata: Metadata = {
 }
 
 export default async function AccountPage() {
-  const user = await auth()
+  const auth_id = await auth()
+  if (!auth_id) {
+    redirect("/login")
+  }
+
+  const { user, status } = await getUser(auth_id)
+  if (!user || status != 200) {
+    redirect("/login")
+  }
 
   return (
     <div className="lg:w-xl mx-auto space-y-6">

@@ -1,18 +1,11 @@
 "use client"
 
 import {
-  CreditCard,
   EllipsisVertical,
   LogOut,
-  Sparkles,
   UserRound
 } from "lucide-react"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,18 +22,15 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { User } from "@/types/user"
-
 import { logout } from "@/actions/queries/logout"
-import { Plan } from "@/types/plan"
-import { ProPlanDialog } from "./pro-plan-dialog"
+import { User } from "@/types/user"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 type NavUserProps = {
-  user: User | undefined
-  plan: Plan
+  user: User
 }
 
-export function NavUser({ user, plan }: NavUserProps) {
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar()
 
   return (
@@ -82,30 +72,11 @@ export function NavUser({ user, plan }: NavUserProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {plan.kind === "free" && (
-              <>
-                <DropdownMenuGroup>
-                  <ProPlanDialog>
-                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                      <Sparkles />
-                      Atualizar para o PRO
-                    </DropdownMenuItem>
-                  </ProPlanDialog>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-              </>
-            )}
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <a href="/dashboard/conta">
                   <UserRound />
                   Conta
-                </a>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href="/dashboard/assinatura">
-                  <CreditCard />
-                  <span>Assinatura</span>
                 </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
