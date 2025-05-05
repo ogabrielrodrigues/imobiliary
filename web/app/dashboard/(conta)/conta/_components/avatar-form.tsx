@@ -1,6 +1,6 @@
 'use client'
 
-import { updateAvatar } from "@/actions/avatar";
+import { changeAvatar } from "@/actions/mutations/user/change-avatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { User } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -23,7 +22,6 @@ const avatar_schema = z.object({
 })
 
 export function AvatarForm({ user }: AvatarFormProps) {
-  const router = useRouter()
   const form = useForm<z.infer<typeof avatar_schema>>({
     resolver: zodResolver(avatar_schema),
   })
@@ -31,7 +29,7 @@ export function AvatarForm({ user }: AvatarFormProps) {
   async function onSubmit(values: z.infer<typeof avatar_schema>) {
     const formData = new FormData()
     formData.append("avatar", values.avatar)
-    const status = await updateAvatar(formData)
+    const status = await changeAvatar(formData)
 
     switch (status) {
       case 200:
