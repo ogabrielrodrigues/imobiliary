@@ -11,3 +11,93 @@ POST https://api.imobiliary.com/properties
   Esta rota requer autenticação. Você deve fornecer o cabeçalho `Authorization` com um token de autenticação válido.
   O token deve ser obtido através da rota de autenticação.
 </Note>
+
+### Requisição
+Para realizar essa requisição, deve-se fornecer o corpo da
+requisição no seguinte formato.
+
+```json
+{
+  "status": "Disponível",
+  "water_id": "1234567@6",
+  "energy_id": "123456778",
+  "kind": "Residencial",
+  "address": {
+    "street": "Rua da Saudade",
+    "number": "099",
+    "neighborhood": "Vl. Nobre",
+    "complement": "",
+    "city": "São Paulo",
+    "state": "SP",
+    "zip_code": "15550000"
+  }
+}
+```
+
+### Respostas
+Esses são as possíveis respostas desta requisição.
+
+#### 201
+Receberá essa resposta caso forneça um corpo da requisição válido.
+
+```http
+HTTP/1.1 201 Created
+Location: /properties/22be508a-8505-4dbb-8b36-bfe1c4adb008
+```
+
+#### 400
+Receberá essa resposta caso não forneça o corpo da requisição ou informe
+algum dos campos de forma incorreta. Exemplo:
+
+```json
+{
+  "status": "Disponível",
+  // sem o campo water_id
+  "energy_id": "123456778",
+  "kind": "Residencial",
+  "address": {
+    "street": "Rua da Saudade",
+    "number": "099",
+    "neighborhood": "Vl. Nobre",
+    "complement": "",
+    "city": "São Paulo",
+    "state": "SP",
+    "zip_code": "15550000"
+  }
+}
+```
+
+Resposta:
+
+```json
+{
+  "code": 400,
+  "message": "cód. água do imóvel não pode ser vazio",
+  "error": "Bad Request"
+}
+```
+
+#### 409
+Receberá essa resposta caso o corpo da requisição conflite com dados
+de `water_id`, `energy_id` ou `address` já existentes.
+
+```json
+{
+  "code": 409,
+  "message": "imóvel já existe",
+  "error": "Conflict"
+}
+```
+
+#### 500
+Receberá essa resposta caso ocorra um erro interno no servidor.
+Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
+```json
+{
+  "code": 500,
+  "message": "erro interno do servidor",
+  "error": "Internal Server Error"
+}
+```

@@ -26,6 +26,7 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 		pr.water_id,
 		pr.energy_id,
 		pr.owner_id,
+		pr.manager_id,
 		ad.street,
 		ad.number,
 		ad.complement,
@@ -39,12 +40,12 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 	ON pr.address_id = ad.id
 	WHERE
 		pr.id = $1
-	AND
-		pr.manager_id = $2`
+	`
+	// AND
+	//		pr.manager_id = $2
+	row := pg.pool.QueryRow(ctx, query, id) // pr.manager_id = $2
 
-	row := pg.pool.QueryRow(ctx, query, id, user_id)
-
-	var owner_id *string
+	var owner_id, manager_id *string
 	var p property.DTO
 	if err := row.Scan(
 		&p.ID,
@@ -53,6 +54,7 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 		&p.WaterID,
 		&p.EnergyID,
 		&owner_id,
+		&manager_id,
 		&p.Address.Street,
 		&p.Address.Number,
 		&p.Address.Complement,
@@ -67,6 +69,10 @@ func (pg *PostgresPropertyRepository) FindByID(ctx context.Context, id uuid.UUID
 		}
 
 		return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
+	}
+
+	if *manager_id != user_id {
+		return nil, response.NewErr(http.StatusForbidden, response.ERR_ACCESS_FORBIDDEN)
 	}
 
 	if owner_id != nil {

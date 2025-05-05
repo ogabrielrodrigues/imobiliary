@@ -9,9 +9,10 @@ import (
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 )
 
-func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *property.Property) *response.Err {
+func (pg *PostgresPropertyRepository) Create(ctx context.Context, dto *property.Property) *response.Err {
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
 		tx.Rollback(ctx)
@@ -25,20 +26,25 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 	`
 
 	row := tx.QueryRow(ctx, address_query,
-		property.Address.Street,
-		property.Address.Number,
-		property.Address.Complement,
-		property.Address.Neighborhood,
-		property.Address.City,
-		property.Address.State,
-		property.Address.ZipCode,
-		property.Address.FullAddress,
-		property.Address.MiniAddress,
+		dto.Address.Street,
+		dto.Address.Number,
+		dto.Address.Complement,
+		dto.Address.Neighborhood,
+		dto.Address.City,
+		dto.Address.State,
+		dto.Address.ZipCode,
+		dto.Address.FullAddress,
+		dto.Address.MiniAddress,
 	)
 
 	var address_id string
 	if err := row.Scan(&address_id); err != nil {
 		tx.Rollback(ctx)
+
+		if store.IsUniqueConstraint(err) {
+			return response.NewErr(http.StatusConflict, property.ERR_PROPERTY_ALREADY_EXISTS)
+		}
+
 		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
@@ -54,11 +60,11 @@ func (pg *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 		VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	_, err = tx.Exec(ctx, property_query,
-		property.ID,
-		property.Status,
-		property.Kind,
-		property.WaterID,
-		property.EnergyID,
+		dto.ID,
+		dto.Status,
+		dto.Kind,
+		dto.WaterID,
+		dto.EnergyID,
 		manager_id,
 		address_id,
 	)

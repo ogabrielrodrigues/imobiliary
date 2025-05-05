@@ -63,7 +63,6 @@ func (p *Property) ToDTO() *DTO {
 		Status:   p.Status,
 		WaterID:  p.WaterID,
 		EnergyID: p.EnergyID,
-		UserID:   p.UserID.String(),
 		OwnerID:  p.OwnerID.String(),
 		Address:  *p.Address.ToDTO(),
 	}

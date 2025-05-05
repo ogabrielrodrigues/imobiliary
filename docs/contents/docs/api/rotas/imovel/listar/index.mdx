@@ -1,13 +1,73 @@
 ---
-title: Listar Imóvel
-description: Nessa rota você pode listar os imóveis cadastrados na plataforma do usuário autenticado.
+title: Listar Imóveis
+description: Nessa rota você pode listar os imóveis cadastrados na plataforma pelo usuário autenticado.
 ---
 
 ```http
-GET https://api.imobiliary.com/properties/:property_id
+GET https://api.imobiliary.com/properties
 ```
 
 <Note title="Nota" type="warning">
   Esta rota requer autenticação. Você deve fornecer o cabeçalho `Authorization` com um token de autenticação válido.
   O token deve ser obtido através da rota de autenticação.
 </Note>
+
+### Requisição
+Para realizar essa requisição, basta enviar requisição para a rota referente.
+
+### Respostas
+Esses são as possíveis respostas desta requisição.
+
+#### 200
+Receberá essa resposta caso não ocorra nenhum erro durante o processamento da
+requisição. Essa resposta pode ser recebida com os registros dos imóveis cadastrados
+pelo usuário cadastrado, ou em caso de não haver nenhum imóvel cadastrado receberá uma
+`Array` vazio como resposta.
+
+Exemplo de resposta com imóveis cadastrados:
+
+```json
+[
+  {
+    "id": "22be508a-8505-4dbb-8b36-bfe1c4adb008",
+    "status": "Disponível",
+    "kind": "Residencial",
+    "water_id": "1234567@6",
+    "energy_id": "123456778",
+    "owner_id": "",
+    "address": {
+      "mini_address": "Rua da Saudade, 099, Vl. Nobre, São Paulo/SP",
+      "street": "Rua da Saudade",
+      "number": "099",
+      "neighborhood": "Vl. Nobre",
+      "city": "São Paulo",
+      "state": "SP",
+      "zip_code": "15550000"
+    }
+  }
+]
+```
+
+#### 401
+Receberá essa resposta caso não envie o token de autenticação no cabecalho `Authorization`,
+caso o token enviado não seja válido ou tenha expirado.
+
+```json
+{
+  "code": 401,
+  "message": "token inválido ou expirado",
+  "error": "Unauthorized"
+}
+```
+
+#### 500
+Receberá essa resposta caso ocorra um erro interno no servidor.
+Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
+```json
+{
+  "code": 500,
+  "message": "erro interno do servidor",
+  "error": "Internal Server Error"
+}

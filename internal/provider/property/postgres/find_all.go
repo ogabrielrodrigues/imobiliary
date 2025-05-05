@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
@@ -40,10 +39,6 @@ func (pg *PostgresPropertyRepository) FindAllByUserID(ctx context.Context) ([]pr
 
 	rows, err := pg.pool.Query(ctx, query, user_id)
 	if err != nil {
-		if pgx.ErrNoRows == err {
-			return nil, response.NewErr(http.StatusNotFound, http.StatusText(http.StatusNotFound))
-		}
-
 		return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 	defer rows.Close()
