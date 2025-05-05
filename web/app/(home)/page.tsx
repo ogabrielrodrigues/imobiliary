@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
-import { HeroSection } from "./_components/hero-section"
+import { Fragment } from "react"
 import { HomeHeader } from "./_components/home-header"
-import { PlanSection } from "./_components/plan-section"
+
 
 export const metadata: Metadata = {
   title: "Home"
@@ -12,18 +12,30 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   return (
-    <div className="w-full overflow-x-hidden">
+    <Fragment>
       <HomeHeader />
-
-      <HeroSection />
-      <PlanSection />
-
-      <section className="my-16 flex flex-col items-center">
-        <Link id="know-now" href="/login">
-          <Button>Conhecer agora</Button>
-        </Link>
-      </section>
-    </div>
+      <main className="sm:container mx-auto w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
+        <div className="px-4 sm:px-0">
+          <h1 className="text-[1.80rem] leading-8 sm:px-8 md:leading-[4.5rem] font-bold mb-4 sm:text-6xl text-left sm:text-center">
+            Bem-vindo ao Imobiliary!
+          </h1>
+          <p className="mb-8 md:text-lg text-base max-w-[800px] text-muted-foreground text-left sm:text-center">
+            Aqui você poderá, gerenciar seus imóveis com agilidade e eficiência, sem gastar <span className="text-primary">nenhum real</span> com isso.
+          </p>
+          <Link href="/login">
+            <Button size="lg">Conhecer agora</Button>
+          </Link>
+        </div>
+      </main>
+      <footer className="border-t border-border p-4 h-16 sm:gap-2 w-full flex items-center justify-center text-muted-foreground text-xs sm:text-sm">
+        <p>Quer contribuir, e ajudar a aprimorar a plataforma?</p>
+        <Link
+          target="_blank"
+          href="https://github.com/ogabrielrodrigues/imobiliary"
+          className="text-primary"
+        >Github</Link>
+      </footer>
+    </Fragment>
   )
 }
 

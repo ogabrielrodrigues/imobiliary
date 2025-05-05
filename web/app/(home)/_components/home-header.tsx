@@ -1,73 +1,46 @@
-import { Tooltip } from "@/components/ui/tooltip";
 
-import { TooltipContent } from "@/components/ui/tooltip";
 
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { auth } from "@/actions/queries/auth";
 import { logout } from "@/actions/queries/logout";
-import { getPlan } from "@/actions/queries/plan/get-plan";
-import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { TooltipTrigger } from "@/components/ui/tooltip";
-import { HousePlus, LogOut, Sparkles } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { HousePlus, LogOut } from "lucide-react";
 import Link from "next/link";
 
 export async function HomeHeader() {
   const user = await auth()
 
-  const { status, plan } = await getPlan()
-
   return (
-    <header className="fixed top-0 left-0 z-50 w-full bg-zinc-950/95 backdrop-blur-3xl p-4 flex items-center justify-between gap-4">
-      <div className="absolute right-8">
-        {user && <div className="flex items-center space-x-4">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/dashboard/conta">
-                <Avatar>
-                  <AvatarImage src={user?.avatar} className="object-cover" />
-                  <AvatarFallback className="bg-sidebar-primary">{user?.fullname.charAt(0)}</AvatarFallback>
-                </Avatar>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Ver Conta</p>
-            </TooltipContent>
-          </Tooltip>
-          <Button asChild variant="ghost">
-            <Link href="/dashboard">
-              Dashboard
-            </Link>
-          </Button>
-          <form action={logout}>
-            <Button variant="outline" type="submit">
-              <LogOut className="size-4" />
-              <p className="hidden sm:block">Sair</p>
-            </Button>
-          </form>
-        </div>}
-        {!user && <div>
+    <header className="h-16 border-b border-border w-full bg-zinc-950/95 backdrop-blur-3xl p-4 flex items-center justify-between gap-4">
+      <nav className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
+          <HousePlus className="size-5" />
+          <span className="sr-only">Imobiliary</span>
+          <h1 className="text-lg font-bold hidden sm:block select-none">Imobiliary</h1>
+        </div>
+
+        <Separator orientation="vertical" />
+
+        <Link href="https://docs.imobiliary.com">
+          <Button variant="ghost" size="sm">Docs</Button>
+        </Link>
+      </nav>
+
+      {user ? (<form action={logout}>
+        <Button variant="outline" type="submit" size="sm">
+          <LogOut className="size-4" />
+          <p className="hidden sm:block">Sair</p>
+        </Button>
+      </form>)
+        : (<div className="flex items-center gap-2">
           <Link href="/login" id="login">
-            <Button variant="ghost">Login</Button>
+            <Button variant="ghost" size="sm">Login</Button>
           </Link>
           <Link href="/cadastro" id="sign">
-            <Button variant="ghost">Cadastro</Button>
+            <Button variant="ghost" size="sm">Cadastro</Button>
           </Link>
-        </div>}
-      </div>
-      <div className="flex items-center gap-2">
-        <HousePlus className="size-5" />
-        <span className="sr-only">Imobiliary</span>
-        <>
-          <h1 className="text-lg font-bold hidden sm:block select-none">
-            Imobiliary
-          </h1>
-          {(status === 200 && plan?.kind === 'pro') && (
-            <Sparkles className="size-4 self-start" />
-          )}
-        </>
-      </div>
-    </header>
+        </div>)}
+    </header >
   )
 }
