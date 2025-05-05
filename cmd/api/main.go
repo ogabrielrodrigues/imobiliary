@@ -23,8 +23,12 @@ func main() {
 
 	pool, err := pgxpool.New(context.Background(), store.PostgresConnectionString(*env))
 	if err != nil {
-		logger.Error("error initializing database", zap.Error(err))
-		return
+		logger.Panic("error initializing database", zap.Error(err))
+	}
+
+	err = pool.Ping(context.Background())
+	if err != nil {
+		logger.Panic("error connecting in database", zap.Error(err))
 	}
 
 	handler := api.NewHandler(pool)
@@ -33,8 +37,7 @@ func main() {
 		logger.Info(fmt.Sprintf("server running on %s", env.SERVER_ADDR))
 		if err := http.ListenAndServe(env.SERVER_ADDR, middleware.CORSMiddleware(middleware.LoggerMiddleware(handler))); err != nil {
 			if !errors.Is(err, http.ErrServerClosed) {
-				logger.Error("error starting server", zap.Error(err))
-				os.Exit(1)
+				logger.Panic("error starting server", zap.Error(err))
 			}
 		}
 	}()
