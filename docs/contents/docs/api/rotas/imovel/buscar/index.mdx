@@ -1,0 +1,13 @@
+---
+title: Buscar Imóvel
+description: Nessa rota você pode buscar um imóvel através do id.
+---
+
+```http
+GET https://api.imobiliary.com/properties/:property_id
+```
+
+<Note title="Nota" type="warning">
+  Esta rota requer autenticação. Você deve fornecer o cabeçalho `Authorization` com um token de autenticação válido.
+  O token deve ser obtido através da rota de autenticação.
+</Note>

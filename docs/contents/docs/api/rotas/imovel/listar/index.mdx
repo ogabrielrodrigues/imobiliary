@@ -1,0 +1,13 @@
+---
+title: Listar Imóvel
+description: Nessa rota você pode listar os imóveis cadastrados na plataforma do usuário autenticado.
+---
+
+```http
+GET https://api.imobiliary.com/properties/:property_id
+```
+
+<Note title="Nota" type="warning">
+  Esta rota requer autenticação. Você deve fornecer o cabeçalho `Authorization` com um token de autenticação válido.
+  O token deve ser obtido através da rota de autenticação.
+</Note>

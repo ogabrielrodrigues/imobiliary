@@ -1,0 +1,99 @@
+---
+title: Imóvel
+description: Sobre a entidade Imóvel.
+---
+
+A entidade Imóvel representa um imóvel dentro da plataforma imobiliária.
+
+### Propriedades
+A entidade Imóvel possui as seguintes propriedades:
+
+```go:property.go
+type Property struct {
+	ID       uuid.UUID
+	Status   Status
+	Kind     Kind
+	WaterID  string
+	EnergyID string
+	UserID   uuid.UUID
+	OwnerID  uuid.UUID
+	Address  *types.Address
+}
+```
+
+### Tipos
+
+#### Status
+O status do imóvel pode ser um dos seguintes:
+
+```go:property.go
+type Status string
+const (
+	StatusAvailable   Status = "Disponível"
+	StatusOccupied    Status = "Ocupado"
+	StatusUnavailable Status = "Indisponível"
+	StatusReserved    Status = "Reservado"
+	StatusRenovating  Status = "Reformando"
+)
+```
+
+#### Tipo
+O tipo do imóvel pode ser um dos seguintes:
+
+```go:property.go
+type Kind string
+const (
+	KindResidential Kind = "Residencial"
+	KindComercial   Kind = "Comercial"
+	KindIndustrial  Kind = "Industrial"
+	KindTerreno     Kind = "Terreno"
+	KindRural       Kind = "Rural"
+)
+```
+
+#### Endereço
+O endereço do imóvel é representado por uma estrutura que contém os seguintes campos:
+
+```go:property.go
+type Address struct {
+	FullAddress  string
+	MiniAddress  string
+	Street       string
+	Number       string
+	Neighborhood string
+	Complement   string
+	City         string
+	State        string
+	ZipCode      string
+}
+```
+
+### DTOs
+A entidade Usuário possui os seguintes DTOs:
+
+#### DTO padrão de resposta de imóvel
+
+```go:dto.go
+type DTO struct {
+	ID       string          `json:"id"`
+	Status   Status          `json:"status"`
+	Kind     Kind            `json:"kind"`
+	WaterID  string          `json:"water_id"`
+	EnergyID string          `json:"energy_id"`
+	UserID   string          `json:"user_id"`
+	OwnerID  string          `json:"owner_id"`
+	Address  types.AdressDTO `json:"address"`
+}
+```
+
+#### DTO para criação de imóvel
+
+```go:dto.go
+type CreateDTO struct {
+	Status   Status                 `json:"status"`
+	Kind     Kind                   `json:"kind"`
+	WaterID  string                 `json:"water_id"`
+	EnergyID string                 `json:"energy_id"`
+	Address  *types.AdressCreateDTO `json:"address"`
+}
+```

@@ -28,6 +28,15 @@ export const ROUTES: EachRoute[] = [
               { title: "Alterar Avatar", href: "/alterar-avatar" },
             ],
           },
+          {
+            title: "Imóvel",
+            href: "/imovel",
+            items: [
+              { title: "Listar Imóveis", href: "/listar" },
+              { title: "Buscar Imóvel", href: "/buscar" },
+              { title: "Criar Imóvel", href: "/criar" },
+            ],
+          },
         ]
       },
     ],

@@ -20,7 +20,7 @@ type User struct {
 }
 ```
 
-### DTOs (Objetos de Transferência de Dados)
+### DTOs
 A entidade Usuário possui os seguintes DTOs:
 
 #### DTO padrão de resposta de usuário
@@ -39,7 +39,7 @@ type DTO struct {
 #### DTO para criação de usuário
 
 ```go:dto.go
-type CreateUserDTO struct {
+type CreateDTO struct {
   Fullname  string `json:"fullname"`
   CreciID   string `json:"creci_id"`
   Cellphone string `json:"cellphone"`
