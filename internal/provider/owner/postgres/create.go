@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
@@ -14,6 +15,7 @@ import (
 func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner) (uuid.UUID, *response.Err) {
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
+		logger.Error("1 - " + err.Error())
 		tx.Rollback(ctx)
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
@@ -38,6 +40,7 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 
 	var address_id string
 	if err := row.Scan(&address_id); err != nil {
+		logger.Error("2 - " + err.Error())
 		tx.Rollback(ctx)
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
@@ -67,11 +70,13 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 
 	var owner_id string
 	if err := row.Scan(&owner_id); err != nil {
+		logger.Error("3 - " + err.Error() + " - " + string(owner.MaritalStatus))
 		tx.Rollback(ctx)
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
+		logger.Error("4 - " + err.Error())
 		tx.Rollback(ctx)
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}

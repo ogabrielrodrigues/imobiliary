@@ -1,7 +1,7 @@
 CREATE TYPE marital_status AS ENUM (
   'Solteiro(a)',
   'Casado(a)',
-  'Amasiado(a)'
+  'Amasiado(a)',
   'Divorciado(a)',
   'União Estável',
   'Viúvo(a)'
