@@ -19,13 +19,13 @@ import { cn } from "@/lib/utils"
 
 import { Separator } from "@/components/ui/separator"
 
-import { createOwner } from "@/actions/owner"
+import { createOwner } from "@/actions/mutations/owner/create-owner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useHookFormMask } from "use-mask-input"
 
-export const owner_schema = z.object({
+const owner_schema = z.object({
   fullname: z.string().min(10, "O nome deve conter ao menos 10 caracteres").max(100, "Máximo de 100 caracteres"),
   cpf: z.string().length(14),
   rg: z.string().min(5, "o rg deve ter no minimo 5 caracteres").max(15, "o rg deve ter no máximo 15 caracteres"),
@@ -45,10 +45,12 @@ export const owner_schema = z.object({
   }),
 })
 
+export type OwnerRequest = z.infer<typeof owner_schema>
+
 export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter()
 
-  const form = useForm<z.infer<typeof owner_schema>>({
+  const form = useForm<OwnerRequest>({
     resolver: zodResolver(owner_schema),
     defaultValues: {
       fullname: "",
@@ -72,7 +74,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
 
   const registerWithMask = useHookFormMask(form.register);
 
-  async function onSubmit(values: z.infer<typeof owner_schema>) {
+  async function onSubmit(values: OwnerRequest) {
     const status = await createOwner(values)
 
     switch (status) {
@@ -130,7 +132,9 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                   autoComplete="off"
                   {...field}
                   {...registerWithMask("cpf", '999.999.999-99', {
-                    required: true
+                    showMaskOnHover: false,
+                    showMaskOnFocus: false,
+                    required: true,
                   })}
                 />
               </FormControl>
@@ -172,7 +176,9 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                   autoComplete="off"
                   {...field}
                   {...registerWithMask("cellphone", ['(99) 9999-9999', '(99) 99999-9999'], {
-                    required: true
+                    showMaskOnHover: false,
+                    showMaskOnFocus: false,
+                    required: true,
                   })}
                 />
               </FormControl>
@@ -359,6 +365,11 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                   autoComplete="off"
                   maxLength={8}
                   {...field}
+                  {...registerWithMask("address.zip_code", '99999999', {
+                    showMaskOnHover: false,
+                    showMaskOnFocus: false,
+                    required: true,
+                  })}
                 />
               </FormControl>
               <FormMessage />

@@ -1,4 +1,4 @@
-import { auth } from "@/actions/queries/auth"
+import { auth } from "@/actions/queries/auth/auth"
 import { getUser } from "@/actions/queries/user/get-user"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card"
 import { Metadata } from "next"

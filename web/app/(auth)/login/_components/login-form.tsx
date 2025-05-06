@@ -16,20 +16,25 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-import { login } from "@/actions/queries/login"
+import { login } from "@/actions/mutations/auth/login"
 import { cn } from "@/lib/utils"
+import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { toast } from "sonner"
 
-export const login_schema = z.object({
+const login_schema = z.object({
   email: z.string().email("o e-mail digitado deve ser válido"),
   password: z.string().min(8, "A senha deve contem ao menos 8 caracteres")
 })
 
+export type LoginRequest = z.infer<typeof login_schema>
+
 export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof login_schema>>({
+  const form = useForm<LoginRequest>({
     resolver: zodResolver(login_schema),
     defaultValues: {
       email: "",
@@ -37,26 +42,42 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
     }
   })
 
-  async function onSubmit(values: z.infer<typeof login_schema>) {
+  async function onSubmit(values: LoginRequest) {
+    setLoading(true)
+
     const status = await login(values)
 
     switch (status) {
       case 200:
-        toast.success("Login realizado com sucesso!", { duration: 1500 })
+        toast.success("Login realizado com sucesso!", {
+          description: "Estamos lhe redirecionando a Dashboard",
+          duration: 2000
+        })
         setTimeout(() => {
           router.push("/dashboard")
-        }, 1500)
+        }, 2000)
         break
       case 401:
-        toast.error("E-mail ou senha inválidos.", { duration: 1500 })
+        toast.error("Senha inválida.", {
+          description: "Verifique sua senha e tente novamente",
+          duration: 3000
+        })
         break
       case 404:
-        toast.error("Usuário não encontrado.", { duration: 1500 })
+        toast.error("Usuário não encontrado.", {
+          description: "Verifique seu email e tente novamente",
+          duration: 3000
+        })
         break
       default:
-        toast.error("Erro ao realizar login.", { duration: 1500 })
+        toast.error("Erro ao realizar login.", {
+          description: "Ocorreu um erro interno ao tentar realizar login. Caso o problema persista entre em contato",
+          duration: 3000
+        })
         break
     }
+
+    setLoading(false)
   }
 
   return (
@@ -104,8 +125,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" id="login">
-          Entrar
+        <Button disabled={loading} type="submit" className="w-full" id="login">
+          {loading && <LoaderCircle className="size-4 animate-spin" />}Entrar
         </Button>
       </form>
     </Form>

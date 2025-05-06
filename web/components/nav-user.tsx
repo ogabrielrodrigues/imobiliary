@@ -22,7 +22,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { logout } from "@/actions/queries/logout"
+import { logout } from "@/actions/mutations/auth/logout"
 import { User } from "@/types/user"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 

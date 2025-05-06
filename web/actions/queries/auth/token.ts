@@ -1,3 +1,5 @@
+'use server'
+
 import { cookies } from "next/headers"
 
 export async function token(): Promise<string | undefined> {

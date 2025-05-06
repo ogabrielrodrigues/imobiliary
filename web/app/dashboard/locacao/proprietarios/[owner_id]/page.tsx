@@ -1,4 +1,4 @@
-import { getOwner } from "@/actions/owner"
+import { getOwner } from "@/actions/queries/owner/get-owner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, EllipsisVertical } from "lucide-react"
@@ -13,7 +13,7 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
   const { owner_id } = await params
   const { status, owner } = await getOwner(owner_id)
 
-  if (status !== 200) notFound()
+  if (!owner || status !== 200) notFound()
 
   return (
     <>

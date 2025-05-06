@@ -1,10 +1,9 @@
 'use server'
 
-import { sign_schema } from "@/app/(auth)/cadastro/_components/sign-form"
+import { SignRequest } from "@/app/(auth)/cadastro/_components/sign-form"
 import { env } from "@/lib/env"
-import { z } from "zod"
 
-export async function sign(values: z.infer<typeof sign_schema>): Promise<number> {
+export async function sign(values: SignRequest): Promise<number> {
   try {
     const response = await fetch(`${env.SERVER_ADDR}/users`, {
       method: "POST",

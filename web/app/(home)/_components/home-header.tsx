@@ -1,8 +1,8 @@
 
 
 
-import { auth } from "@/actions/queries/auth";
-import { logout } from "@/actions/queries/logout";
+import { logout } from "@/actions/mutations/auth/logout";
+import { auth } from "@/actions/queries/auth/auth";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { HousePlus, LogOut } from "lucide-react";

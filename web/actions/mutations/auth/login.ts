@@ -1,11 +1,10 @@
 'use server'
 
-import { login_schema } from "@/app/(auth)/login/_components/login-form"
+import { LoginRequest } from "@/app/(auth)/login/_components/login-form"
 import { env } from "@/lib/env"
 import { cookies } from "next/headers"
-import { z } from "zod"
 
-export async function login(values: z.infer<typeof login_schema>): Promise<number> {
+export async function login(values: LoginRequest): Promise<number> {
   try {
     const response = await fetch(`${env.SERVER_ADDR}/users/auth`, {
       method: "POST",

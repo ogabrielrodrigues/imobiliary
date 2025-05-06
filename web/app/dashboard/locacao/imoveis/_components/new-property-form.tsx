@@ -19,10 +19,11 @@ import { cn } from "@/lib/utils"
 
 import { Separator } from "@/components/ui/separator"
 
-import { createProperty } from "@/actions/property"
+import { createProperty } from "@/actions/mutations/property/create-property"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useHookFormMask } from "use-mask-input"
 
 export const property_schema = z.object({
   water_id: z.string().min(3, "O código da água deve conter ao menos 3 caracteres"),
@@ -40,10 +41,12 @@ export const property_schema = z.object({
   }),
 })
 
+export type CreatePropertyRequest = z.infer<typeof property_schema>
+
 export function NewPropertyForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter()
 
-  const form = useForm<z.infer<typeof property_schema>>({
+  const form = useForm<CreatePropertyRequest>({
     resolver: zodResolver(property_schema),
     defaultValues: {
       water_id: "",
@@ -62,7 +65,9 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
     }
   })
 
-  async function onSubmit(values: z.infer<typeof property_schema>) {
+  const registerWithMask = useHookFormMask(form.register);
+
+  async function onSubmit(values: CreatePropertyRequest) {
     const status = await createProperty(values)
 
     switch (status) {
@@ -194,6 +199,11 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
                   autoComplete="off"
                   maxLength={8}
                   {...field}
+                  {...registerWithMask("address.zip_code", '99999999', {
+                    showMaskOnHover: false,
+                    showMaskOnFocus: false,
+                    required: true,
+                  })}
                 />
               </FormControl>
               <FormMessage />
