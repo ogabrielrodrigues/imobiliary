@@ -2,7 +2,6 @@
 
 import { changeAvatar } from "@/actions/mutations/user/change-avatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -34,9 +33,8 @@ export function AvatarForm({ user }: AvatarFormProps) {
     switch (status) {
       case 200:
         toast.success("Avatar atualizado com sucesso", {
-          description: "Atualize sua conta para ver as mudanças",
-          duration: 5000,
-          action: <Button variant="outline" onClick={() => window.location.reload()}>Atualizar</Button>,
+          description: "Em alguns instantes, seu avatar será atualizado",
+          duration: 3000,
         })
         setTimeout(() => {
           window.location.reload()

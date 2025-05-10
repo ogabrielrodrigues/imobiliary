@@ -9,6 +9,7 @@ import (
 )
 
 type IRepository interface {
+	ListAll(ctx context.Context) ([]DTO, *response.Err)
 	FindByID(ctx context.Context, id uuid.UUID) (*User, *response.Err)
 	Create(ctx context.Context, user *User) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, dto *AuthDTO) (uuid.UUID, *response.Err)

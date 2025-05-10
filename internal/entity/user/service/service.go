@@ -15,6 +15,7 @@ type Service struct {
 }
 
 type IService interface {
+	ListAll(ctx context.Context) ([]user.DTO, *response.Err)
 	FindByID(ctx context.Context, id uuid.UUID) (*user.DTO, *response.Err)
 	Create(ctx context.Context, dto *user.CreateDTO) (uuid.UUID, *response.Err)
 	Authenticate(ctx context.Context, dto *user.AuthDTO) (string, *response.Err)
