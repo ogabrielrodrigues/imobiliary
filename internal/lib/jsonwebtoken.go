@@ -8,12 +8,12 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 const (
 	ERR_TOKEN_INVALID_OR_EXPIRED string = "token inválido ou expirado"
+	ERR_FAILED_GENERATE_TOKEN    string = "erro ao gerar o token de autenticação"
 )
 
 func ExtractToken(authorization string) string {
@@ -51,7 +51,7 @@ func GenerateToken(user_id uuid.UUID) (string, *response.Err) {
 
 	token, err := claims.SignedString([]byte(environment.Environment.JWT_SECRET))
 	if err != nil {
-		return "", response.NewErr(http.StatusInternalServerError, user.ERR_FAILED_GENERATE_TOKEN)
+		return "", response.NewErr(http.StatusInternalServerError, ERR_FAILED_GENERATE_TOKEN)
 	}
 
 	return token, nil

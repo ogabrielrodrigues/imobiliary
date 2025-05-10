@@ -21,7 +21,7 @@ type User struct {
 func (u *User) hashPwd() *response.Err {
 	hash, err := bcrypt.GenerateFromPassword([]byte(u.password), 14)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, ERR_FAILED_TO_PROCESS_USER)
+		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	u.password = string(hash)

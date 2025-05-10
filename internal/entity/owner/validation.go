@@ -8,18 +8,17 @@ import (
 )
 
 const (
-	ERR_FULLNAME_EMPTY                string = "owner fullname is empty"
-	ERR_FULLNAME_INVALID              string = "owner fullname must be between 10 and 100 characters"
-	ERR_CPF_EMPTY                     string = "owner cpf is empty"
-	ERR_CPF_INVALID                   string = "owner cpf is invalid format"
-	ERR_RG_EMPTY                      string = "owner rg is empty"
-	ERR_RG_INVALID                    string = "owner rg must is invalid"
-	ERR_EMAIL_EMPTY                   string = "owner email is empty"
-	ERR_CELLPHONE_EMPTY               string = "owner cellphone is empty"
-	ERR_CELLPHONE_INVALID             string = "owner cellphone is invalid format"
-	ERR_EMAIL_INVALID                 string = "owner email is invalid format"
-	ERR_OWNER_NOT_FOUND_OR_NOT_EXISTS string = "owner not found or not exists"
-	ERR_OWNER_BODY_INVALID            string = "owner body is invalid"
+	ERR_FULLNAME_EMPTY                string = "nome completo do proprietário não pode ser vazio"
+	ERR_FULLNAME_INVALID              string = "nome completo do proprietário deve ter entre 10 e 100 caracteres"
+	ERR_CPF_EMPTY                     string = "cpf do proprietário não pode ser vazio"
+	ERR_CPF_INVALID                   string = "cpf do proprietário deve ter o formato xxx.xxx.xxx-xx"
+	ERR_RG_EMPTY                      string = "rg do proprietário não pode ser vazio"
+	ERR_RG_INVALID                    string = "rg do proprietário deve ter entre 5 e 15 caracteres"
+	ERR_EMAIL_EMPTY                   string = "email do proprietário não pode ser vazio"
+	ERR_EMAIL_INVALID                 string = "email do proprietário deve ser válido"
+	ERR_CELLPHONE_EMPTY               string = "email do proprietário deve ser vazio"
+	ERR_CELLPHONE_INVALID             string = "telefone celular do proprietário deve ter o formato (xx) xxxxx-xxxx"
+	ERR_OWNER_NOT_FOUND_OR_NOT_EXISTS string = "proprietário não encontrado ou não existente"
 )
 
 func (o *Owner) validate() *response.Err {
