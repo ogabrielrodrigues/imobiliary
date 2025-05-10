@@ -67,5 +67,9 @@ func (pg *PostgresPropertyRepository) FindAllByUserID(ctx context.Context) ([]pr
 		properties = append(properties, p)
 	}
 
+	if err := rows.Err(); err != nil {
+		return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
+	}
+
 	return properties, nil
 }

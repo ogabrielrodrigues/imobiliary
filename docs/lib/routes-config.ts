@@ -22,6 +22,7 @@ export const ROUTES: EachRoute[] = [
             title: "Usuário",
             href: "/usuario",
             items: [
+              { title: "Listar Usuários", href: "/listar" },
               { title: "Buscar Usuário", href: "/buscar" },
               { title: "Criar Usuário", href: "/criar" },
               { title: "Autenticar Usuário", href: "/autenticar" },
