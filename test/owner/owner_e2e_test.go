@@ -492,7 +492,7 @@ func TestE2EFindByIDUser(t *testing.T) {
 		Cellphone:     "(00) 99000-0000",
 		Occupation:    "Developer",
 		MaritalStatus: "Solteiro(a)",
-		Address: types.AdressDTO{
+		Address: types.AddressDTO{
 			Street:       "Rua da Saudade",
 			Number:       "099",
 			Neighborhood: "Vl. Nobre",

@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -11,8 +11,8 @@ export default function NotFound() {
         </p>
         <p>Oops! A página que está procurando não foi encontrada ou não existe.</p>
       </div>
-      <Link href="/" className={buttonVariants({})}>
-        Voltar para o início
+      <Link href="/">
+        <Button className="font-bold" size="lg">Voltar para o início</Button>
       </Link>
     </div>
   );

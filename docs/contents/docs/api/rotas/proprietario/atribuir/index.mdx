@@ -1,10 +1,10 @@
 ---
-title: Criar Imóvel
-description: Nessa rota você pode criar um novo imóvel.
+title: Atribuir Proprietário
+description: Nessa rota você pode atribuir um proprietário a um imóvel.
 ---
 
 ```http
-POST https://api.imobiliary.com/properties
+PUT https://api.imobiliary.com/owners/assign
 ```
 
 <Note title="Nota" type="warning">
@@ -18,31 +18,19 @@ requisição no seguinte formato.
 
 ```json
 {
-  "status": "Disponível",
-  "water_id": "1234567@6",
-  "energy_id": "123456778",
-  "kind": "Residencial",
-  "address": {
-    "street": "Rua da Saudade",
-    "number": "099",
-    "neighborhood": "Vl. Nobre",
-    "complement": "",
-    "city": "São Paulo",
-    "state": "SP",
-    "zip_code": "15550000"
-  }
+  "owner_id": "aaf6f6fc-f049-4930-898f-30499cf103fa",
+  "property_id": "22be508a-8505-4dbb-8b36-bfe1c4adb008"
 }
 ```
 
 ### Respostas
 Esses são as possíveis respostas desta requisição.
 
-#### 201
+#### 200
 Receberá essa resposta caso forneça um corpo da requisição válido.
 
 ```http
-HTTP/1.1 201 Created
-Location: /properties/22be508a-8505-4dbb-8b36-bfe1c4adb008
+HTTP/1.1 200 OK
 ```
 
 #### 400
@@ -51,19 +39,8 @@ algum dos campos de forma incorreta. Exemplo:
 
 ```json
 {
-  "status": "Disponível",
-  // sem o campo water_id
-  "energy_id": "123456778",
-  "kind": "Residencial",
-  "address": {
-    "street": "Rua da Saudade",
-    "number": "099",
-    "neighborhood": "Vl. Nobre",
-    "complement": "",
-    "city": "São Paulo",
-    "state": "SP",
-    "zip_code": "15550000"
-  }
+  "owner_id": "aaf6f6fc-f049-4930-898f-30499cf103fa",
+  // sem o campo property_id
 }
 ```
 
@@ -72,7 +49,7 @@ Resposta:
 ```json
 {
   "code": 400,
-  "message": "cód. água do imóvel não pode ser vazio",
+  "message": "corpo da requisição inválido",
   "error": "Bad Request"
 }
 ```
@@ -89,15 +66,25 @@ caso o token enviado não seja válido ou tenha expirado.
 }
 ```
 
-#### 409
-Receberá essa resposta caso o corpo da requisição conflite com dados
-de `water_id`, `energy_id` ou `address` já existentes.
+#### 404
+Receberá essa resposta caso informe `property_id` ou `owner_id`
+que não existem.
 
 ```json
 {
-  "code": 409,
-  "message": "imóvel já existe",
-  "error": "Conflict"
+  "code": 404,
+  "message": "imóvel não encontrado ou não existente",
+  "error": "Not Found"
+}
+```
+
+Ou
+
+```json
+{
+  "code": 404,
+  "message": "proprietário não encontrado ou não existente",
+  "error": "Not Found"
 }
 ```
 

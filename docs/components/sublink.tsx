@@ -1,15 +1,24 @@
-import { EachRoute } from "@/lib/routes-config";
-import Anchor from "./anchor";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
 import { SheetClose } from "@/components/ui/sheet";
+import { EachRoute } from "@/lib/routes-config";
+import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import Anchor from "./anchor";
+
+const variants = {
+  get: "dark:bg-green-700 bg-green-500",
+  post: "dark:bg-yellow-700 bg-yellow-500",
+  put: "dark:bg-amber-700 bg-amber-500",
+  delete: "dark:bg-red-700 bg-red-500",
+}
+
+export type TagVariant = keyof typeof variants;
 
 export default function SubLink({
   title,
@@ -32,12 +41,12 @@ export default function SubLink({
       activeClassName="text-primary dark:font-medium font-semibold"
       href={href}
     >
-      {title}
       {tag && (
-        <span className="dark:bg-blue-700 bg-blue-500 rounded-md px-1.5 py-0.5 mx-2 text-xs text-white !font-normal">
-          {tag}
+        <span className={cn(["rounded-md px-1.5 py-0.5 mx-2 text-xs text-white !font-normal", variants[tag.variant]])}>
+          {tag.title}
         </span>
       )}
+      {title}
     </Anchor>
   );
 
@@ -49,12 +58,12 @@ export default function SubLink({
     )
   ) : (
     <h4 className="font-medium sm:text-sm text-primary">
-      {title}
       {tag && (
-        <span className="dark:bg-blue-700 bg-blue-500 rounded-md px-1.5 py-0.5 mx-2 text-xs text-white !font-normal">
-          {tag}
+        <span className={cn(["rounded-md px-1.5 py-0.5 mx-2 text-xs text-white !font-normal", variants[tag.variant]])}>
+          {tag.title}
         </span>
       )}
+      {title}
     </h4>
   );
 

@@ -6,21 +6,21 @@ import (
 )
 
 type DTO struct {
-	ID       string          `json:"id"`
-	Status   Status          `json:"status"`
-	Kind     Kind            `json:"kind"`
-	WaterID  string          `json:"water_id"`
-	EnergyID string          `json:"energy_id"`
-	OwnerID  string          `json:"owner_id"`
-	Address  types.AdressDTO `json:"address"`
+	ID       string           `json:"id"`
+	Status   Status           `json:"status"`
+	Kind     Kind             `json:"kind"`
+	WaterID  string           `json:"water_id"`
+	EnergyID string           `json:"energy_id"`
+	OwnerID  string           `json:"owner_id"`
+	Address  types.AddressDTO `json:"address"`
 }
 
 type CreateDTO struct {
-	Status   Status                 `json:"status"`
-	Kind     Kind                   `json:"kind"`
-	WaterID  string                 `json:"water_id"`
-	EnergyID string                 `json:"energy_id"`
-	Address  *types.AdressCreateDTO `json:"address"`
+	Status   Status                  `json:"status"`
+	Kind     Kind                    `json:"kind"`
+	WaterID  string                  `json:"water_id"`
+	EnergyID string                  `json:"energy_id"`
+	Address  *types.AddressCreateDTO `json:"address"`
 }
 
 func (d *DTO) ToProperty() *Property {

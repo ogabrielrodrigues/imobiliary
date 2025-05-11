@@ -3,10 +3,10 @@ package types
 type MaritalStatus string
 
 const (
-	MaritalStatusSolteiro     MaritalStatus = "Solteiro(a)"
-	MaritalStatusCasado       MaritalStatus = "Casado(a)"
-	MaritalStatusAmasiado     MaritalStatus = "Amasiado(a)"
-	MaritalStatusDivorciado   MaritalStatus = "Divorciado(a)"
-	MaritalStatusUniaoEstavel MaritalStatus = "União Estável"
-	MaritalStatusViuvo        MaritalStatus = "Viúvo(a)"
+	MaritalStatusSingle      MaritalStatus = "Solteiro(a)"
+	MaritalStatusMarried     MaritalStatus = "Casado(a)"
+	MaritalStatusLoved       MaritalStatus = "Amasiado(a)"
+	MaritalStatusDivorced    MaritalStatus = "Divorciado(a)"
+	MaritalStatusStableUnion MaritalStatus = "União Estável"
+	MaritalStatusWidowed     MaritalStatus = "Viúvo(a)"
 )

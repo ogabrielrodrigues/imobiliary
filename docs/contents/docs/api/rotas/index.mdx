@@ -4,13 +4,19 @@ description: Rotas da API do Imobiliary.
 ---
 
 ### Rotas de Usuário
- - `GET /users` - [Listar Usuários](./rotas/usuario/listar)
- - `GET /users/:user_id` - [Buscar Usuário](./rotas/usuario/buscar)
- - `POST /users` - [Criar Usuário](./rotas/usuario/criar)
- - `POST /users/auth` - [Autenticar Usuário](./rotas/usuario/autenticar)
- - `PUT /users/avatar` - [Alterar Avatar](./rotas/usuario/alterar-avatar)
+  - `GET /users` - [Listar Usuários](./rotas/usuario/listar)
+  - `GET /users/:user_id` - [Buscar Usuário](./rotas/usuario/buscar)
+  - `POST /users` - [Criar Usuário](./rotas/usuario/criar)
+  - `POST /users/auth` - [Autenticar Usuário](./rotas/usuario/autenticar)
+  - `PUT /users/avatar` - [Alterar Avatar](./rotas/usuario/alterar-avatar)
 
 ### Rotas de Imóvel
- - `GET /properties` - [Listar Imóveis](./rotas/imovel/listar)
- - `GET /properties/:property_id` - [Buscar Imóvel](./rotas/imovel/buscar)
- - `POST /properties` - [Criar Imóvel](./rotas/imovel/criar)
+  - `GET /properties` - [Listar Imóveis](./rotas/imovel/listar)
+  - `GET /properties/:property_id` - [Buscar Imóvel](./rotas/imovel/buscar)
+  - `POST /properties` - [Criar Imóvel](./rotas/imovel/criar)
+
+### Rotas de Proprietário
+  - `GET /owners` - [Listar Proprietários](./rotas/proprietario/buscar)
+  - `GET /owners/:owner_id` - [Buscar Proprietário](./rotas/proprietario/listar)
+  - `POST /owners` - [Criar Proprietário](./rotas/proprietario/criar)
+  - `PUT /owners/assign` - [Atribuir Proprietário](./rotas/proprietario/atribuir)

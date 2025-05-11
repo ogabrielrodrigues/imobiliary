@@ -19,6 +19,7 @@ const (
 	ERR_CELLPHONE_EMPTY               string = "email do proprietário deve ser vazio"
 	ERR_CELLPHONE_INVALID             string = "telefone celular do proprietário deve ter o formato (xx) xxxxx-xxxx"
 	ERR_OWNER_NOT_FOUND_OR_NOT_EXISTS string = "proprietário não encontrado ou não existente"
+	ERR_OWNER_ALREADY_EXISTS          string = "proprietário já existe"
 )
 
 func (o *Owner) validate() *response.Err {

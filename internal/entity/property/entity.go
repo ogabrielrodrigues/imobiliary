@@ -20,9 +20,9 @@ type Kind string
 
 const (
 	KindResidential Kind = "Residencial"
-	KindComercial   Kind = "Comercial"
+	KindCommercial  Kind = "Comercial"
 	KindIndustrial  Kind = "Industrial"
-	KindTerreno     Kind = "Terreno"
+	KindTerrain     Kind = "Terreno"
 	KindRural       Kind = "Rural"
 )
 

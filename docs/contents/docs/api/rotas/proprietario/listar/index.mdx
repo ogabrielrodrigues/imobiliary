@@ -1,0 +1,76 @@
+---
+title: Listar Proprietários
+description: Nessa rota você pode listar os proprietários cadastrados na plataforma pelo proprietário autenticado.
+---
+
+```http
+GET https://api.imobiliary.com/owners
+```
+
+<Note title="Nota" type="warning">
+  Esta rota requer autenticação. Você deve fornecer o cabeçalho `Authorization` com um token de autenticação válido.
+  O token deve ser obtido através da rota de autenticação.
+</Note>
+
+### Requisição
+Para realizar essa requisição, basta enviar requisição para a rota referente.
+
+### Respostas
+Esses são as possíveis respostas desta requisição.
+
+#### 200
+Receberá essa resposta caso não ocorra nenhum erro durante o processamento da
+requisição. Essa resposta pode ser recebida com os registros dos proprietários cadastrados
+pelo proprietário cadastrado, ou em caso de não haver nenhum proprietário cadastrado receberá uma
+`Array` vazio como resposta.
+
+Exemplo de resposta com proprietários cadastrados:
+
+```json
+[
+  {
+    "id": "aaf6f6fc-f049-4930-898f-30499cf103fa",
+    "fullname": "Ciclano de Tal",
+    "cpf": "123.456.768-43",
+    "rg": "324352-X",
+    "email": "ciclanodetal@gmail.com",
+    "cellphone": "(17) 32414-2134",
+    "occupation": "Desenvolvedor",
+    "marital_status": "Solteiro(a)",
+    "manager_id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
+    "address": {
+      "mini_address": "Rua das Oliveiras, 502, Centro, São Paulo/SP",
+      "street": "Rua das Oliveiras",
+      "number": "502",
+      "neighborhood": "Centro",
+      "city": "São Paulo",
+      "state": "SP",
+      "zip_code": "15000-000",
+    }
+  }
+]
+```
+
+#### 401
+Receberá essa resposta caso não envie o token de autenticação no cabecalho `Authorization`,
+caso o token enviado não seja válido ou tenha expirado.
+
+```json
+{
+  "code": 401,
+  "message": "token inválido ou expirado",
+  "error": "Unauthorized"
+}
+```
+
+#### 500
+Receberá essa resposta caso ocorra um erro interno no servidor.
+Isso pode acontecer por diversos motivos, como problemas de conexão com o servidor.
+
+Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
+```json
+{
+  "code": 500,
+  "message": "erro interno do servidor",
+  "error": "Internal Server Error"
+}

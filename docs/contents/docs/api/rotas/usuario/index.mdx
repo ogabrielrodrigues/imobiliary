@@ -3,10 +3,10 @@ title: Usuário
 description: Sobre a entidade Usuário.
 ---
 
-A entidade Usuário é responsável por gerenciar as informações da plataforma do Imobiliary, atuando como gestor dos imóveis e administrador do fluxo de locação dos mesmos.
+A entidade usuário é responsável por gerenciar as informações da plataforma do Imobiliary, atuando como gestor dos imóveis e administrador do fluxo de locação dos mesmos.
 
 ### Propriedades
-A entidade Usuário possui as seguintes propriedades:
+A entidade usuário possui as seguintes propriedades:
 
 ```go:user.go
 type User struct {
@@ -21,9 +21,10 @@ type User struct {
 ```
 
 ### DTOs
-A entidade Usuário possui os seguintes DTOs:
+A entidade usuário possui os seguintes DTOs:
 
-#### DTO padrão de resposta de usuário
+#### DTO
+O DTO de usuário é utilizado para representar a resposta de um usuário na plataforma. Ele contém os seguintes campos:
 
 ```go:dto.go
 type DTO struct {
@@ -36,7 +37,8 @@ type DTO struct {
 }
 ```
 
-#### DTO para criação de usuário
+#### CreateDTO
+O DTO de criação de usuário é utilizado para criar um novo usuário na plataforma. Ele contém os seguintes campos:
 
 ```go:dto.go
 type CreateDTO struct {
@@ -48,7 +50,8 @@ type CreateDTO struct {
 }
 ```
 
-#### DTO para autenticação (login) de usuário
+#### AuthDTO
+O DTO de autenticação de usuário é utilizado para autenticar um usuário na plataforma. Ele contém os seguintes campos:
 
 ```go:dto.go
 type AuthDTO struct {

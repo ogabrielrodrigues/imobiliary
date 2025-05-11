@@ -1,0 +1,105 @@
+---
+title: Proprietário
+description: Sobre a entidade Proprietário.
+---
+
+A entidade proprietário representa um imóvel dentro da plataforma imobiliária.
+
+### Propriedades
+A entidade proprietário possui as seguintes propriedades:
+
+```go:owner.go
+type Owner struct {
+	ID            uuid.UUID
+	Fullname      string
+	CPF           string
+	RG            string
+	Email         string
+	Cellphone     string
+	Occupation    string
+	MaritalStatus types.MaritalStatus
+	Address       *types.Address
+	ManagerID     uuid.UUID
+}
+```
+
+### Tipos
+
+#### MaritalStatus
+O estado civil do proprietário pode ser um dos seguintes:
+
+```go:marital_status.go
+type MaritalStatus string
+const (
+	MaritalStatusSingle      MaritalStatus = "Solteiro(a)"
+	MaritalStatusMarried     MaritalStatus = "Casado(a)"
+	MaritalStatusLoved       MaritalStatus = "Amasiado(a)"
+	MaritalStatusDivorced    MaritalStatus = "Divorciado(a)"
+	MaritalStatusStableUnion MaritalStatus = "União Estável"
+	MaritalStatusWidowed     MaritalStatus = "Viúvo(a)"
+)
+```
+
+#### Address
+O endereço do proprietário é representado por uma estrutura que contém os seguintes campos:
+
+```go:address.go
+type Address struct {
+	FullAddress  string
+	MiniAddress  string
+	Street       string
+	Number       string
+	Neighborhood string
+	Complement   string
+	City         string
+	State        string
+	ZipCode      string
+}
+```
+
+### DTOs
+A entidade proprietário possui os seguintes DTOs:
+
+#### DTO
+O DTO de proprietário é utilizado para representar a resposta de um proprietário na plataforma. Ele contém os seguintes campos:
+
+```go:dto.go
+type DTO struct {
+	ID            uuid.UUID           `json:"id"`
+	Fullname      string              `json:"fullname"`
+	CPF           string              `json:"cpf"`
+	RG            string              `json:"rg"`
+	Email         string              `json:"email"`
+	Cellphone     string              `json:"cellphone"`
+	Occupation    string              `json:"occupation"`
+	MaritalStatus types.MaritalStatus `json:"marital_status"`
+	ManagerID     uuid.UUID           `json:"manager_id"`
+	Address       types.AddressDTO    `json:"address"`
+}
+```
+
+#### CreateDTO
+O DTO de criação de proprietário é utilizado para criar um novo proprietário na plataforma. Ele contém os seguintes campos:
+
+```go:dto.go
+type CreateDTO struct {
+	Fullname      string              `json:"fullname"`
+	CPF           string              `json:"cpf"`
+	RG            string              `json:"rg"`
+	Email         string              `json:"email"`
+	Cellphone     string              `json:"cellphone"`
+	Occupation    string              `json:"occupation"`
+	MaritalStatus types.MaritalStatus `json:"marital_status"`
+	Address       types.AddressDTO    `json:"address"`
+}
+```
+
+#### AssignOwnerDTO
+O DTO de atribuição de proprietário é utilizado para atribuir um proprietário a um imóvel. Ele contém os seguintes campos:
+
+```go:dto.go
+type AssignOwnerDTO struct {
+	OwnerID    string `json:"owner_id"`
+	PropertyID string `json:"property_id"`
+}
+```

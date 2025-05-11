@@ -15,7 +15,7 @@ type DTO struct {
 	Occupation    string              `json:"occupation"`
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
 	ManagerID     uuid.UUID           `json:"manager_id"`
-	Address       types.AdressDTO     `json:"address"`
+	Address       types.AddressDTO    `json:"address"`
 }
 
 func (dto *DTO) ToOwner() *Owner {
@@ -40,7 +40,7 @@ type CreateDTO struct {
 	Cellphone     string              `json:"cellphone"`
 	Occupation    string              `json:"occupation"`
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
-	Address       types.AdressDTO     `json:"address"`
+	Address       types.AddressDTO    `json:"address"`
 }
 
 type AssignOwnerDTO struct {

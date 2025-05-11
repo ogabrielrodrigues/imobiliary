@@ -1,10 +1,10 @@
 ---
-title: Criar Imóvel
-description: Nessa rota você pode criar um novo imóvel.
+title: Criar Proprietário
+description: Nessa rota você pode criar um novo proprietário.
 ---
 
 ```http
-POST https://api.imobiliary.com/properties
+POST https://api.imobiliary.com/owners
 ```
 
 <Note title="Nota" type="warning">
@@ -18,18 +18,21 @@ requisição no seguinte formato.
 
 ```json
 {
-  "status": "Disponível",
-  "water_id": "1234567@6",
-  "energy_id": "123456778",
-  "kind": "Residencial",
+  "fullname": "Ciclano de Tal",
+  "cpf": "123.456.768-43",
+  "rg": "324352-X",
+  "email": "ciclanodetal@gmail.com",
+  "cellphone": "(17) 32414-2134",
+  "occupation": "Desenvolvedor",
+  "marital_status": "Solteiro(a)",
   "address": {
-    "street": "Rua da Saudade",
-    "number": "099",
-    "neighborhood": "Vl. Nobre",
+    "street": "Rua das Oliveiras",
+    "number": "502",
     "complement": "",
+    "neighborhood": "Centro",
     "city": "São Paulo",
     "state": "SP",
-    "zip_code": "15550000"
+    "zip_code": "15000-000"
   }
 }
 ```
@@ -42,7 +45,7 @@ Receberá essa resposta caso forneça um corpo da requisição válido.
 
 ```http
 HTTP/1.1 201 Created
-Location: /properties/22be508a-8505-4dbb-8b36-bfe1c4adb008
+Location: /owners/aaf6f6fc-f049-4930-898f-30499cf103fa
 ```
 
 #### 400
@@ -51,18 +54,21 @@ algum dos campos de forma incorreta. Exemplo:
 
 ```json
 {
-  "status": "Disponível",
-  // sem o campo water_id
-  "energy_id": "123456778",
-  "kind": "Residencial",
+  "fullname": "Ciclano de Tal",
+  // sem o campo cpf
+  "rg": "324352-X",
+  "email": "ciclanodetal@gmail.com",
+  "cellphone": "(17) 32414-2134",
+  "occupation": "Desenvolvedor",
+  "marital_status": "Solteiro(a)",
   "address": {
-    "street": "Rua da Saudade",
-    "number": "099",
-    "neighborhood": "Vl. Nobre",
+    "street": "Rua das Oliveiras",
+    "number": "502",
     "complement": "",
+    "neighborhood": "Centro",
     "city": "São Paulo",
     "state": "SP",
-    "zip_code": "15550000"
+    "zip_code": "15000-000"
   }
 }
 ```
@@ -72,7 +78,7 @@ Resposta:
 ```json
 {
   "code": 400,
-  "message": "cód. água do imóvel não pode ser vazio",
+  "message": "cpf do proprietário não pode ser vazio",
   "error": "Bad Request"
 }
 ```
@@ -91,12 +97,12 @@ caso o token enviado não seja válido ou tenha expirado.
 
 #### 409
 Receberá essa resposta caso o corpo da requisição conflite com dados
-de `water_id`, `energy_id` ou `address` já existentes.
+de `cpf`, `rg`, `email` ou `address` já existentes.
 
 ```json
 {
   "code": 409,
-  "message": "imóvel já existe",
+  "message": "proprietário já existe",
   "error": "Conflict"
 }
 ```

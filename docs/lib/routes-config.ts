@@ -1,11 +1,16 @@
 // for page navigation & to sort on leftbar
 
+import { TagVariant } from "@/components/sublink";
+
 export type EachRoute = {
   title: string;
   href: string;
   noLink?: true; // noLink will create a route segment (section) but cannot be navigated
   items?: EachRoute[];
-  tag?: string;
+  tag?: {
+    title: string;
+    variant: TagVariant;
+  }
 };
 
 export const ROUTES: EachRoute[] = [
@@ -22,20 +27,30 @@ export const ROUTES: EachRoute[] = [
             title: "Usuário",
             href: "/usuario",
             items: [
-              { title: "Listar Usuários", href: "/listar" },
-              { title: "Buscar Usuário", href: "/buscar" },
-              { title: "Criar Usuário", href: "/criar" },
-              { title: "Autenticar Usuário", href: "/autenticar" },
-              { title: "Alterar Avatar", href: "/alterar-avatar" },
+              { title: "Listar Usuários", href: "/listar", tag: { title: "GET", variant: "get" } },
+              { title: "Buscar Usuário", href: "/buscar", tag: { title: "GET", variant: "get" } },
+              { title: "Criar Usuário", href: "/criar", tag: { title: "POST", variant: "post" } },
+              { title: "Autenticar Usuário", href: "/autenticar", tag: { title: "POST", variant: "post" } },
+              { title: "Alterar Avatar", href: "/alterar-avatar", tag: { title: "PUT", variant: "put" } },
             ],
           },
           {
             title: "Imóvel",
             href: "/imovel",
             items: [
-              { title: "Listar Imóveis", href: "/listar" },
-              { title: "Buscar Imóvel", href: "/buscar" },
-              { title: "Criar Imóvel", href: "/criar" },
+              { title: "Listar Imóveis", href: "/listar", tag: { title: "GET", variant: "get" } },
+              { title: "Buscar Imóvel", href: "/buscar", tag: { title: "GET", variant: "get" } },
+              { title: "Criar Imóvel", href: "/criar", tag: { title: "POST", variant: "post" } },
+            ],
+          },
+          {
+            title: "Proprietário",
+            href: "/proprietario",
+            items: [
+              { title: "Listar Proprietários", href: "/listar", tag: { title: "GET", variant: "get" } },
+              { title: "Buscar Proprietário", href: "/buscar", tag: { title: "GET", variant: "get" } },
+              { title: "Criar Proprietário", href: "/criar", tag: { title: "POST", variant: "post" } },
+              { title: "Atribuir Proprietário", href: "/atribuir", tag: { title: "PUT", variant: "put" } },
             ],
           },
         ]

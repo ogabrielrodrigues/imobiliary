@@ -3,10 +3,10 @@ title: Imóvel
 description: Sobre a entidade Imóvel.
 ---
 
-A entidade Imóvel representa um imóvel dentro da plataforma imobiliária.
+A entidade imóvel representa um imóvel dentro da plataforma imobiliária.
 
 ### Propriedades
-A entidade Imóvel possui as seguintes propriedades:
+A entidade imóvel possui as seguintes propriedades:
 
 ```go:property.go
 type Property struct {
@@ -37,24 +37,10 @@ const (
 )
 ```
 
-#### Tipo
-O tipo do imóvel pode ser um dos seguintes:
-
-```go:property.go
-type Kind string
-const (
-	KindResidential Kind = "Residencial"
-	KindComercial   Kind = "Comercial"
-	KindIndustrial  Kind = "Industrial"
-	KindTerreno     Kind = "Terreno"
-	KindRural       Kind = "Rural"
-)
-```
-
-#### Endereço
+#### Address
 O endereço do imóvel é representado por uma estrutura que contém os seguintes campos:
 
-```go:property.go
+```go:address.go
 type Address struct {
 	FullAddress  string
 	MiniAddress  string
@@ -71,29 +57,30 @@ type Address struct {
 ### DTOs
 A entidade Usuário possui os seguintes DTOs:
 
-#### DTO padrão de resposta de imóvel
+#### DTO
+O DTO de imóvel é utilizado para representar a resposta de um imóvel na plataforma. Ele contém os seguintes campos:
 
 ```go:dto.go
 type DTO struct {
-	ID       string          `json:"id"`
-	Status   Status          `json:"status"`
-	Kind     Kind            `json:"kind"`
-	WaterID  string          `json:"water_id"`
-	EnergyID string          `json:"energy_id"`
-	UserID   string          `json:"user_id"`
-	OwnerID  string          `json:"owner_id"`
-	Address  types.AdressDTO `json:"address"`
+	ID       string           `json:"id"`
+	Status   Status           `json:"status"`
+	Kind     Kind             `json:"kind"`
+	WaterID  string           `json:"water_id"`
+	EnergyID string           `json:"energy_id"`
+	OwnerID  string           `json:"owner_id"`
+	Address  types.AddressDTO `json:"address"`
 }
 ```
 
-#### DTO para criação de imóvel
+#### CreateDTO
+O DTO de criação de imóvel é utilizado para criar um novo imóvel na plataforma. Ele contém os seguintes campos:
 
 ```go:dto.go
 type CreateDTO struct {
-	Status   Status                 `json:"status"`
-	Kind     Kind                   `json:"kind"`
-	WaterID  string                 `json:"water_id"`
-	EnergyID string                 `json:"energy_id"`
-	Address  *types.AdressCreateDTO `json:"address"`
+	Status   Status                  `json:"status"`
+	Kind     Kind                    `json:"kind"`
+	WaterID  string                  `json:"water_id"`
+	EnergyID string                  `json:"energy_id"`
+	Address  *types.AddressCreateDTO `json:"address"`
 }
 ```

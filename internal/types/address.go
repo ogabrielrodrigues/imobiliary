@@ -39,7 +39,7 @@ func genMiniAddress(street, number, neighborhood, city, state string) string {
 	return fmt.Sprintf("%s, %s, %s, %s/%s", street, number, neighborhood, city, state)
 }
 
-type AdressDTO struct {
+type AddressDTO struct {
 	FullAddress  string `json:"full_address,omitempty"`
 	MiniAddress  string `json:"mini_address"`
 	Street       string `json:"street"`
@@ -51,7 +51,7 @@ type AdressDTO struct {
 	ZipCode      string `json:"zip_code"`
 }
 
-type AdressCreateDTO struct {
+type AddressCreateDTO struct {
 	Street       string `json:"street"`
 	Number       string `json:"number"`
 	Neighborhood string `json:"neighborhood"`
@@ -61,12 +61,12 @@ type AdressCreateDTO struct {
 	ZipCode      string `json:"zip_code"`
 }
 
-func (d *AdressCreateDTO) ToAddress() *Address {
+func (d *AddressCreateDTO) ToAddress() *Address {
 	return NewAddress(d.Street, d.Number, d.Neighborhood, d.Complement, d.City, d.State, d.ZipCode)
 }
 
-func (a *Address) ToDTO() *AdressDTO {
-	return &AdressDTO{
+func (a *Address) ToDTO() *AddressDTO {
+	return &AddressDTO{
 		FullAddress:  a.FullAddress,
 		MiniAddress:  a.MiniAddress,
 		Street:       a.Street,
@@ -79,7 +79,7 @@ func (a *Address) ToDTO() *AdressDTO {
 	}
 }
 
-func (a *AdressDTO) ToAddress() *Address {
+func (a *AddressDTO) ToAddress() *Address {
 	address := NewAddress(
 		a.Street,
 		a.Number,

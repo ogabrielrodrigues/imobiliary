@@ -1,10 +1,10 @@
 ---
-title: Buscar Imóvel
-description: Nessa rota você pode buscar um imóvel cadastrado pelo imóvel autenticado, através do id.
+title: Buscar Proprietário
+description: Nessa rota você pode buscar um proprietário cadastrado pelo proprietário autenticado, através do id.
 ---
 
 ```http
-GET https://api.imobiliary.com/properties/:property_id
+GET https://api.imobiliary.com/owners/:owner_id
 ```
 
 <Note title="Nota" type="warning">
@@ -13,42 +13,45 @@ GET https://api.imobiliary.com/properties/:property_id
 </Note>
 
 ### Requisição
-Para realizar essa requisição, deve-se informar um id de imóvel válido
+Para realizar essa requisição, deve-se informar um id de proprietário válido
 e que tenha sido cadastrado por você, para assim trazer seus dados. Exemplo:
 
 ```http
-GET https://api.imobiliary.com/properties/22be508a-8505-4dbb-8b36-bfe1c4adb008
+GET https://api.imobiliary.com/owners/aaf6f6fc-f049-4930-898f-30499cf103fa
 ```
 
 ### Respostas
 Esses são as possíveis respostas desta requisição.
 
 #### 200
-Receberá essa resposta caso informe um `id` de imóvel
+Receberá essa resposta caso informe um `id` de proprietário
 existente e que tenha sido cadastrado por você.
 
 ```json
 {
-  "id": "22be508a-8505-4dbb-8b36-bfe1c4adb008",
-  "status": "Disponível",
-  "kind": "Residencial",
-  "water_id": "1234567@6",
-  "energy_id": "123456778",
-  "owner_id": "",
+  "id": "aaf6f6fc-f049-4930-898f-30499cf103fa",
+  "fullname": "Ciclano de Tal",
+  "cpf": "123.456.768-43",
+  "rg": "324352-X",
+  "email": "ciclanodetal@gmail.com",
+  "cellphone": "(17) 32414-2134",
+  "occupation": "Desenvolvedor",
+  "marital_status": "Solteiro(a)",
+  "manager_id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
   "address": {
-    "mini_address": "Rua da Saudade, 099, Vl. Nobre, São Paulo/SP",
-    "street": "Rua da Saudade",
-    "number": "099",
-    "neighborhood": "Vl. Nobre",
+    "mini_address": "Rua das Oliveiras, 502, Centro, São Paulo/SP",
+    "street": "Rua das Oliveiras",
+    "number": "502",
+    "neighborhood": "Centro",
     "city": "São Paulo",
     "state": "SP",
-    "zip_code": "15550000"
+    "zip_code": "15000-000",
   }
 }
 ```
 
 #### 400
-Receberá essa resposta caso informe um `id` de imóvel invalido.
+Receberá essa resposta caso informe um `id` de proprietário invalido.
 
 ```json
 {
@@ -71,7 +74,7 @@ caso o token enviado não seja válido ou tenha expirado.
 ```
 
 #### 403
-Receberá essa resposta caso informe um `id` de imóvel
+Receberá essa resposta caso informe um `id` de proprietário
 que não foi cadastrado por você.
 
 ```json
@@ -83,18 +86,18 @@ que não foi cadastrado por você.
 ```
 
 #### 404
-Receberá essa resposta caso informe um `id` de imóvel
+Receberá essa resposta caso informe um `id` de proprietário
 que não existe.
 
 <Note title="Nota" type="warning">
-  Caso não informe o `id` de um imóvel, será devolvida uma
+  Caso não informe o `id` de um proprietário, será devolvida uma
   resposta sem o formato padrão de erro.
 </Note>
 
 ```json
 {
   "code": 404,
-  "message": "imóvel não encontrado ou não existente",
+  "message": "proprietário não encontrado ou não existente",
   "error": "Not Found"
 }
 ```

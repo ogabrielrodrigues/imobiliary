@@ -17,7 +17,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -35,7 +35,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -57,7 +57,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -79,7 +79,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -101,7 +101,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -123,7 +123,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -145,7 +145,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -167,7 +167,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -189,7 +189,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -211,7 +211,7 @@ func TestOwner(t *testing.T) {
 			"",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -233,7 +233,7 @@ func TestOwner(t *testing.T) {
 			"johndoeexample",
 			"(01) 12345-6789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -255,7 +255,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)
@@ -276,7 +276,7 @@ func TestOwner(t *testing.T) {
 			"johndoe@example.com",
 			"01123456789",
 			"Comerciante",
-			types.MaritalStatusSolteiro,
+			types.MaritalStatusSingle,
 			types.NewAddress("Rua das Flores", "123", "", "Centro", "São Paulo", "SP", "12345678"),
 			uuid.Nil,
 		)

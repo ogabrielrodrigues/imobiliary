@@ -5,17 +5,16 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
 	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
 	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 )
 
-func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner) (uuid.UUID, *response.Err) {
+func (pg *PostgresOwnerRepository) Create(ctx context.Context, dto owner.Owner) (uuid.UUID, *response.Err) {
 	tx, err := pg.pool.Begin(ctx)
 	if err != nil {
-		logger.Error("1 - " + err.Error())
 		tx.Rollback(ctx)
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
@@ -27,21 +26,25 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 	`
 
 	row := tx.QueryRow(ctx, address_query,
-		owner.Address.Street,
-		owner.Address.Number,
-		owner.Address.Complement,
-		owner.Address.Neighborhood,
-		owner.Address.City,
-		owner.Address.State,
-		owner.Address.ZipCode,
-		owner.Address.FullAddress,
-		owner.Address.MiniAddress,
+		dto.Address.Street,
+		dto.Address.Number,
+		dto.Address.Complement,
+		dto.Address.Neighborhood,
+		dto.Address.City,
+		dto.Address.State,
+		dto.Address.ZipCode,
+		dto.Address.FullAddress,
+		dto.Address.MiniAddress,
 	)
 
 	var address_id string
 	if err := row.Scan(&address_id); err != nil {
-		logger.Error("2 - " + err.Error())
 		tx.Rollback(ctx)
+
+		if store.IsUniqueConstraint(err) {
+			return uuid.Nil, response.NewErr(http.StatusConflict, owner.ERR_OWNER_ALREADY_EXISTS)
+		}
+
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
@@ -56,27 +59,30 @@ func (pg *PostgresOwnerRepository) Create(ctx context.Context, owner owner.Owner
 	}
 
 	row = tx.QueryRow(ctx, owner_query,
-		owner.ID,
-		owner.Fullname,
-		owner.CPF,
-		owner.RG,
-		owner.Email,
-		owner.Cellphone,
-		owner.Occupation,
-		owner.MaritalStatus,
+		dto.ID,
+		dto.Fullname,
+		dto.CPF,
+		dto.RG,
+		dto.Email,
+		dto.Cellphone,
+		dto.Occupation,
+		dto.MaritalStatus,
 		address_id,
 		manager_id,
 	)
 
 	var owner_id string
 	if err := row.Scan(&owner_id); err != nil {
-		logger.Error("3 - " + err.Error() + " - " + string(owner.MaritalStatus))
 		tx.Rollback(ctx)
+
+		if store.IsUniqueConstraint(err) {
+			return uuid.Nil, response.NewErr(http.StatusConflict, owner.ERR_OWNER_ALREADY_EXISTS)
+		}
+
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		logger.Error("4 - " + err.Error())
 		tx.Rollback(ctx)
 		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
 	}
