@@ -8,7 +8,7 @@ import { env } from "@/lib/env"
 export async function createOwner(data: OwnerRequest): Promise<number> {
   const auth_token = await token()
 
-  const found = await searchCEP(env.CEP_API_ADDR!, data.address.zip_code)
+  const found = await searchCEP(data.address.zip_code)
 
   if (found == undefined) {
     return 400

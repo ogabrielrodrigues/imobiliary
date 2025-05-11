@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { ArrowLeft, ArrowUpRight, EllipsisVertical, Pencil } from "lucide-react"
+import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Fragment } from "react"
@@ -15,6 +16,10 @@ import { AssignPropertyForm } from "./_components/assign-property-form"
 
 type PropertyDetailsPageParams = {
   params: Promise<{ property_id: string }>
+}
+
+export const metadata: Metadata = {
+  title: "Detalhes do Imóvel",
 }
 
 export default async function PropertyDetailsPage({ params }: PropertyDetailsPageParams) {

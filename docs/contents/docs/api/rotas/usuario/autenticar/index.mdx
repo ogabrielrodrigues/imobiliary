@@ -44,9 +44,13 @@ Resposta:
 
 ```json
 {
+  "status": "Bad Request",
   "code": 400,
-  "message": "corpo da requisição inválido",
-  "error": "Bad Request"
+  "result": {
+    "code": 400,
+    "message": "corpo da requisição inválido",
+    "error": "Bad Request"
+  }
 }
 ```
 
@@ -65,9 +69,13 @@ Resposta:
 
 ```json
 {
+  "status": "Unauthorized",
   "code": 401,
-  "message": "a senha do usuário não coincide com a cadastrada",
-  "error": "Unauthorized"
+  "result": {
+    "code": 401,
+    "message": "a senha do usuário não coincide com a cadastrada",
+    "error": "Unauthorized"
+  }
 }
 ```
 
@@ -85,9 +93,13 @@ que não esteja cadastrado. Exemplo:
 Resposta:
 ```json
 {
+  "status": "Not Found",
   "code": 404,
-  "message": "usuário não encontrado ou não existente",
-  "error": "Not Found"
+  "result": {
+    "code": 404,
+    "message": "usuário não encontrado ou não existente",
+    "error": "Not Found"
+  }
 }
 ```
 
@@ -98,8 +110,12 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }
 ```

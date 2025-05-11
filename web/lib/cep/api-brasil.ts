@@ -1,9 +1,10 @@
 'use server'
 
+import { env } from "../env"
 import { CEP } from "./cep"
 
-export async function searchCEP(api_addr: string, cep: string): Promise<CEP | undefined> {
-  const response = await fetch(`${api_addr}/${cep}`)
+export async function searchCEP(cep: string): Promise<CEP | undefined> {
+  const response = await fetch(`${env.CEP_API_ADDR}/${cep}`)
 
   if (response.status != 200) {
     return undefined

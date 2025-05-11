@@ -1,28 +1,26 @@
-import { z } from "zod";
 
-export const owner_schema = z.object({
-  id: z.string().uuid(),
-  fullname: z.string(),
-  cpf: z.string().length(14),
-  rg: z.string().max(15),
-  email: z.string().email(),
-  cellphone: z.string(),
-  occupation: z.string(),
-  marital_status: z.enum(["Solteiro(a)", "Casado(a)", "Amasiado(a)", "Divorciado(a)", "Viúvo(a)", "União Estável"]),
-  manager_id: z.string().uuid(),
-  address: z.object({
-    full_address: z.string().optional(),
-    mini_address: z.string(),
-    street: z.string(),
-    number: z.string(),
-    neighborhood: z.string(),
-    complement: z.string().optional(),
-    city: z.string(),
-    state: z.string(),
-    state_abbr: z.string(),
-    zip_code: z.string(),
-  }),
-});
+export type Owner = {
+  id: string
+  fullname: string
+  cpf: string
+  rg: string
+  email: string
+  cellphone: string
+  occupation: string
+  marital_status: 'Solteiro(a)' | 'Casado(a)' | 'Amasiado(a)' | 'Divorciado(a)' | 'Viúvo(a)' | 'União Estável',
+  manager_id: string
+  address: {
+    full_address: string
+    mini_address: string
+    street: string
+    number: string
+    neighborhood: string
+    complement: string
+    city: string
+    state: string
+    state_abbr: string
+    zip_code: string
+  },
+};
 
-export type Owner = z.infer<typeof owner_schema>;
 

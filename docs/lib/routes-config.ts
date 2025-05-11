@@ -19,6 +19,7 @@ export const ROUTES: EachRoute[] = [
     href: "/api",
     items: [
       { title: "Autenticação", href: "/autenticacao" },
+      { title: "Respostas", href: "/respostas" },
       {
         title: "Rotas",
         href: "/rotas",

@@ -21,16 +21,20 @@ em caso de não haver nenhum usuário cadastrado receberá uma `Array` vazio com
 Exemplo de resposta com usuários cadastrados:
 
 ```json
-[
-  {
-    "id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
-    "creci_id": "00000-F",
-    "fullname": "Fulano de Tal",
-    "cellphone": "(01) 12345-6789",
-    "email": "fulanodetal@email.com",
-    "avatar": "https://..." // caso tenha
-  }
-]
+{
+  "status": "OK",
+  "code": 200,
+  "result": [
+    {
+      "id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
+      "creci_id": "00000-F",
+      "fullname": "Fulano de Tal",
+      "cellphone": "(01) 12345-6789",
+      "email": "fulanodetal@email.com",
+      "avatar": "https://..." // caso tenha
+    }
+  ]
+}
 ```
 
 #### 500
@@ -40,7 +44,12 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }
+```

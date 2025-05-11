@@ -3,8 +3,14 @@
 import { token } from "@/actions/queries/auth/token"
 import { env } from "@/lib/env"
 import { Owner } from "@/types/owner"
+import { Response } from "@/types/response"
 
-export async function listOwners(): Promise<{ owners: Owner[] | undefined, status: number }> {
+type ListOwnersResponse = {
+  owners: Owner[] | undefined,
+  status: number
+}
+
+export async function listOwners(): Promise<ListOwnersResponse> {
   const auth_token = await token()
 
   try {
@@ -19,7 +25,7 @@ export async function listOwners(): Promise<{ owners: Owner[] | undefined, statu
       return { owners: undefined, status: response.status }
     }
 
-    const owners = await response.json() as Owner[]
+    const { result: owners } = await response.json() as Response<Owner[]>
 
     return { owners, status: response.status }
   } catch {
