@@ -1,26 +1,22 @@
-import { z } from "zod";
-
-export const property_schema = z.object({
-  id: z.string().uuid(),
-  water_id: z.string(),
-  energy_id: z.string(),
-  user_id: z.string().uuid(),
-  owner_id: z.string().uuid(),
-  kind: z.enum(['Residencial', 'Comercial', 'Industrial', 'Terreno', 'Rural']),
-  status: z.enum(['Disponível', 'Ocupado', 'Indisponível', 'Reservado', 'Reformando']),
-  address: z.object({
-    full_address: z.string(),
-    mini_address: z.string(),
-    street: z.string(),
-    number: z.string(),
-    neighborhood: z.string(),
-    complement: z.string().optional(),
-    city: z.string(),
-    state: z.string(),
-    state_abbr: z.string(),
-    zip_code: z.string(),
-  }),
-});
-
-export type Property = z.infer<typeof property_schema>;
+export type Property = {
+  id: string
+  water_id: string
+  energy_id: string
+  user_id: string
+  owner_id: string
+  kind: 'Residencial' | 'Comercial' | 'Industrial' | 'Terreno' | 'Rural',
+  status: 'Disponível' | 'Ocupado' | 'Indisponível' | 'Reservado' | 'Reformando',
+  address: {
+    full_address: string
+    mini_address: string
+    street: string
+    number: string
+    neighborhood: string
+    complement: string
+    city: string
+    state: string
+    state_abbr: string
+    zip_code: string
+  },
+};
 

@@ -2,11 +2,16 @@ import { getOwner } from "@/actions/queries/owner/get-owner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, EllipsisVertical } from "lucide-react"
+import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
 type OwnerDetailsPageParams = {
   params: Promise<{ owner_id: string }>
+}
+
+export const metadata: Metadata = {
+  title: "Perfil do Proprietário",
 }
 
 export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParams) {

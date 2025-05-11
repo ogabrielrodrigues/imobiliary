@@ -3,10 +3,14 @@
 import { token } from "@/actions/queries/auth/token"
 import { env } from "@/lib/env"
 import { Property } from "@/types/property"
+import { Response } from "@/types/response"
 
-type GetPropertyReponse = { properties: Property[] | undefined, status: number }
+type ListPropertiesResponse = {
+  properties: Property[] | undefined,
+  status: number
+}
 
-export async function listProperties(): Promise<GetPropertyReponse> {
+export async function listProperties(): Promise<ListPropertiesResponse> {
   const auth_token = await token()
 
   try {
@@ -21,7 +25,7 @@ export async function listProperties(): Promise<GetPropertyReponse> {
       return { properties: undefined, status: response.status }
     }
 
-    const properties = await response.json() as Property[]
+    const { result: properties } = await response.json() as Response<Property[]>
 
     return { properties, status: response.status }
   } catch {

@@ -1,4 +1,4 @@
-'use client'
+'use server'
 
 import { token } from "@/actions/queries/auth/token"
 import { CreatePropertyRequest } from "@/app/dashboard/locacao/imoveis/_components/new-property-form"
@@ -8,7 +8,7 @@ import { env } from "@/lib/env"
 export async function createProperty(data: CreatePropertyRequest): Promise<number> {
   const auth_token = await token()
 
-  const found = await searchCEP(env.CEP_API_ADDR!, data.address.zip_code)
+  const found = await searchCEP(data.address.zip_code)
 
   if (found == undefined) {
     return 400

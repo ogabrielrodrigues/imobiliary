@@ -1,9 +1,13 @@
 'use server'
 
 import { env } from "@/lib/env"
+import { Response } from "@/types/response"
 import { User } from "@/types/user"
 
-type GetUserResponse = { user: User | undefined, status: number }
+type GetUserResponse = {
+  user: User | undefined,
+  status: number
+}
 
 export async function getUser(id: string): Promise<GetUserResponse> {
   try {
@@ -15,7 +19,7 @@ export async function getUser(id: string): Promise<GetUserResponse> {
       return { user: undefined, status: response.status }
     }
 
-    const user = await response.json() as User
+    const { result: user } = await response.json() as Response<User>
 
     return { user, status: response.status }
   } catch {
