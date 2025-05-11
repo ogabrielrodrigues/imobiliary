@@ -27,25 +27,29 @@ pelo usuário cadastrado, ou em caso de não haver nenhum imóvel cadastrado rec
 Exemplo de resposta com imóveis cadastrados:
 
 ```json
-[
-  {
-    "id": "22be508a-8505-4dbb-8b36-bfe1c4adb008",
-    "status": "Disponível",
-    "kind": "Residencial",
-    "water_id": "1234567@6",
-    "energy_id": "123456778",
-    "owner_id": "",
-    "address": {
-      "mini_address": "Rua da Saudade, 099, Vl. Nobre, São Paulo/SP",
-      "street": "Rua da Saudade",
-      "number": "099",
-      "neighborhood": "Vl. Nobre",
-      "city": "São Paulo",
-      "state": "SP",
-      "zip_code": "15550000"
+{
+  "status": "OK",
+  "code": 200,
+  "result": [
+    {
+      "id": "22be508a-8505-4dbb-8b36-bfe1c4adb008",
+      "status": "Disponível",
+      "kind": "Residencial",
+      "water_id": "1234567@6",
+      "energy_id": "123456778",
+      "owner_id": "",
+      "address": {
+        "mini_address": "Rua da Saudade, 099, Vl. Nobre, São Paulo/SP",
+        "street": "Rua da Saudade",
+        "number": "099",
+        "neighborhood": "Vl. Nobre",
+        "city": "São Paulo",
+        "state": "SP",
+        "zip_code": "15550000"
+      }
     }
-  }
-]
+  ]
+}
 ```
 
 #### 401
@@ -54,9 +58,13 @@ caso o token enviado não seja válido ou tenha expirado.
 
 ```json
 {
+  "status": "Unauthorized",
   "code": 401,
-  "message": "token inválido ou expirado",
-  "error": "Unauthorized"
+  "result": {
+    "code": 401,
+    "message": "token inválido ou expirado",
+    "error": "Unauthorized"
+  }
 }
 ```
 
@@ -67,7 +75,11 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }

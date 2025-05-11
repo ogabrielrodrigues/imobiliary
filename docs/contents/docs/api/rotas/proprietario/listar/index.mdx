@@ -27,28 +27,32 @@ pelo proprietário cadastrado, ou em caso de não haver nenhum proprietário cad
 Exemplo de resposta com proprietários cadastrados:
 
 ```json
-[
-  {
-    "id": "aaf6f6fc-f049-4930-898f-30499cf103fa",
-    "fullname": "Ciclano de Tal",
-    "cpf": "123.456.768-43",
-    "rg": "324352-X",
-    "email": "ciclanodetal@gmail.com",
-    "cellphone": "(17) 32414-2134",
-    "occupation": "Desenvolvedor",
-    "marital_status": "Solteiro(a)",
-    "manager_id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
-    "address": {
-      "mini_address": "Rua das Oliveiras, 502, Centro, São Paulo/SP",
-      "street": "Rua das Oliveiras",
-      "number": "502",
-      "neighborhood": "Centro",
-      "city": "São Paulo",
-      "state": "SP",
-      "zip_code": "15000-000",
-    }
-  }
-]
+{
+  "status": "OK",
+  "code": 200,
+  "result": [
+    {
+      "id": "aaf6f6fc-f049-4930-898f-30499cf103fa",
+      "fullname": "Ciclano de Tal",
+      "cpf": "123.456.768-43",
+      "rg": "324352-X",
+      "email": "ciclanodetal@gmail.com",
+      "cellphone": "(17) 32414-2134",
+      "occupation": "Desenvolvedor",
+      "marital_status": "Solteiro(a)",
+      "manager_id": "0fabb50f-d83b-4c77-a2c9-c62bfecfac1c",
+      "address": {
+        "mini_address": "Rua das Oliveiras, 502, Centro, São Paulo/SP",
+        "street": "Rua das Oliveiras",
+        "number": "502",
+        "neighborhood": "Centro",
+        "city": "São Paulo",
+        "state": "SP",
+        "zip_code": "15000-000",
+      }
+    },
+  ]
+}
 ```
 
 #### 401
@@ -57,9 +61,13 @@ caso o token enviado não seja válido ou tenha expirado.
 
 ```json
 {
+  "status": "Unauthorized",
   "code": 401,
-  "message": "token inválido ou expirado",
-  "error": "Unauthorized"
+  "result": {
+    "code": 401,
+    "message": "token inválido ou expirado",
+    "error": "Unauthorized"
+  }
 }
 ```
 
@@ -70,7 +78,12 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }
+```

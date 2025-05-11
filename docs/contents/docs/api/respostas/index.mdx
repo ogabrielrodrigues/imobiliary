@@ -1,0 +1,105 @@
+---
+title: Respostas
+description: Sobre as respostas padrões da API.
+---
+
+A API do Imobiliary retorna todas as respostas no formato `JSON`.
+Salvo excessões em rotas que dão suas respostas sem corpo e introduzem
+as respostas nos `Headers` de resposta da requisição.
+
+## Estrutura de Resposta
+
+As respostas da API seguem a seguinte estrutura:
+
+```json
+{
+  "status": "OK",
+  "code": 200,
+  "result": {
+    // Resultado da requisição...
+  }
+}
+```
+- `status`: Código/Status HTTP por extenso da requisição. Códigos documentados e padronizados na [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231).
+- `code`: Código HTTP da resposta. Códigos documentados e padronizados na [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231).
+- `result`: Resultado da requisição. Pode ser um objeto ou uma lista de objetos.
+
+### Estrutura de Erro
+As respostas de erro seguem a seguinte estrutura:
+
+```go:response.go
+type Err struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Err     string `json:"error"`
+}
+```
+
+#### Erros Gerais
+```go:errors.go
+const (
+	ERR_INTERNAL_SERVER_ERROR string = "erro interno do servidor"
+	ERR_SERIALIZING_JSON      string = "erro ao serializar a resposta"
+	ERR_INVALID_UUID          string = "id do recurso inválido"
+	ERR_INVALID_REQUEST_BODY  string = "corpo da requisição inválido"
+	ERR_ACCESS_FORBIDDEN      string = "acesso negado a este recurso"
+)
+```
+
+
+## Tipos de Respostas
+A API do Imobiliary possui três tipos de respostas:
+
+### Respostas de Sucesso
+Respostas que retornam o
+código `200 OK` ou `201 Created`. Exemplo:
+
+```json
+{
+  "status": "OK",
+  "code": 200,
+  "result": {
+    // Resultado da requisição...
+  }
+}
+```
+
+Respostas que retornam o código `201 Created` são
+geralmente utilizadas em requisições `POST` que criam um novo recurso,
+e por isso não retornam corpo de requisição, somente o cabeçalho
+`Location` com o endpoint para novo recurso criado.
+
+```http
+HTTP/1.1 201 Created
+Location: https://api.imobiliary.com/users/0fabb50f-d83b-4c77-a2c9-c62bfecfac1c
+```
+
+### Respostas de Erro de Entrada
+Respostas que retornam códigos de erro na faixa de `4xx`.
+
+```json
+{
+  "status": "Not Found",
+  "code": 404,
+  "result": {
+    "code": 404,
+    "message": "usuário não encontrado ou não existente",
+    "error": "Not Found"
+  }
+}
+```
+
+### Respostas de Erro Interno
+Respostas que retornam códigos de erro na faixa de `5xx`. Exemplo:
+
+```json
+{
+  "status": "Internal Server Error",
+  "code": 500,
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
+}
+```

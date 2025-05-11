@@ -29,20 +29,24 @@ existente e que tenha sido cadastrado por você.
 
 ```json
 {
-  "id": "22be508a-8505-4dbb-8b36-bfe1c4adb008",
-  "status": "Disponível",
-  "kind": "Residencial",
-  "water_id": "1234567@6",
-  "energy_id": "123456778",
-  "owner_id": "",
-  "address": {
-    "mini_address": "Rua da Saudade, 099, Vl. Nobre, São Paulo/SP",
-    "street": "Rua da Saudade",
-    "number": "099",
-    "neighborhood": "Vl. Nobre",
-    "city": "São Paulo",
-    "state": "SP",
-    "zip_code": "15550000"
+  "status": "OK",
+  "code": 200,
+  "result": {
+    "id": "22be508a-8505-4dbb-8b36-bfe1c4adb008",
+    "status": "Disponível",
+    "kind": "Residencial",
+    "water_id": "1234567@6",
+    "energy_id": "123456778",
+    "owner_id": "",
+    "address": {
+      "mini_address": "Rua da Saudade, 099, Vl. Nobre, São Paulo/SP",
+      "street": "Rua da Saudade",
+      "number": "099",
+      "neighborhood": "Vl. Nobre",
+      "city": "São Paulo",
+      "state": "SP",
+      "zip_code": "15550000"
+    },
   }
 }
 ```
@@ -52,9 +56,13 @@ Receberá essa resposta caso informe um `id` de imóvel invalido.
 
 ```json
 {
+  "status": "Bad Request",
   "code": 400,
-  "message": "id do recurso inválido",
-  "error": "Bad Request"
+  "result": {
+    "code": 400,
+    "message": "id do recurso inválido",
+    "error": "Bad Request"
+  }
 }
 ```
 
@@ -64,9 +72,13 @@ caso o token enviado não seja válido ou tenha expirado.
 
 ```json
 {
+  "status": "Unauthorized",
   "code": 401,
-  "message": "token inválido ou expirado",
-  "error": "Unauthorized"
+  "result": {
+    "code": 401,
+    "message": "token inválido ou expirado",
+    "error": "Unauthorized"
+  }
 }
 ```
 
@@ -76,9 +88,13 @@ que não foi cadastrado por você.
 
 ```json
 {
+  "status": "Forbidden",
   "code": 403,
-  "message": "acesso negado a este recurso",
-  "error": "Forbidden"
+  "result": {
+    "code": 403,
+    "message": "acesso negado a este recurso",
+    "error": "Forbidden"
+  }
 }
 ```
 
@@ -93,9 +109,13 @@ que não existe.
 
 ```json
 {
+  "status": "Not Found",
   "code": 404,
-  "message": "imóvel não encontrado ou não existente",
-  "error": "Not Found"
+  "result": {
+    "code": 404,
+    "message": "imóvel não encontrado ou não existente",
+    "error": "Not Found"
+  }
 }
 ```
 
@@ -106,7 +126,11 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }

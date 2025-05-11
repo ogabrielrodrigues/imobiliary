@@ -39,27 +39,39 @@ envie um arquivo de imagem em formato inválido ou com tamanho maior que `3MB`.
 Exemplo de resposta por não enviar um arquivo de imagem:
 ```json
 {
+  "status": "Bad Request",
   "code": 400,
-  "message": "deve enviar um arquivo de avatar",
-  "error": "Bad Request"
+  "result": {
+    "code": 400,
+    "message": "deve enviar um arquivo de avatar",
+    "error": "Bad Request"
+  }
 }
 ```
 
 Exemplo de resposta por enviar um arquivo em formato inválido:
 ```json
 {
+  "status": "Bad Request",
   "code": 400,
-  "message": "o formato do avatar deve ser .jpeg, .png, .jpg ou .webp",
-  "error": "Bad Request"
+  "result": {
+    "code": 400,
+    "message": "o formato do avatar deve ser .jpeg, .png, .jpg ou .webp",
+    "error": "Bad Request"
+  }
 }
 ```
 
 Exemplo de resposta por enviar um arquivo com tamanho maior que `3MB`:
 ```json
 {
+  "status": "Bad Request",
   "code": 400,
-  "message": "o tamanho do arquivo de avatar deve ser menor que 3MB",
-  "error": "Bad Request"
+  "result": {
+    "code": 400,
+    "message": "o tamanho do arquivo de avatar deve ser menor que 3MB",
+    "error": "Bad Request"
+  }
 }
 ```
 
@@ -69,9 +81,13 @@ caso o token enviado não seja válido ou tenha expirado.
 
 ```json
 {
+  "status": "Unauthorized",
   "code": 401,
-  "message": "token inválido ou expirado",
-  "error": "Unauthorized"
+  "result": {
+    "code": 401,
+    "message": "token inválido ou expirado",
+    "error": "Unauthorized"
+  }
 }
 ```
 
@@ -82,8 +98,12 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }
 ```

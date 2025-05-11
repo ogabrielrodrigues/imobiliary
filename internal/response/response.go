@@ -23,11 +23,21 @@ func NewErr(code int, message string) *Err {
 	}
 }
 
+type response struct {
+	Status string `json:"status"`
+	Code   int    `json:"code"`
+	Result any    `json:"result"`
+}
+
 func End(w http.ResponseWriter, code int, data any) *Err {
 	w.Header().Add("content-type", "application/json")
 
 	w.WriteHeader(code)
-	if err := json.NewEncoder(w).Encode(data); err != nil {
+	if err := json.NewEncoder(w).Encode(response{
+		Status: http.StatusText(code),
+		Code:   code,
+		Result: data,
+	}); err != nil {
 		return NewErr(http.StatusBadRequest, ERR_SERIALIZING_JSON)
 	}
 

@@ -50,9 +50,13 @@ Resposta:
 
 ```json
 {
+  "status": "Bad Request",
   "code": 400,
-  "message": "senha não pode ser vazia",
-  "error": "Bad Request"
+  "result": {
+    "code": 400,
+    "message": "senha não pode ser vazia",
+    "error": "Bad Request"
+  }
 }
 ```
 
@@ -62,9 +66,13 @@ de `creci_id` ou `email` já existentes.
 
 ```json
 {
+  "status": "Conflict",
   "code": 409,
-  "message": "usuário já existe",
-  "error": "Conflict"
+  "result": {
+    "code": 409,
+    "message": "usuário já existe",
+    "error": "Conflict"
+  }
 }
 ```
 
@@ -86,9 +94,13 @@ Resposta:
 
 ```json
 {
+  "status": "Unprocessable Entity",
   "code": 422,
-  "message": "email do usuário deve ser válido",
-  "error": "Unprocessable Entity"
+  "result": {
+    "code": 422,
+    "message": "email do usuário deve ser válido",
+    "error": "Unprocessable Entity"
+  }
 }
 ```
 
@@ -99,8 +111,12 @@ Isso pode acontecer por diversos motivos, como problemas de conexão com o servi
 Caso o problema persista [Entre em contato](https://docs.imobiliary.com/contato)
 ```json
 {
+  "status": "Internal Server Error",
   "code": 500,
-  "message": "erro interno do servidor",
-  "error": "Internal Server Error"
+  "result": {
+    "code": 500,
+    "message": "erro interno do servidor",
+    "error": "Internal Server Error"
+  }
 }
 ```
