@@ -1,7 +1,7 @@
 import { getOwner } from "@/actions/queries/owner/get-owner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, EllipsisVertical } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -36,9 +36,6 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
                 <p className="hidden md:block">Voltar</p>
               </Button>
             </Link>
-            <Button>
-              <EllipsisVertical className="size-4" />
-            </Button>
           </div>
         </div>
         <Card className="bg-zinc-900/20 backdrop-blur-2xl relative z-20 overflow-hidden">

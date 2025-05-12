@@ -51,7 +51,7 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
               disabled={!isFilterActive}
             >
               <CircleX className="size-4 mr-1" />
-              Limpar Filtros
+              Limpar Filtro
             </Button>
           </div>
         </div>

@@ -3,7 +3,6 @@
 import { Sidebar } from "lucide-react"
 import React from 'react'
 
-import { SearchForm } from "@/components/search-form"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -55,7 +54,7 @@ export function SiteHeader(): React.ReactElement {
             ))}
           </BreadcrumbList>
         </Breadcrumb>
-        <SearchForm className="w-full sm:ml-auto sm:w-1/6" />
+        {/* <SearchForm className="w-full sm:ml-auto sm:w-1/6" /> */}
       </div>
     </header>
   );
