@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import "@docsearch/css";
 import { DocSearch } from "@docsearch/react";
@@ -23,7 +23,7 @@ export default function AlgoliaSearch(props: AlgoliaProps) {
       <DocSearch {...props} maxResultsPerGroup={8} translations={{
         button: {
           buttonText: "Buscar ..."
-        }
+        },
       }} />
     </div>
   );

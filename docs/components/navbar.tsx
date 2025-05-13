@@ -1,10 +1,12 @@
-import { ModeToggle } from "@/components/theme-toggle";
 import { SheetClose } from "@/components/ui/sheet";
+import { env } from "@/lib/env";
 import { page_routes } from "@/lib/routes-config";
 import { HousePlus } from "lucide-react";
 import Link from "next/link";
+import AlgoliaSearch from "./algolia-search";
 import Anchor from "./anchor";
 import { SheetLeftbar } from "./leftbar";
+import { ModeToggle } from "./theme-toggle";
 
 export const NAVLINKS = [
   {
@@ -17,13 +19,7 @@ export const NAVLINKS = [
   },
 ];
 
-const algolia_props = {
-  appId: process.env.ALGOLIA_APP_ID!,
-  indexName: process.env.ALGOLIA_INDEX!,
-  apiKey: process.env.ALGOLIA_SEARCH_API_KEY!,
-};
-
-export function Navbar() {
+export async function Navbar() {
   return (
     <nav className="w-full border-b h-16 sticky top-0 z-50 bg-background">
       <div className="sm:container mx-auto w-[95vw] h-full flex items-center justify-between md:gap-2">
@@ -39,15 +35,16 @@ export function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between sm:gap-2">
+        <div className="flex items-center sm:justify-normal justify-between sm:gap-3 ml-1 sm:w-fit w-[90%]">
+          <AlgoliaSearch
+            appId={env.APP_ID}
+            indexName={env.INDEX_NAME}
+            apiKey={env.API_KEY}
+          />
           <div className="flex ml-4 sm:ml-0">
             <ModeToggle />
           </div>
         </div>
-
-        {/* <div className="flex items-center sm:justify-normal justify-between sm:gap-3 ml-1 sm:w-fit w-[90%]">
-          <AlgoliaSearch {...algolia_props} />
-        </div> */}
       </div>
     </nav>
   );
