@@ -30,4 +30,3 @@ migrate-down:
 	DATABASE_PWD="${DATABASE_PWD}" \
 	tern migrate --migrations internal/store/postgres/migrations \
 	--config internal/store/postgres/migrations/tern.conf -d -1
-
