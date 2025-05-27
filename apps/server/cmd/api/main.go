@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"syscall"
 	"time"
@@ -12,56 +11,60 @@ import (
 	"os/signal"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
 	"github.com/ogabrielrodrigues/imobiliary/config/logger"
 	api "github.com/ogabrielrodrigues/imobiliary/internal"
 	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	store "github.com/ogabrielrodrigues/imobiliary/internal/store/postgres"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types"
+	"github.com/ogabrielrodrigues/imobiliary/internal/storage/postgres"
 	"go.uber.org/zap"
 )
 
-func initDependencies(ctx context.Context, env *types.Environment) (*pgxpool.Pool, error) {
-	return pgxpool.New(ctx, store.PostgresConnectionString(*env))
+func initDependencies(config *Config) (*pgxpool.Pool, error) {
+	postgresConnString := config.GetPostgresConnString()
+	postgresConfig := postgres.DefaultPostgresConfig()
+
+	postgresClient, err := postgres.NewPostgresClient(postgresConnString, postgresConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	return postgresClient, nil
 }
 
 func main() {
-	env := environment.Load()
+	config, err := NewConfig()
+	if err != nil {
+		logger.Panic("config error", zap.Error(err))
+	}
+
 	ctx := context.Background()
 
-	pool, err := initDependencies(ctx, env)
+	postgresClient, err := initDependencies(config)
 	if err != nil {
-		logger.Panic("error initializing database", zap.Error(err))
+		logger.Panic("error initializing dependencies", zap.Error(err))
 	}
 
-	err = pool.Ping(ctx)
-	if err != nil {
-		logger.Panic("error connecting in database", zap.Error(err))
-	}
-
-	handler := api.NewHandler(pool)
+	handler := api.NewHandler(postgresClient)
 
 	server := &http.Server{
-		Addr:           env.SERVER_ADDR,
+		Addr:           config.GetServerAddr(),
 		Handler:        middleware.CORSMiddleware(middleware.LoggerMiddleware(handler)),
 		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
 	go func() {
-		logger.Info(fmt.Sprintf("server running on %s", env.SERVER_ADDR))
-		if err := server.ListenAndServe(); err != nil {
-			if !errors.Is(err, http.ErrServerClosed) {
-				logger.Panic("error starting server", zap.Error(err))
-			}
-
-			logger.Error("server error on listen", zap.Error(err))
+		logger.Info(fmt.Sprintf("server running on %s", config.GetServerAddr()))
+		if err := server.ListenAndServe(); err != http.ErrServerClosed {
+			logger.Panic("server error on listen", zap.Error(err))
 		}
 	}()
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
+
+	logger.Info("initialized graceful shutdown...")
 
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
