@@ -17,8 +17,15 @@ type ManagerHandler struct {
 	authenticateManagerUseCase *usecase.AuthenticateManager
 }
 
-func NewManagerHandler() *ManagerHandler {
-	return &ManagerHandler{}
+func NewManagerHandler(
+	findByIDManagerUseCase *usecase.FindByIDManager,
+	createManagerUseCase *usecase.CreateManager,
+	authenticateManagerUseCase *usecase.AuthenticateManager) *ManagerHandler {
+	return &ManagerHandler{
+		findByIDManagerUseCase,
+		createManagerUseCase,
+		authenticateManagerUseCase,
+	}
 }
 
 func (h *ManagerHandler) FindByID(w http.ResponseWriter, r *http.Request) *response.Err {

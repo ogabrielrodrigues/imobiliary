@@ -18,6 +18,16 @@ type Manager struct {
 	Password string
 }
 
+func NewManager(fullname string, phone types.Phone, email types.Email, password string) *Manager {
+	return &Manager{
+		ID:       uuid.New(),
+		Fullname: fullname,
+		Phone:    phone,
+		Email:    email,
+		Password: password,
+	}
+}
+
 func (u *Manager) hashPassword() *response.Err {
 	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
 	if err != nil {

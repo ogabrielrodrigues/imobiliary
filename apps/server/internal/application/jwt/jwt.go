@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"imobiliary/config/environment"
 	"imobiliary/internal/response"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -28,13 +27,13 @@ func ExtractToken(authorization string) (string, error) {
 	return token, nil
 }
 
-func GenerateToken(managerID uuid.UUID) (string, *response.Err) {
+func GenerateToken(managerID uuid.UUID, jwtSecret string) (string, *response.Err) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": managerID,
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
 
-	token, err := claims.SignedString([]byte(environment.Environment.JWT_SECRET))
+	token, err := claims.SignedString([]byte(jwtSecret))
 	if err != nil {
 		return "", response.NewErr(http.StatusInternalServerError, err.Error()) // TODO: place error type
 	}
@@ -42,9 +41,9 @@ func GenerateToken(managerID uuid.UUID) (string, *response.Err) {
 	return token, nil
 }
 
-func ParseToken(token string) (uuid.UUID, *response.Err) {
+func ParseToken(token string, jwtSecret string) (uuid.UUID, *response.Err) {
 	parsed, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		return []byte(environment.Environment.JWT_SECRET), nil
+		return []byte(jwtSecret), nil
 	})
 
 	if err != nil {

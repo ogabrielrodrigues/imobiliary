@@ -10,24 +10,25 @@ import (
 
 type AuthenticateManager struct {
 	repository manager.Repository
+	jwtSecret  string
 }
 
-func NewAuthenticateManager(repository manager.Repository) *AuthenticateManager {
-	return &AuthenticateManager{repository}
+func NewAuthenticateManager(repository manager.Repository, jwtSecret string) *AuthenticateManager {
+	return &AuthenticateManager{repository, jwtSecret}
 }
 
-func (cm *AuthenticateManager) Execute(ctx context.Context, dto request.AuthDTO) (string, error) { // TODO: place error type
+func (am *AuthenticateManager) Execute(ctx context.Context, dto request.AuthDTO) (string, error) { // TODO: place error type
 	email, err := types.NewEmail(dto.Email)
 	if err != nil {
 		return "", err
 	}
 
-	managerID, err := cm.repository.Authenticate(ctx, email, dto.Password)
+	managerID, err := am.repository.Authenticate(ctx, email, dto.Password)
 	if err != nil {
 		return "", err // TODO: place error type
 	}
 
-	token, err := jwt.GenerateToken(managerID)
+	token, err := jwt.GenerateToken(managerID, am.jwtSecret)
 	if err != nil {
 		return "", err // TODO: place error type
 	}

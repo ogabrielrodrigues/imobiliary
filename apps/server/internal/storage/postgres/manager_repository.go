@@ -4,10 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/domain/manager"
 	"imobiliary/internal/domain/types"
-	"imobiliary/internal/response"
-	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -21,7 +20,7 @@ func NewPostgresManagerRepository(pool *pgxpool.Pool) *PostgresManagerRepository
 	return &PostgresManagerRepository{db: pool}
 }
 
-func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uuid.UUID) (*manager.Manager, *response.Err) {
+func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uuid.UUID) (*manager.Manager, error) {
 	row := mr.db.QueryRow(ctx, `SELECT * FROM "user" WHERE id = $1`, managerID)
 
 	var found manager.Manager
@@ -33,16 +32,16 @@ func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uui
 		&found.Password,
 	); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, response.NewErr(http.StatusNotFound, err.Error()) //  TODO: refactor error
+			return nil, httperr.NewNotFoundError(ctx, "manager not found or not exists")
 		}
 
-		return nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
+		return nil, httperr.NewInternalServerError(ctx, err.Error())
 	}
 
 	return &found, nil
 }
 
-func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) *response.Err {
+func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) error {
 	_, err := mr.db.Exec(ctx, `
 		INSERT INTO "user" (id, fullname, phone, email, password)
 		VALUES ($1, $2, $3, $4, $5)`,
@@ -55,29 +54,29 @@ func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manage
 
 	if err != nil {
 		if IsUniqueConstraint(err) {
-			return response.NewErr(http.StatusConflict, err.Error()) //  TODO: refactor error
+			return httperr.NewAlreadyExistsError(ctx, "manager already exists")
 		}
 
-		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
+		return httperr.NewInternalServerError(ctx, err.Error())
 	}
 
 	return nil
 }
 
-func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, *response.Err) {
+func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, error) {
 	row := mr.db.QueryRow(ctx, `SELECT id, password FROM "user" WHERE email = $1`, email)
 
 	var found manager.Manager
 	if err := row.Scan(&found.ID, &found.Password); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return uuid.Nil, response.NewErr(http.StatusNotFound, err.Error()) //  TODO: refactor error
+			return uuid.Nil, httperr.NewNotFoundError(ctx, "manager not found or not exists")
 		}
 
-		return uuid.Nil, response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
+		return uuid.Nil, httperr.NewInternalServerError(ctx, err.Error())
 	}
 
 	if !found.ComparePassword(password) {
-		return uuid.Nil, response.NewErr(http.StatusUnauthorized, "") //  TODO: refactor error
+		return uuid.Nil, httperr.NewUnauthorizedError(ctx, "password don't match")
 	}
 
 	return found.ID, nil

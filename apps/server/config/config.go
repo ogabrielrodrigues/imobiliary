@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"errors"
@@ -61,6 +61,10 @@ func NewConfig() (*Config, error) {
 		jwtSecret:          jwtSecret,
 		postgresConnString: postgresConnString,
 	}, nil
+}
+
+func (c *Config) GetEnvironment() types.Environment {
+	return c.environment
 }
 
 func (c *Config) GetServerAddr() string {

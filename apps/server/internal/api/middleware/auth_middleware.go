@@ -18,7 +18,7 @@ var (
 	ManagerIDKey = contextKey("manager_id")
 )
 
-func AuthMiddleware(next http.Handler) http.Handler {
+func AuthMiddleware(next http.Handler, jwtSecret string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorization := r.Header.Get("Authorization")
 
@@ -29,7 +29,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		managerID, err := jwt.ParseToken(token)
+		managerID, err := jwt.ParseToken(token, jwtSecret)
 		if err != nil {
 			response.End(w, 401, err) // TODO: place error type
 			return

@@ -1,8 +1,7 @@
 package types
 
 import (
-	"imobiliary/internal/response"
-	"net/http"
+	"errors"
 	"regexp"
 )
 
@@ -14,9 +13,9 @@ type Phone struct {
 	Number string
 }
 
-func NewPhone(number string) (*Phone, *response.Err) {
+func NewPhone(number string) (*Phone, error) {
 	if !phoneRegex.MatchString(number) {
-		return nil, response.NewErr(http.StatusUnprocessableEntity, "invalid phone number")
+		return nil, errors.New("invalid phone number")
 	}
 
 	return &Phone{Number: number}, nil

@@ -3,22 +3,21 @@ package main
 import (
 	"context"
 	"fmt"
-	"syscall"
-	"time"
-
-	"net/http"
-	"os"
-	"os/signal"
-
+	"imobiliary/config"
 	"imobiliary/internal/api/middleware"
 	"imobiliary/internal/api/router"
 	"imobiliary/internal/application/logger"
 	"imobiliary/internal/storage/postgres"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func initDependencies(config *Config) (*pgxpool.Pool, error) {
+func initDependencies(config *config.Config) (*pgxpool.Pool, error) {
 	postgresConnString := config.GetPostgresConnString()
 	postgresConfig := postgres.DefaultPostgresConfig()
 
@@ -31,11 +30,12 @@ func initDependencies(config *Config) (*pgxpool.Pool, error) {
 }
 
 func main() {
-	config, err := NewConfig()
-	logger := logger.NewLogger(logger.Config{Environment: config.environment.GetEnvironment()})
+	config, err := config.NewConfig()
 	if err != nil {
-		logger.Panic("config error", err)
+		panic(err)
 	}
+
+	logger := logger.NewLogger(logger.Config{Environment: config.GetEnvironment()})
 
 	ctx := context.Background()
 
@@ -44,14 +44,21 @@ func main() {
 		logger.Panic("error initializing dependencies", err)
 	}
 
-	handler, err := router.NewRouter(postgresClient)
+	handler, err := router.NewRouter(postgresClient, logger)
 	if err != nil {
 		logger.Panic("error on routes setup", err)
 	}
 
+	handler = middleware.CORSMiddleware(
+		middleware.CurrentTimeMiddleware(
+			middleware.LoggerMiddleware(handler, logger),
+		),
+		config.GetCorsOrigin(),
+	)
+
 	server := &http.Server{
 		Addr:           config.GetServerAddr(),
-		Handler:        middleware.CORSMiddleware(middleware.LoggerMiddleware(handler)),
+		Handler:        handler,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,

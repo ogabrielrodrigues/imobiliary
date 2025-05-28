@@ -25,7 +25,7 @@ func makeHandler(handler RouteHandler, logger *logrus.Entry) http.HandlerFunc {
 }
 
 func setupRoutes(h *Handler) error {
-	mh, err := maker.MakeManagerHandler()
+	mh, err := maker.MakeManagerHandler(h.pool, h.config)
 	if err != nil {
 		return err
 	}

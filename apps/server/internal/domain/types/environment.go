@@ -7,7 +7,3 @@ const (
 	Staging     Environment = "staging"
 	Production  Environment = "production"
 )
-
-func (e Environment) GetEnvironment() Environment {
-	return Development
-}

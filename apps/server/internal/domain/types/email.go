@@ -1,8 +1,7 @@
 package types
 
 import (
-	"imobiliary/internal/response"
-	"net/http"
+	"errors"
 	"regexp"
 	"strings"
 )
@@ -15,11 +14,11 @@ type Email struct {
 	Address string
 }
 
-func NewEmail(address string) (*Email, *response.Err) {
+func NewEmail(address string) (*Email, error) {
 	address = strings.TrimSpace(address)
 
 	if !emailRegex.MatchString(address) {
-		return nil, response.NewErr(http.StatusUnprocessableEntity, "invalid email address")
+		return nil, errors.New("invalid email address")
 	}
 
 	return &Email{Address: address}, nil
