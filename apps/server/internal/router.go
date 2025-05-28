@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"imobiliary/config/logger"
+	"imobiliary/internal/api/middleware"
 	"imobiliary/internal/factory"
-	"imobiliary/internal/middleware"
 	"imobiliary/internal/response"
 
 	"github.com/jackc/pgx/v5/pgxpool"

@@ -1,32 +1,38 @@
 package router
 
 import (
-	"imobiliary/config/logger"
+	"imobiliary/internal/api/maker"
 	"imobiliary/internal/response"
 	"net/http"
 
-	"go.uber.org/zap"
+	"github.com/sirupsen/logrus"
 )
 
 type RouteHandler func(w http.ResponseWriter, r *http.Request) *response.Err
 
-func makeHandler(handler RouteHandler) http.HandlerFunc {
+func makeHandler(handler RouteHandler, logger *logrus.Entry) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := handler(w, r); err != nil {
-			logger.Error(err.Message, zap.String("method", r.Method), zap.String("path", r.URL.Path), zap.Int("response_status", err.Code), zap.String("message", err.Message))
+			logger.Error(err.Message, logrus.WithFields(logrus.Fields{
+				"method":  r.Method,
+				"path":    r.URL.Path,
+				"status":  err.Code,
+				"message": err.Message,
+			}))
 			response.End(w, err.Code, err)
 		}
 	}
 }
 
-func setupRoutes(h *Handler) {
-	// user_handler := factory.NewUserHandlerFactory(pool)
+func setupRoutes(h *Handler) error {
+	mh, err := maker.MakeManagerHandler()
+	if err != nil {
+		return err
+	}
 
-	// mux.Handle("GET /users", makeHandler(user_handler.ListAll))
-	// mux.Handle("GET /users/{user_id}", makeHandler(user_handler.FindByID))
-	// mux.Handle("POST /users", makeHandler(user_handler.Create))
-	// mux.Handle("POST /users/auth", makeHandler(user_handler.Authenticate))
-	// mux.Handle("PUT /users/avatar", middleware.AuthMiddleware(makeHandler(user_handler.ChangeAvatar)))
+	h.router.Handle("GET /manager/{manager_id}", makeHandler(mh.FindByID, h.logger))
+	h.router.Handle("POST /manager", makeHandler(mh.Create, h.logger))
+	h.router.Handle("POST /auth", makeHandler(mh.Authenticate, h.logger))
 
 	// property_handler := factory.NewPropertyHandlerFactory(pool)
 
@@ -40,4 +46,5 @@ func setupRoutes(h *Handler) {
 	// mux.Handle("GET /owners", middleware.AuthMiddleware(makeHandler(owner_handler.FindAllByManagerID)))
 	// mux.Handle("POST /owners", middleware.AuthMiddleware(makeHandler(owner_handler.Create)))
 	// mux.Handle("PUT /owners/assign", middleware.AuthMiddleware(makeHandler(owner_handler.AssignOwnerToProperty)))
+	return nil
 }

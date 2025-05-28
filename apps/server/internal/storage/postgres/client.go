@@ -2,8 +2,10 @@ package postgres
 
 import (
 	"context"
+	"errors"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -43,4 +45,17 @@ func NewPostgresClient(connString string, config Config) (*pgxpool.Pool, error) 
 	}
 
 	return pool, nil
+}
+
+func IsUniqueConstraint(err error) bool {
+	var pg_err *pgconn.PgError
+	if !errors.As(err, &pg_err) {
+		return false
+	}
+
+	if pg_err.Code == "23505" {
+		return true
+	}
+
+	return false
 }

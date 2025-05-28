@@ -5,12 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"imobiliary/config/logger"
-
-	"go.uber.org/zap"
+	"github.com/sirupsen/logrus"
 )
 
-func LoggerMiddleware(next http.Handler) http.Handler {
+func LoggerMiddleware(next http.Handler, logger *logrus.Entry) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
@@ -20,9 +18,11 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 
 		logger.Info(
 			"request received",
-			zap.String("method", r.Method),
-			zap.String("path", r.URL.Path),
-			zap.String("duration", fmt.Sprintf("%dms", duration)),
+			logrus.WithFields(logrus.Fields{
+				"method":   r.Method,
+				"path":     r.URL.Path,
+				"duration": fmt.Sprintf("%dms", duration),
+			}),
 		)
 	})
 }

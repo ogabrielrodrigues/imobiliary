@@ -10,13 +10,12 @@ import (
 	"os"
 	"os/signal"
 
-	"imobiliary/config/logger"
-	api "imobiliary/internal"
-	"imobiliary/internal/middleware"
+	"imobiliary/internal/api/middleware"
+	"imobiliary/internal/api/router"
+	"imobiliary/internal/application/logger"
 	"imobiliary/internal/storage/postgres"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
 )
 
 func initDependencies(config *Config) (*pgxpool.Pool, error) {
@@ -33,18 +32,22 @@ func initDependencies(config *Config) (*pgxpool.Pool, error) {
 
 func main() {
 	config, err := NewConfig()
+	logger := logger.NewLogger(logger.Config{Environment: config.environment.GetEnvironment()})
 	if err != nil {
-		logger.Panic("config error", zap.Error(err))
+		logger.Panic("config error", err)
 	}
 
 	ctx := context.Background()
 
 	postgresClient, err := initDependencies(config)
 	if err != nil {
-		logger.Panic("error initializing dependencies", zap.Error(err))
+		logger.Panic("error initializing dependencies", err)
 	}
 
-	handler := api.NewHandler(postgresClient)
+	handler, err := router.NewRouter(postgresClient)
+	if err != nil {
+		logger.Panic("error on routes setup", err)
+	}
 
 	server := &http.Server{
 		Addr:           config.GetServerAddr(),
@@ -57,7 +60,7 @@ func main() {
 	go func() {
 		logger.Info(fmt.Sprintf("server running on %s", config.GetServerAddr()))
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
-			logger.Panic("server error on listen", zap.Error(err))
+			logger.Panic("server error on listen", err)
 		}
 	}()
 
@@ -71,7 +74,7 @@ func main() {
 	defer cancel()
 
 	if server.Shutdown(ctx); err != nil {
-		logger.Panic("fail to shutdown server", zap.Error(err))
+		logger.Panic("fail to shutdown server", err)
 	}
 
 	logger.Info("server shutdown")
