@@ -4,10 +4,11 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
+	"imobiliary/internal/store"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
-	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 )
 
 func (pg *PostgresUserRepository) Create(ctx context.Context, usr *user.User) (uuid.UUID, *response.Err) {

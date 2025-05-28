@@ -3,7 +3,7 @@ package user
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/response"
 )
 
 func (h *Handler) ListAll(w http.ResponseWriter, r *http.Request) *response.Err {

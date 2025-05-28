@@ -3,9 +3,10 @@ package user
 import (
 	"context"
 
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) Create(ctx context.Context, dto *user.CreateDTO) (uuid.UUID, *response.Err) {

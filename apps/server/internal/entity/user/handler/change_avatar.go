@@ -3,8 +3,8 @@ package user
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
 )
 
 func (h *Handler) ChangeAvatar(w http.ResponseWriter, r *http.Request) *response.Err {

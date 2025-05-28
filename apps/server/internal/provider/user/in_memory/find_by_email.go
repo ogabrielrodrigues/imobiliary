@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
 )
 
 func (r *InMemoryUserRepository) FindByEmail(ctx context.Context, email string) (*user.User, *response.Err) {

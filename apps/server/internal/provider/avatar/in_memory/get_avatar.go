@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
 )
 
 func (r *InMemoryAvatarRepository) GetAvatar(ctx context.Context, id string) (string, *response.Err) {

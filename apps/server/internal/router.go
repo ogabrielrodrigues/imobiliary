@@ -3,11 +3,12 @@ package api
 import (
 	"net/http"
 
+	"imobiliary/config/logger"
+	"imobiliary/internal/factory"
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/response"
+
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
-	"github.com/ogabrielrodrigues/imobiliary/internal/factory"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 	"go.uber.org/zap"
 )
 

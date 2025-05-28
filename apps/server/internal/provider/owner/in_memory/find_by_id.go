@@ -4,9 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/entity/owner"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (r *InMemoryOwnerRepository) FindByID(ctx context.Context, owner_id uuid.UUID) (*owner.DTO, *response.Err) {

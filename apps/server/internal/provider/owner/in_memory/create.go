@@ -3,9 +3,10 @@ package provider
 import (
 	"context"
 
+	"imobiliary/internal/entity/owner"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (r *InMemoryOwnerRepository) Create(ctx context.Context, owner owner.Owner) (uuid.UUID, *response.Err) {

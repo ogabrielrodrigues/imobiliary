@@ -1,7 +1,7 @@
 package provider
 
 import (
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	"imobiliary/internal/entity/user"
 )
 
 type InMemoryUserRepository struct {

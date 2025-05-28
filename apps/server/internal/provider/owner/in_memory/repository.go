@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
+	"imobiliary/internal/entity/owner"
+	"imobiliary/internal/entity/property"
 )
 
 type InMemoryOwnerRepository struct {

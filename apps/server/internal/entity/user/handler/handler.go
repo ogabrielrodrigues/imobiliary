@@ -1,7 +1,7 @@
 package user
 
 import (
-	user "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
+	user "imobiliary/internal/entity/user/service"
 )
 
 type Handler struct {

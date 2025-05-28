@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
+	"imobiliary/config/logger"
+
 	"go.uber.org/zap"
 )
 

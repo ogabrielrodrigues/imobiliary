@@ -3,8 +3,8 @@ package owner
 import (
 	"context"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/owner"
+	"imobiliary/internal/response"
 )
 
 func (s *Service) FindAllByManagerID(ctx context.Context) ([]owner.DTO, *response.Err) {

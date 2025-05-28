@@ -4,8 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/response"
+
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 const (

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/property"
+	"imobiliary/internal/response"
 )
 
 func (h *Handler) Create(w http.ResponseWriter, r *http.Request) *response.Err {

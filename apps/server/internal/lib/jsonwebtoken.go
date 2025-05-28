@@ -5,10 +5,11 @@ import (
 	"strings"
 	"time"
 
+	"imobiliary/config/environment"
+	"imobiliary/internal/response"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 const (

@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/property"
+	jwt "imobiliary/internal/lib"
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/response"
 )
 
 func (pg *PostgresPropertyRepository) FindAllByUserID(ctx context.Context) ([]property.DTO, *response.Err) {

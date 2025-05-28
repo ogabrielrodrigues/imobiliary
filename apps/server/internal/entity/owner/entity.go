@@ -1,9 +1,10 @@
 package owner
 
 import (
+	"imobiliary/internal/response"
+	"imobiliary/internal/types"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type Owner struct {

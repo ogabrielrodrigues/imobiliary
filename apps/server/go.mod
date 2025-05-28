@@ -1,4 +1,4 @@
-module github.com/ogabrielrodrigues/imobiliary
+module imobiliary
 
 go 1.23.4
 

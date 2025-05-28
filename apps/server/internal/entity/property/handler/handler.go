@@ -1,7 +1,7 @@
 package property
 
 import (
-	property_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/property/service"
+	property_service "imobiliary/internal/entity/property/service"
 )
 
 type Handler struct {

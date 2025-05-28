@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	jwt "imobiliary/internal/lib"
+	"imobiliary/internal/response"
 )
 
 type contextKey string

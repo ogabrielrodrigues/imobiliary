@@ -4,9 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/entity/property"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) Create(ctx context.Context, dto *property.CreateDTO) *response.Err {

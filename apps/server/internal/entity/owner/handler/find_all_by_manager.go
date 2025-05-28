@@ -3,7 +3,7 @@ package owner
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/response"
 )
 
 func (h *Handler) FindAllByManagerID(w http.ResponseWriter, r *http.Request) *response.Err {

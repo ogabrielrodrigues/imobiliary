@@ -4,9 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (r *InMemoryUserRepository) Authenticate(ctx context.Context, dto *user.AuthDTO) (uuid.UUID, *response.Err) {

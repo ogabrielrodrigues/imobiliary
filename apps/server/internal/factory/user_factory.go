@@ -1,12 +1,13 @@
 package factory
 
 import (
+	"imobiliary/config/environment"
+	user_handler "imobiliary/internal/entity/user/handler"
+	user_service "imobiliary/internal/entity/user/service"
+	avatar_repository "imobiliary/internal/provider/avatar/cloudflare"
+	user_repository "imobiliary/internal/provider/user/postgres"
+
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
-	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/cloudflare"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/postgres"
 )
 
 func NewUserHandlerFactory(pool *pgxpool.Pool) *user_handler.Handler {

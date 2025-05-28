@@ -1,8 +1,9 @@
 package property
 
 import (
+	types "imobiliary/internal/types"
+
 	"github.com/google/uuid"
-	types "github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type DTO struct {

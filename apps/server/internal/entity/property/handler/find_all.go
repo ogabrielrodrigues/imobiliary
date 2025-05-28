@@ -3,7 +3,7 @@ package property
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/response"
 )
 
 func (h *Handler) FindAllByUserID(w http.ResponseWriter, r *http.Request) *response.Err {

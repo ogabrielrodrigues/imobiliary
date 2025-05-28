@@ -4,8 +4,9 @@ import (
 	"errors"
 	"os"
 
+	"imobiliary/internal/domain/types"
+
 	"github.com/joho/godotenv"
-	"github.com/ogabrielrodrigues/imobiliary/internal/domain/types"
 )
 
 type Config struct {

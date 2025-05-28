@@ -3,8 +3,8 @@ package provider
 import (
 	"context"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
 )
 
 func (r *InMemoryUserRepository) ListAll(ctx context.Context) ([]user.DTO, *response.Err) {

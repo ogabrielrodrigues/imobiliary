@@ -10,11 +10,12 @@ import (
 	"os"
 	"os/signal"
 
+	"imobiliary/config/logger"
+	api "imobiliary/internal"
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/storage/postgres"
+
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
-	api "github.com/ogabrielrodrigues/imobiliary/internal"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/storage/postgres"
 	"go.uber.org/zap"
 )
 

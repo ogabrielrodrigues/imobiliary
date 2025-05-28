@@ -4,9 +4,10 @@ import (
 	"context"
 	"mime/multipart"
 
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 type Service struct {

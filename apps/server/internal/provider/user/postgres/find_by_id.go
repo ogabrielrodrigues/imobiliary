@@ -6,9 +6,10 @@ import (
 	"errors"
 	"net/http"
 
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (pg *PostgresUserRepository) FindByID(ctx context.Context, id uuid.UUID) (*user.User, *response.Err) {

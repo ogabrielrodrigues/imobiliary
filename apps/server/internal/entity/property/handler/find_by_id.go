@@ -3,8 +3,9 @@ package property
 import (
 	"net/http"
 
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (h *Handler) FindByID(w http.ResponseWriter, r *http.Request) *response.Err {

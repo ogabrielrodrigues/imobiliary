@@ -1,9 +1,10 @@
 package property
 
 import (
+	"imobiliary/internal/response"
+	types "imobiliary/internal/types"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
-	types "github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 type Status string

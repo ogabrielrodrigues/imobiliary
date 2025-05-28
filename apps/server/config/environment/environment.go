@@ -3,9 +3,10 @@ package environment
 import (
 	"os"
 
+	"imobiliary/config/logger"
+	"imobiliary/internal/types"
+
 	"github.com/joho/godotenv"
-	"github.com/ogabrielrodrigues/imobiliary/config/logger"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 const (

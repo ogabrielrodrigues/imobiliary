@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
+	"imobiliary/config/environment"
 )
 
 func CORSMiddleware(next http.Handler) http.Handler {

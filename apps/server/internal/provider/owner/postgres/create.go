@@ -4,12 +4,13 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/entity/owner"
+	jwt "imobiliary/internal/lib"
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/response"
+	"imobiliary/internal/store"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
-	"github.com/ogabrielrodrigues/imobiliary/internal/store"
 )
 
 func (pg *PostgresOwnerRepository) Create(ctx context.Context, dto owner.Owner) (uuid.UUID, *response.Err) {

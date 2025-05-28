@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"imobiliary/internal/entity/owner"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (h *Handler) AssignOwnerToProperty(w http.ResponseWriter, r *http.Request) *response.Err {

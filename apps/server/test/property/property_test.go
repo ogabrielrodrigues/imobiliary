@@ -3,9 +3,10 @@ package test
 import (
 	"testing"
 
+	"imobiliary/internal/entity/property"
+	"imobiliary/internal/types"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types"
 )
 
 func TestProperty(t *testing.T) {

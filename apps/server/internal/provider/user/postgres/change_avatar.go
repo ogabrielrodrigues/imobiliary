@@ -4,9 +4,10 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (pg *PostgresUserRepository) ChangeAvatar(ctx context.Context, avatar_url string) *response.Err {

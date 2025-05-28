@@ -4,8 +4,9 @@ import (
 	"context"
 	"mime/multipart"
 
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 type IRepository interface {

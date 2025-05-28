@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/response"
 )
 
 const (

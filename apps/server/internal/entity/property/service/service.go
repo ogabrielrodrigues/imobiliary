@@ -3,9 +3,10 @@ package property
 import (
 	"context"
 
+	"imobiliary/internal/entity/property"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 type IService interface {

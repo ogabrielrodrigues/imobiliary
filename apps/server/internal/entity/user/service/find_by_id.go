@@ -3,9 +3,10 @@ package user
 import (
 	"context"
 
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (s *Service) FindByID(ctx context.Context, id uuid.UUID) (*user.DTO, *response.Err) {

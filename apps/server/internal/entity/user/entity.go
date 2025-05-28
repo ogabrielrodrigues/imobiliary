@@ -3,8 +3,9 @@ package user
 import (
 	"net/http"
 
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 	"golang.org/x/crypto/bcrypt"
 )
 

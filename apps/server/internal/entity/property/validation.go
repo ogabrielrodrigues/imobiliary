@@ -3,7 +3,7 @@ package property
 import (
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/response"
 )
 
 const (

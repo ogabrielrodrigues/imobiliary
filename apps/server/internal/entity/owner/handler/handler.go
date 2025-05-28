@@ -1,6 +1,6 @@
 package owner
 
-import owner "github.com/ogabrielrodrigues/imobiliary/internal/entity/owner/service"
+import owner "imobiliary/internal/entity/owner/service"
 
 type Handler struct {
 	service owner.IService

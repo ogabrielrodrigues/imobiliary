@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
+	"imobiliary/internal/entity/user"
 )
 
 func TestUser(t *testing.T) {

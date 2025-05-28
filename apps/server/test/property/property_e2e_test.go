@@ -8,19 +8,20 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	property_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/property/handler"
-	property_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/property/service"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	property_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/property/in_memory"
-	"github.com/ogabrielrodrigues/imobiliary/internal/types"
+	"imobiliary/config/environment"
+	"imobiliary/internal/entity/property"
+	property_handler "imobiliary/internal/entity/property/handler"
+	property_service "imobiliary/internal/entity/property/service"
+	"imobiliary/internal/entity/user"
+	"imobiliary/internal/middleware"
+	property_repository "imobiliary/internal/provider/property/in_memory"
+	"imobiliary/internal/types"
 
-	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/in_memory"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/in_memory"
+	"github.com/google/uuid"
+
+	user_service "imobiliary/internal/entity/user/service"
+	avatar_repository "imobiliary/internal/provider/avatar/in_memory"
+	user_repository "imobiliary/internal/provider/user/in_memory"
 )
 
 func TestE2ECreateProperty(t *testing.T) {

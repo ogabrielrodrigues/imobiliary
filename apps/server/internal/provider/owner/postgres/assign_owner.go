@@ -4,13 +4,14 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/entity/owner"
+	"imobiliary/internal/entity/property"
+	jwt "imobiliary/internal/lib"
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/property"
-	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func (pg *PostgresOwnerRepository) AssignOwnerToProperty(ctx context.Context, owner_id uuid.UUID, property_id uuid.UUID) *response.Err {

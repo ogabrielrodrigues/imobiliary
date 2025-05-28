@@ -3,7 +3,7 @@ package store
 import (
 	"fmt"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/types"
+	"imobiliary/internal/types"
 )
 
 func PostgresConnectionString(env types.Environment) string {

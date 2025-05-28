@@ -8,14 +8,15 @@ import (
 	"path/filepath"
 	"testing"
 
+	"imobiliary/config/environment"
+	"imobiliary/internal/entity/user"
+	user_handler "imobiliary/internal/entity/user/handler"
+	user_service "imobiliary/internal/entity/user/service"
+	avatar_repository "imobiliary/internal/provider/avatar/in_memory"
+	user_repository "imobiliary/internal/provider/user/in_memory"
+	"imobiliary/internal/response"
+
 	"github.com/google/uuid"
-	"github.com/ogabrielrodrigues/imobiliary/config/environment"
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/user"
-	user_handler "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/handler"
-	user_service "github.com/ogabrielrodrigues/imobiliary/internal/entity/user/service"
-	avatar_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/avatar/in_memory"
-	user_repository "github.com/ogabrielrodrigues/imobiliary/internal/provider/user/in_memory"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
 )
 
 func TestE2ECreateUser(t *testing.T) {

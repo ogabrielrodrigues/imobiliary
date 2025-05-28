@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ogabrielrodrigues/imobiliary/internal/entity/owner"
-	jwt "github.com/ogabrielrodrigues/imobiliary/internal/lib"
-	"github.com/ogabrielrodrigues/imobiliary/internal/middleware"
-	"github.com/ogabrielrodrigues/imobiliary/internal/response"
+	"imobiliary/internal/entity/owner"
+	jwt "imobiliary/internal/lib"
+	"imobiliary/internal/middleware"
+	"imobiliary/internal/response"
 )
 
 func (pg *PostgresOwnerRepository) FindAllByManagerID(ctx context.Context) ([]owner.DTO, *response.Err) {
