@@ -27,7 +27,7 @@ func NewRouter(pool *pgxpool.Pool, logger *logrus.Entry, config *config.Config) 
 	}
 
 	mux := http.NewServeMux()
-	err := setupRoutes(&h)
+	err := setupRoutes(&h, mux)
 
 	h.router = mux
 	return h, err

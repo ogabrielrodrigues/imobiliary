@@ -13,7 +13,7 @@ type response struct {
 	Result any    `json:"result"`
 }
 
-func End(w http.ResponseWriter, code int, data any) *httperr.HttpError {
+func Json(w http.ResponseWriter, code int, data any) *httperr.HttpError {
 	w.Header().Add("content-type", "application/json")
 
 	w.WriteHeader(code)
@@ -24,6 +24,12 @@ func End(w http.ResponseWriter, code int, data any) *httperr.HttpError {
 	}); err != nil {
 		return httperr.NewInternalServerError(context.Background(), "error encoding json response")
 	}
+
+	return nil
+}
+
+func End(w http.ResponseWriter, code int) *httperr.HttpError {
+	w.WriteHeader(code)
 
 	return nil
 }

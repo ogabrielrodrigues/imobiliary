@@ -17,6 +17,11 @@ func MakeManagerHandler(pool *pgxpool.Pool, config *config.Config) (*handler.Man
 	createManagerUseCase := usecase.NewCreateManager(managerRepository, manager.NewManagerValidator())
 	authenticateManagerUseCase := usecase.NewAuthenticateManager(managerRepository, config.GetJwtSecret())
 
-	return handler.NewManagerHandler(findByIDManagerUseCase,
-		createManagerUseCase, authenticateManagerUseCase), nil
+	managerHandler := handler.NewManagerHandler(
+		findByIDManagerUseCase,
+		createManagerUseCase,
+		authenticateManagerUseCase,
+	)
+
+	return managerHandler, nil
 }

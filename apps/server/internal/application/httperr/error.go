@@ -23,11 +23,11 @@ const (
 
 type HttpError struct {
 	Code      string                 `json:"code"`
-	HttpCode  int                    `json:"http_code"`
+	HttpCode  int                    `json:"-"`
 	Message   string                 `json:"message"`
 	Context   map[string]interface{} `json:"context,omitempty"`
 	Timestamp time.Time              `json:"timestamp"`
-	Cause     error                  `json:"cause"`
+	Cause     error                  `json:"cause,omitempty"`
 }
 
 func (err HttpError) Error() string {
@@ -175,6 +175,23 @@ func NewAlreadyExistsError(ctx context.Context, reason string) *HttpError {
 		Code:     AlreadyExistsError,
 		HttpCode: http.StatusConflict,
 		Message:  "Conflict",
+		Context: map[string]interface{}{
+			"reason": reason,
+		},
+		Timestamp: currentTime,
+	}
+}
+
+func NewUnprocessableEntityError(ctx context.Context, reason string) *HttpError {
+	currentTime, err := appcontext.ExtractCurrentTimeFromContext(ctx)
+	if err != nil {
+		currentTime = time.Time{}
+	}
+
+	return &HttpError{
+		Code:     UnprocessableEntityError,
+		HttpCode: http.StatusUnprocessableEntity,
+		Message:  "Unprocessable Entity",
 		Context: map[string]interface{}{
 			"reason": reason,
 		},

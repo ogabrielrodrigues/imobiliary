@@ -20,7 +20,7 @@ func NewPostgresManagerRepository(pool *pgxpool.Pool) *PostgresManagerRepository
 	return &PostgresManagerRepository{db: pool}
 }
 
-func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uuid.UUID) (*manager.Manager, error) {
+func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uuid.UUID) (*manager.Manager, *httperr.HttpError) {
 	row := mr.db.QueryRow(ctx, `SELECT * FROM "user" WHERE id = $1`, managerID)
 
 	var found manager.Manager
@@ -41,7 +41,7 @@ func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uui
 	return &found, nil
 }
 
-func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) error {
+func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) *httperr.HttpError {
 	_, err := mr.db.Exec(ctx, `
 		INSERT INTO "user" (id, fullname, phone, email, password)
 		VALUES ($1, $2, $3, $4, $5)`,
@@ -63,7 +63,7 @@ func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manage
 	return nil
 }
 
-func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, error) {
+func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, *httperr.HttpError) {
 	row := mr.db.QueryRow(ctx, `SELECT id, password FROM "user" WHERE email = $1`, email)
 
 	var found manager.Manager

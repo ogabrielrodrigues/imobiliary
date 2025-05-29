@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/internal/application/dto/response"
 	"imobiliary/internal/application/jwt"
-	"imobiliary/internal/response"
 )
 
 type contextKey string
@@ -24,14 +24,13 @@ func AuthMiddleware(next http.Handler, jwtSecret string) http.Handler {
 
 		token, err := jwt.ExtractToken(authorization)
 		if err != nil {
-			err := response.NewErr(http.StatusUnauthorized, err.Error()) // TODO: place error type
-			response.End(w, err.Code, err)
+			response.Json(w, err.HttpCode, err)
 			return
 		}
 
 		managerID, err := jwt.ParseToken(token, jwtSecret)
 		if err != nil {
-			response.End(w, 401, err) // TODO: place error type
+			response.Json(w, err.HttpCode, err)
 			return
 		}
 

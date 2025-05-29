@@ -44,7 +44,7 @@ func main() {
 		logger.Panic("error initializing dependencies", err)
 	}
 
-	handler, err := router.NewRouter(postgresClient, logger)
+	handler, err := router.NewRouter(postgresClient, logger, config)
 	if err != nil {
 		logger.Panic("error on routes setup", err)
 	}

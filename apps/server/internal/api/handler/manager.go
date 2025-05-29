@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"imobiliary/internal/application/dto/request"
+	"imobiliary/internal/application/dto/response"
+	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/application/usecase"
-	"imobiliary/internal/response"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -28,49 +29,47 @@ func NewManagerHandler(
 	}
 }
 
-func (h *ManagerHandler) FindByID(w http.ResponseWriter, r *http.Request) *response.Err {
+func (h *ManagerHandler) FindByID(w http.ResponseWriter, r *http.Request) *httperr.HttpError {
 	managerID, u_err := uuid.Parse(r.PathValue("manager_id"))
 	if u_err != nil {
-		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_UUID)
+		return httperr.NewBadRequestError(r.Context(), "invalid manager id param")
 	}
 
 	managerDTO, err := h.findByIDManagerUseCase.Execute(r.Context(), managerID)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, err.Error()) // TODO: change error
+		return err
 	}
 
-	return response.End(w, http.StatusOK, managerDTO)
+	return response.Json(w, http.StatusOK, managerDTO)
 }
 
-func (h *ManagerHandler) Create(w http.ResponseWriter, r *http.Request) *response.Err {
+func (h *ManagerHandler) Create(w http.ResponseWriter, r *http.Request) *httperr.HttpError {
 	var dto request.CreateManagerDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_REQUEST_BODY)
+		return httperr.NewBadRequestError(r.Context(), "error decoding json body")
 	}
 
 	err := h.createManagerUseCase.Execute(r.Context(), dto)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, err.Error()) // TODO: change error
+		return err
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	return nil
+	return response.End(w, http.StatusCreated)
 }
 
-func (h *ManagerHandler) Authenticate(w http.ResponseWriter, r *http.Request) *response.Err {
+func (h *ManagerHandler) Authenticate(w http.ResponseWriter, r *http.Request) *httperr.HttpError {
 	var dto request.AuthDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
-		return response.NewErr(http.StatusBadRequest, response.ERR_INVALID_REQUEST_BODY)
+		return httperr.NewBadRequestError(r.Context(), "error decoding json body")
 	}
 
 	token, err := h.authenticateManagerUseCase.Execute(r.Context(), dto)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, err.Error()) // TODO: change error
+		return err
 	}
 
 	w.Header().Add("Authorization", fmt.Sprintf("Bearer %s", token))
-	w.WriteHeader(http.StatusOK)
-	return nil
+	return response.End(w, http.StatusOK)
 }

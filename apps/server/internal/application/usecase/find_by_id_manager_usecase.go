@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"imobiliary/internal/application/dto/response"
+	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/domain/manager"
 
 	"github.com/google/uuid"
@@ -16,10 +17,10 @@ func NewFindByIDManager(repository manager.Repository) *FindByIDManager {
 	return &FindByIDManager{repository}
 }
 
-func (cm *FindByIDManager) Execute(ctx context.Context, managerID uuid.UUID) (*response.ManagerDTO, error) { // TODO: place error type
+func (cm *FindByIDManager) Execute(ctx context.Context, managerID uuid.UUID) (*response.ManagerDTO, *httperr.HttpError) {
 	manager, err := cm.repository.FindByID(ctx, managerID)
 	if err != nil {
-		return nil, err // TODO: place error type
+		return nil, err
 	}
 
 	managerDTO := response.ManagerDTO{

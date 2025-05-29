@@ -1,10 +1,10 @@
 package manager
 
 import (
-	"net/http"
+	"context"
 
+	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/domain/types"
-	"imobiliary/internal/response"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -28,10 +28,10 @@ func NewManager(fullname string, phone types.Phone, email types.Email, password 
 	}
 }
 
-func (u *Manager) hashPassword() *response.Err {
+func (u *Manager) hashPassword() *httperr.HttpError {
 	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
 	if err != nil {
-		return response.NewErr(http.StatusInternalServerError, response.ERR_INTERNAL_SERVER_ERROR)
+		return httperr.NewInternalServerError(context.Background(), "error creating user")
 	}
 
 	u.Password = string(hash)

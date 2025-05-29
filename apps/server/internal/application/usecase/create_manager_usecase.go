@@ -18,7 +18,7 @@ func NewCreateManager(repository manager.Repository, validator *manager.Validato
 	return &CreateManager{repository, validator}
 }
 
-func (cm *CreateManager) Execute(ctx context.Context, dto request.CreateManagerDTO) error { // TODO: place error type
+func (cm *CreateManager) Execute(ctx context.Context, dto request.CreateManagerDTO) *httperr.HttpError {
 	currentTime, err := appcontext.ExtractCurrentTimeFromContext(ctx)
 	if err != nil {
 		return httperr.NewInvalidContextError(ctx, appcontext.CurrentTimeContextKey, err.Error())
@@ -30,7 +30,7 @@ func (cm *CreateManager) Execute(ctx context.Context, dto request.CreateManagerD
 		if errors.As(err, &validationErrs) {
 			return httperr.NewValidationError(ctx, validationErrs)
 		}
-		return err
+		return err.(*httperr.HttpError)
 	}
 
 	err = cm.repository.Create(ctx, newManager)
