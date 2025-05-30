@@ -50,11 +50,10 @@ func main() {
 	}
 
 	handler = middleware.CORSMiddleware(
-		middleware.CurrentTimeMiddleware(
-			middleware.LoggerMiddleware(handler, logger),
-		),
+		middleware.CurrentTimeMiddleware(handler),
 		config.GetCorsOrigin(),
 	)
+	// middleware.LoggerMiddleware(handler, logger),
 
 	server := &http.Server{
 		Addr:           config.GetServerAddr(),

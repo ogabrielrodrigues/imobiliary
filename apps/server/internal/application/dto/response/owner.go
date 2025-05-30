@@ -1,0 +1,20 @@
+package response
+
+import (
+	"imobiliary/internal/domain/types"
+
+	"github.com/google/uuid"
+)
+
+type OwnerDTO struct {
+	ID            uuid.UUID           `json:"id"`
+	ManagerID     uuid.UUID           `json:"manager_id"`
+	Fullname      string              `json:"fullname"`
+	CPF           string              `json:"cpf"`
+	RG            string              `json:"rg"`
+	Email         string              `json:"email"`
+	Phone         string              `json:"phone"`
+	Occupation    string              `json:"occupation"`
+	MaritalStatus types.MaritalStatus `json:"marital_status"`
+	Address       AddressDTO          `json:"address"`
+}

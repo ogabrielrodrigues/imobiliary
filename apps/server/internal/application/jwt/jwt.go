@@ -18,11 +18,11 @@ import (
 func ExtractToken(authorization string) (string, *httperr.HttpError) {
 	authorization = strings.TrimSpace(authorization)
 
-	if !strings.HasPrefix(authorization, "Bearer") {
+	if !strings.HasPrefix(authorization, "Bearer ") {
 		return "", httperr.NewUnauthorizedError(context.Background(), "auth token invalid format")
 	}
 
-	token := strings.TrimPrefix(authorization, "Bearer")
+	token := strings.TrimPrefix(authorization, "Bearer ")
 
 	return token, nil
 }

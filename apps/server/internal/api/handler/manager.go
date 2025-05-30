@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"imobiliary/internal/api/middleware"
 	"imobiliary/internal/application/dto/request"
 	"imobiliary/internal/application/dto/response"
 	"imobiliary/internal/application/httperr"
@@ -30,12 +31,12 @@ func NewManagerHandler(
 }
 
 func (h *ManagerHandler) FindByID(w http.ResponseWriter, r *http.Request) *httperr.HttpError {
-	managerID, u_err := uuid.Parse(r.PathValue("manager_id"))
-	if u_err != nil {
-		return httperr.NewBadRequestError(r.Context(), "invalid manager id param")
+	managerID, ok := r.Context().Value(middleware.ManagerIDKey).(string)
+	if !ok {
+		return httperr.NewUnauthorizedError(r.Context(), "not authorized")
 	}
 
-	managerDTO, err := h.findByIDManagerUseCase.Execute(r.Context(), managerID)
+	managerDTO, err := h.findByIDManagerUseCase.Execute(r.Context(), uuid.MustParse(managerID))
 	if err != nil {
 		return err
 	}

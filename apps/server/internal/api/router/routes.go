@@ -2,6 +2,7 @@ package router
 
 import (
 	"imobiliary/internal/api/maker"
+	"imobiliary/internal/api/middleware"
 	"imobiliary/internal/application/dto/response"
 	"imobiliary/internal/application/httperr"
 	"net/http"
@@ -31,7 +32,8 @@ func setupRoutes(h *Handler, router *http.ServeMux) error {
 		return err
 	}
 
-	router.Handle("GET /manager/{manager_id}", makeHandler(mh.FindByID, h.logger))
+	//{manager_id}
+	router.Handle("GET /manager", middleware.AuthMiddleware(makeHandler(mh.FindByID, h.logger), h.config.GetJwtSecret()))
 	router.Handle("POST /manager", makeHandler(mh.Create, h.logger))
 	router.Handle("POST /auth", makeHandler(mh.Authenticate, h.logger))
 

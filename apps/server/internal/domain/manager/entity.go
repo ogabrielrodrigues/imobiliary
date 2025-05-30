@@ -18,7 +18,12 @@ type Manager struct {
 	Password string
 }
 
-func NewManager(fullname string, phone types.Phone, email types.Email, password string) (*Manager, *httperr.HttpError) {
+func NewManager(
+	fullname string,
+	phone types.Phone,
+	email types.Email,
+	password string,
+) (*Manager, *httperr.HttpError) {
 	newManager := &Manager{
 		ID:       uuid.New(),
 		Fullname: fullname,
