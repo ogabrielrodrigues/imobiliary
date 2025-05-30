@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"go.uber.org/zap"
 )
 
 func initDependencies(config *config.Config) (*pgxpool.Pool, error) {
@@ -30,23 +31,22 @@ func initDependencies(config *config.Config) (*pgxpool.Pool, error) {
 }
 
 func main() {
+	logger := logger.NewLogger()
 	config, err := config.NewConfig()
 	if err != nil {
-		panic(err)
+		logger.Panic("error loading config", zap.Error(err))
 	}
-
-	logger := logger.NewLogger(logger.Config{Environment: config.GetEnvironment()})
 
 	ctx := context.Background()
 
 	postgresClient, err := initDependencies(config)
 	if err != nil {
-		logger.Panic("error initializing dependencies", err)
+		logger.Panic("error initializing dependencies", zap.Error(err))
 	}
 
 	handler, err := router.NewRouter(postgresClient, logger, config)
 	if err != nil {
-		logger.Panic("error on routes setup", err)
+		logger.Panic("error on routes setup", zap.Error(err))
 	}
 
 	handler = middleware.CORSMiddleware(
@@ -67,7 +67,7 @@ func main() {
 	go func() {
 		logger.Info(fmt.Sprintf("server running on %s", config.GetServerAddr()))
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
-			logger.Panic("server error on listen", err)
+			logger.Panic("server error on listen", zap.Error(err))
 		}
 	}()
 
@@ -81,7 +81,7 @@ func main() {
 	defer cancel()
 
 	if server.Shutdown(ctx); err != nil {
-		logger.Panic("fail to shutdown server", err)
+		logger.Panic("fail to shutdown server", zap.Error(err))
 	}
 
 	logger.Info("server shutdown")

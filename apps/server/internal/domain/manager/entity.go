@@ -18,14 +18,20 @@ type Manager struct {
 	Password string
 }
 
-func NewManager(fullname string, phone types.Phone, email types.Email, password string) *Manager {
-	return &Manager{
+func NewManager(fullname string, phone types.Phone, email types.Email, password string) (*Manager, *httperr.HttpError) {
+	newManager := &Manager{
 		ID:       uuid.New(),
 		Fullname: fullname,
 		Phone:    phone,
 		Email:    email,
 		Password: password,
 	}
+
+	if err := newManager.hashPassword(); err != nil {
+		return nil, err
+	}
+
+	return newManager, nil
 }
 
 func (u *Manager) hashPassword() *httperr.HttpError {

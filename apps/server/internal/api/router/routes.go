@@ -6,20 +6,20 @@ import (
 	"imobiliary/internal/application/httperr"
 	"net/http"
 
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 type RouteHandler func(w http.ResponseWriter, r *http.Request) *httperr.HttpError
 
-func makeHandler(handler RouteHandler, logger *logrus.Entry) http.HandlerFunc {
+func makeHandler(handler RouteHandler, logger *zap.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := handler(w, r); err != nil {
-			logger.Error(err.Message, logrus.WithFields(logrus.Fields{
-				"method":  r.Method,
-				"path":    r.URL.Path,
-				"status":  err.Code,
-				"message": err.Message,
-			}))
+			logger.Error(err.Message,
+				zap.String("method", r.Method),
+				zap.String("path", r.URL.Path),
+				zap.Int("status", err.HttpCode),
+				zap.String("message", err.Message),
+			)
 			response.Json(w, err.HttpCode, err)
 		}
 	}

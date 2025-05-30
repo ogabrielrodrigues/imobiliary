@@ -19,8 +19,8 @@ migrate-up:
 	DATABASE_NAME="${DATABASE_NAME}" \
 	DATABASE_USER="${DATABASE_USER}" \
 	DATABASE_PWD="${DATABASE_PWD}" \
-	tern migrate --migrations internal/store/postgres/migrations \
-	--config internal/store/postgres/migrations/tern.conf
+	tern migrate --migrations internal/migrations \
+	--config internal/migrations/tern.conf
 
 migrate-down:
 	DATABASE_HOST="${DATABASE_HOST}" \
@@ -28,5 +28,5 @@ migrate-down:
 	DATABASE_NAME="${DATABASE_NAME}" \
 	DATABASE_USER="${DATABASE_USER}" \
 	DATABASE_PWD="${DATABASE_PWD}" \
-	tern migrate --migrations internal/store/postgres/migrations \
-	--config internal/store/postgres/migrations/tern.conf -d -1
+	tern migrate --migrations internal/migrations \
+	--config internal/migrations/tern.conf -d -1

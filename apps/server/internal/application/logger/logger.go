@@ -4,37 +4,41 @@ import (
 	"imobiliary/internal/domain/types"
 	"os"
 
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type Config struct {
 	Environment types.Environment
 }
 
-func NewLogger(config Config) *logrus.Entry {
-	logger := logrus.New()
-	logger.SetOutput(os.Stdout)
+func NewLogger() *zap.Logger {
+	stdout := zapcore.AddSync(os.Stdout)
 
-	standardFields := logrus.Fields{
-		"app":         "imobiliary",
-		"version":     "1.0.0",
-		"environment": config.Environment,
-	}
-
-	logger.SetFormatter(&logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
-		FieldMap: logrus.FieldMap{
-			logrus.FieldKeyTime: "timestamp",
-			logrus.FieldKeyMsg:  "message",
-		},
+	file := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   "logs/app.log",
+		MaxSize:    10, // megabytes
+		MaxBackups: 3,
+		MaxAge:     7, // days
 	})
 
-	if config.Environment == types.Development {
-		logger.SetLevel(logrus.DebugLevel)
-	} else {
-		logger.SetLevel(logrus.InfoLevel)
-	}
+	level := zap.NewAtomicLevelAt(zap.InfoLevel)
 
-	logger.WithFields(standardFields).Info("logger initialized")
-	return logger.WithFields(standardFields)
+	productionCfg := zap.NewProductionEncoderConfig()
+	productionCfg.TimeKey = "timestamp"
+	productionCfg.EncodeTime = zapcore.ISO8601TimeEncoder
+
+	developmentCfg := zap.NewDevelopmentEncoderConfig()
+	developmentCfg.EncodeLevel = zapcore.CapitalColorLevelEncoder
+
+	consoleEncoder := zapcore.NewConsoleEncoder(developmentCfg)
+	fileEncoder := zapcore.NewJSONEncoder(productionCfg)
+
+	core := zapcore.NewTee(
+		zapcore.NewCore(consoleEncoder, stdout, level),
+		zapcore.NewCore(fileEncoder, file, level),
+	)
+
+	return zap.New(core)
 }

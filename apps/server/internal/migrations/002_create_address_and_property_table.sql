@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "property" (
   REFERENCES "address" ("id")
   ON DELETE CASCADE,
   FOREIGN KEY ("manager_id")
-  REFERENCES "user" ("id")
+  REFERENCES "manager" ("id")
   ON DELETE CASCADE
 );
 

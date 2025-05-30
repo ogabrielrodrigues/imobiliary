@@ -5,13 +5,13 @@ import (
 	"net/http"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 type Handler struct {
 	pool   *pgxpool.Pool
 	config *config.Config
-	logger *logrus.Entry
+	logger *zap.Logger
 	router *http.ServeMux
 }
 
@@ -19,7 +19,7 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.router.ServeHTTP(w, r)
 }
 
-func NewRouter(pool *pgxpool.Pool, logger *logrus.Entry, config *config.Config) (http.Handler, error) {
+func NewRouter(pool *pgxpool.Pool, logger *zap.Logger, config *config.Config) (http.Handler, error) {
 	h := Handler{
 		pool:   pool,
 		config: config,

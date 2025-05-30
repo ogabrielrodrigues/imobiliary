@@ -18,19 +18,19 @@ func NewAuthenticateManager(repository manager.Repository, jwtSecret string) *Au
 	return &AuthenticateManager{repository, jwtSecret}
 }
 
-func (am *AuthenticateManager) Execute(ctx context.Context, dto request.AuthDTO) (string, *httperr.HttpError) { // TODO: place error type
+func (am *AuthenticateManager) Execute(ctx context.Context, dto request.AuthDTO) (string, *httperr.HttpError) {
 	email, err := types.NewEmail(dto.Email)
 	if err != nil {
 		return "", httperr.NewUnprocessableEntityError(ctx, err.Error())
 	}
 
 	managerID, err := am.repository.Authenticate(ctx, email, dto.Password)
-	if err != nil {
+	if err.(*httperr.HttpError) != nil {
 		return "", err.(*httperr.HttpError)
 	}
 
 	token, err := jwt.GenerateToken(managerID, am.jwtSecret)
-	if err != nil {
+	if err.(*httperr.HttpError) != nil {
 		return "", err.(*httperr.HttpError)
 	}
 

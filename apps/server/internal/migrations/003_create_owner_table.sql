@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "owner" (
   REFERENCES "address" ("id")
   ON DELETE CASCADE,
   FOREIGN KEY ("manager_id")
-  REFERENCES "user" ("id")
+  REFERENCES "manager" ("id")
   ON DELETE CASCADE
 );
 

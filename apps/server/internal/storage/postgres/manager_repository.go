@@ -21,14 +21,14 @@ func NewPostgresManagerRepository(pool *pgxpool.Pool) *PostgresManagerRepository
 }
 
 func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uuid.UUID) (*manager.Manager, *httperr.HttpError) {
-	row := mr.db.QueryRow(ctx, `SELECT * FROM "user" WHERE id = $1`, managerID)
+	row := mr.db.QueryRow(ctx, `SELECT * FROM "manager" WHERE id = $1`, managerID)
 
 	var found manager.Manager
 	if err := row.Scan(
 		&found.ID,
 		&found.Fullname,
-		&found.Phone,
-		&found.Email,
+		&found.Phone.Number,
+		&found.Email.Address,
 		&found.Password,
 	); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -43,12 +43,12 @@ func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uui
 
 func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) *httperr.HttpError {
 	_, err := mr.db.Exec(ctx, `
-		INSERT INTO "user" (id, fullname, phone, email, password)
+		INSERT INTO "manager" (id, fullname, phone, email, password)
 		VALUES ($1, $2, $3, $4, $5)`,
 		manager.ID,
 		manager.Fullname,
-		manager.Phone,
-		manager.Email,
+		manager.Phone.Value(),
+		manager.Email.Value(),
 		manager.Password,
 	)
 
@@ -64,7 +64,7 @@ func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manage
 }
 
 func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, *httperr.HttpError) {
-	row := mr.db.QueryRow(ctx, `SELECT id, password FROM "user" WHERE email = $1`, email)
+	row := mr.db.QueryRow(ctx, `SELECT id, password FROM "manager" WHERE email = $1`, email.Value())
 
 	var found manager.Manager
 	if err := row.Scan(&found.ID, &found.Password); err != nil {

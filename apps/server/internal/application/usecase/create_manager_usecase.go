@@ -33,9 +33,8 @@ func (cm *CreateManager) Execute(ctx context.Context, dto request.CreateManagerD
 		return err.(*httperr.HttpError)
 	}
 
-	err = cm.repository.Create(ctx, newManager)
-	if err != nil {
-		return httperr.NewInternalServerError(ctx, err.Error())
+	if err := cm.repository.Create(ctx, newManager); err != nil {
+		return err
 	}
 
 	return nil
