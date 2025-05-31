@@ -17,8 +17,8 @@ func NewFindByIDManager(repository manager.Repository) *FindByIDManager {
 	return &FindByIDManager{repository}
 }
 
-func (cm *FindByIDManager) Execute(ctx context.Context, managerID uuid.UUID) (*response.ManagerDTO, *httperr.HttpError) {
-	manager, err := cm.repository.FindByID(ctx, managerID)
+func (fm *FindByIDManager) Execute(ctx context.Context, managerID uuid.UUID) (*response.ManagerDTO, *httperr.HttpError) {
+	manager, err := fm.repository.FindByID(ctx, managerID)
 	if err != nil {
 		return nil, err
 	}

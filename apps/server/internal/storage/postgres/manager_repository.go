@@ -35,7 +35,7 @@ func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uui
 			return nil, httperr.NewNotFoundError(ctx, "manager not found or not exists")
 		}
 
-		return nil, httperr.NewInternalServerError(ctx, err.Error())
+		return nil, httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 
 	return &found, nil
@@ -57,7 +57,7 @@ func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manage
 			return httperr.NewAlreadyExistsError(ctx, "manager already exists")
 		}
 
-		return httperr.NewInternalServerError(ctx, err.Error())
+		return httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 
 	return nil
@@ -72,7 +72,7 @@ func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *ty
 			return uuid.Nil, httperr.NewNotFoundError(ctx, "manager not found or not exists")
 		}
 
-		return uuid.Nil, httperr.NewInternalServerError(ctx, err.Error())
+		return uuid.Nil, httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 
 	if !found.ComparePassword(password) {

@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func MakeManagerHandler(pool *pgxpool.Pool, config *config.Config) (*handler.ManagerHandler, error) {
+func MakeManagerHandler(pool *pgxpool.Pool, config *config.Config) *handler.ManagerHandler {
 	managerRepository := postgres.NewPostgresManagerRepository(pool)
 
 	findByIDManagerUseCase := usecase.NewFindByIDManager(managerRepository)
@@ -23,5 +23,5 @@ func MakeManagerHandler(pool *pgxpool.Pool, config *config.Config) (*handler.Man
 		authenticateManagerUseCase,
 	)
 
-	return managerHandler, nil
+	return managerHandler
 }

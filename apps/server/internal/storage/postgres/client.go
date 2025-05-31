@@ -5,13 +5,10 @@ import (
 	"errors"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
-
-type Client struct {
-	db *pgxpool.Pool
-}
 
 type Config struct {
 	HealthCheckPeriod time.Duration
@@ -58,4 +55,8 @@ func IsUniqueConstraint(err error) bool {
 	}
 
 	return false
+}
+
+func IsErrNoRows(err error) bool {
+	return errors.Is(err, pgx.ErrNoRows)
 }

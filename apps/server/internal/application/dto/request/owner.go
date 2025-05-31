@@ -10,5 +10,5 @@ type CreateOwnerDTO struct {
 	Phone         string              `json:"phone"`
 	Occupation    string              `json:"occupation"`
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
-	Address       CreateAddressDTO    `json:"address"`
+	Address       *CreateAddressDTO   `json:"address"`
 }

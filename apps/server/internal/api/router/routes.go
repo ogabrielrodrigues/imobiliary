@@ -27,27 +27,17 @@ func makeHandler(handler RouteHandler, logger *zap.Logger) http.HandlerFunc {
 }
 
 func setupRoutes(h *Handler, router *http.ServeMux) error {
-	mh, err := maker.MakeManagerHandler(h.pool, h.config)
-	if err != nil {
-		return err
-	}
+	mh := maker.MakeManagerHandler(h.pool, h.config)
 
-	//{manager_id}
 	router.Handle("GET /manager", middleware.AuthMiddleware(makeHandler(mh.FindByID, h.logger), h.config.GetJwtSecret()))
 	router.Handle("POST /manager", makeHandler(mh.Create, h.logger))
 	router.Handle("POST /auth", makeHandler(mh.Authenticate, h.logger))
 
-	// property_handler := factory.NewPropertyHandlerFactory(pool)
+	oh := maker.MakeOwnerHandler(h.pool, h.config)
 
-	// mux.Handle("GET /properties", middleware.AuthMiddleware(makeHandler(property_handler.FindAllByUserID)))
-	// mux.Handle("GET /properties/{property_id}", middleware.AuthMiddleware(makeHandler(property_handler.FindByID)))
-	// mux.Handle("POST /properties", middleware.AuthMiddleware(makeHandler(property_handler.Create)))
+	router.Handle("GET /owner/{owner_id}", middleware.AuthMiddleware(makeHandler(oh.FindByID, h.logger), h.config.GetJwtSecret()))
+	router.Handle("POST /owner", middleware.AuthMiddleware(makeHandler(oh.Create, h.logger), h.config.GetJwtSecret()))
+	router.Handle("GET /owner", middleware.AuthMiddleware(makeHandler(oh.FindAll, h.logger), h.config.GetJwtSecret()))
 
-	// owner_handler := factory.NewOwnerHandlerFactory(pool)
-
-	// mux.Handle("GET /owners/{owner_id}", middleware.AuthMiddleware(makeHandler(owner_handler.FindByID)))
-	// mux.Handle("GET /owners", middleware.AuthMiddleware(makeHandler(owner_handler.FindAllByManagerID)))
-	// mux.Handle("POST /owners", middleware.AuthMiddleware(makeHandler(owner_handler.Create)))
-	// mux.Handle("PUT /owners/assign", middleware.AuthMiddleware(makeHandler(owner_handler.AssignOwnerToProperty)))
 	return nil
 }

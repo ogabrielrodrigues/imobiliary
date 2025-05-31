@@ -10,22 +10,22 @@ type Owner struct {
 	ID            uuid.UUID
 	ManagerID     uuid.UUID
 	Fullname      string
-	CPF           string
-	RG            string
-	Email         types.Email
+	CPF           types.CPF
+	RG            types.RG
 	Phone         types.Phone
+	Email         types.Email
 	Occupation    string
 	MaritalStatus types.MaritalStatus
 	Address       types.Address
 }
 
-func New(
+func NewOwner(
 	manager_id uuid.UUID,
-	fullname,
-	cpf,
-	rg string,
-	email types.Email,
+	fullname string,
+	cpf types.CPF,
+	rg types.RG,
 	phone types.Phone,
+	email types.Email,
 	occupation string,
 	marital_status types.MaritalStatus,
 	address types.Address,
@@ -36,8 +36,8 @@ func New(
 		Fullname:      fullname,
 		CPF:           cpf,
 		RG:            rg,
-		Email:         email,
 		Phone:         phone,
+		Email:         email,
 		Occupation:    occupation,
 		MaritalStatus: marital_status,
 		Address:       address,
