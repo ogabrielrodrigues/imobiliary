@@ -27,7 +27,6 @@ import { useHookFormMask } from 'use-mask-input'
 
 const sign_schema = z.object({
   fullname: z.string().min(10, "Seu nome deve contem ao menos 10 caracteres").max(100, "Seu nome deve contem menos de 100 caracteres"),
-  creci_id: z.string().min(7, "Seu CRECI ter 7 digitos").regex(/^\d{5}-[FJ]$/, "Seu CRECI deve conter apenas números e o sufixo F ou J"),
   email: z.string().email("o e-mail digitado deve ser válido"),
   cellphone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
     .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
@@ -48,7 +47,6 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
     resolver: zodResolver(sign_schema),
     defaultValues: {
       fullname: "",
-      creci_id: "",
       email: "",
       cellphone: "",
       password: "",
@@ -75,7 +73,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
         break
       case 409:
         toast.error("Erro ao cadastrar usuário", {
-          description: "Já existe um usuário com esse e-mail ou CRECI.",
+          description: "Já existe um usuário com esse e-mail.",
           duration: 3000
         })
         break
@@ -101,7 +99,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
           control={form.control}
           name="fullname"
           render={({ field }) => (
-            <FormItem className="col-span-1 md:col-span-2">
+            <FormItem className="col-span-1 md:col-span-3">
               <FormLabel>Nome Completo</FormLabel>
               <FormControl>
                 <Input
@@ -110,30 +108,6 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   autoComplete="off"
                   autoFocus
                   {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="creci_id"
-          render={({ field }) => (
-            <FormItem className="col-span-1">
-              <FormLabel>Seu CRECI</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Seu CRECI"
-                  maxLength={7}
-                  autoComplete="off"
-                  {...field}
-                  {...registerWithMask("creci_id", ["99999-F", "99999-J"], {
-                    showMaskOnHover: false,
-                    showMaskOnFocus: false,
-                    required: true,
-                  })}
                 />
               </FormControl>
               <FormMessage />

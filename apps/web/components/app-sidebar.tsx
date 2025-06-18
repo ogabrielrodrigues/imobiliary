@@ -18,10 +18,9 @@ import { House, HousePlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NavMain } from "./nav-main"
-import { NavUser } from "./nav-user"
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-  user: User
+  user?: User
 }
 
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
@@ -36,7 +35,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" className="text-lg font-bold">
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2 text-muted">
                 <HousePlus className="!size-5" />
                 Imobiliary
               </Link>
@@ -48,7 +47,11 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === "/dashboard"}>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === "/dashboard"}
+                className="data-[active=true]:!text-primary data-[active=true]:!bg-ring/20"
+              >
                 <a href="/dashboard">
                   <House />
                   Dashboard</a>
@@ -59,7 +62,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <NavMain />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        {/* <NavUser user={user} /> */}
       </SidebarFooter>
     </Sidebar>
   )

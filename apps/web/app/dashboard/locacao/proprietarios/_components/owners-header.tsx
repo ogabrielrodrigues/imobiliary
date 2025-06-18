@@ -1,4 +1,4 @@
-import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/HeaderCard"
+import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
 import { Owner } from "@/types/owner"
 
 interface OwnersHeaderProps {

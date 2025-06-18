@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Fragment } from "react"
 import { HomeHeader } from "./_components/home-header"
 
-
 export const metadata: Metadata = {
   title: "Home"
 }
@@ -16,14 +15,14 @@ export default async function HomePage() {
       <HomeHeader />
       <main className="sm:container mx-auto w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
         <div className="px-4 sm:px-0 flex flex-col items-center">
-          <h1 className="text-[1.80rem] leading-8 sm:px-8 md:leading-[4.5rem] font-bold mb-4 sm:text-6xl text-left sm:text-center">
+          <h1 className="text-[1.80rem] leading-8 sm:px-8 md:leading-[4.5rem] font-extrabold font-heading text-muted mb-4 sm:text-6xl text-left sm:text-center">
             Bem-vindo ao Imobiliary!
           </h1>
           <p className="mb-8 md:text-lg text-base max-w-[800px] text-muted-foreground text-left sm:text-center">
-            Aqui você poderá, gerenciar seus imóveis com agilidade e eficiência, sem gastar <span className="text-primary">nenhum real</span> com isso.
+            Aqui você poderá, gerenciar seus imóveis com agilidade e eficiência, sem gastar <span className="text-primary font-bold">nenhum real</span> com isso.
           </p>
           <Link href="/login">
-            <Button size="lg">Conhecer agora</Button>
+            <Button size="lg" className="!bg-primary">Conhecer agora</Button>
           </Link>
         </div>
       </main>
@@ -33,7 +32,9 @@ export default async function HomePage() {
           target="_blank"
           href="https://github.com/ogabrielrodrigues/imobiliary"
           className="text-primary"
-        ><Button variant="ghost">Github</Button></Link>
+        >
+          <Button variant="ghost" className="font-bold">Github</Button>
+        </Link>
       </footer>
     </Fragment>
   )

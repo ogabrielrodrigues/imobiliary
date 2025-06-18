@@ -1,13 +1,19 @@
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Geist_Mono as GeistMono } from "next/font/google";
+import { Poppins, Rubik } from "next/font/google";
 import { PropsWithChildren } from "react";
 import "./globals.css";
 
-const font_mono = GeistMono({
-  variable: "--font-mono",
+const fontSans = Rubik({
+  variable: "--font-sans",
   subsets: ["latin"],
+});
+
+const fontHeading = Poppins({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["700", "800", "900"]
 });
 
 export const metadata: Metadata = {
@@ -19,9 +25,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="">
       <body
-        className={cn(font_mono.variable, 'font-display antialiased')}
+        className={cn(fontSans.variable, fontHeading.variable, 'font-sans antialiased')}
       >
         <Toaster />
         {children}

@@ -14,7 +14,7 @@ export function AuthHeader({ title, description, url, urlText }: AuthHeaderProps
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2">
         <div className="flex flex-col items-center gap-2 font-medium">
-          <Link href="/" className="flex size-8 items-center justify-center rounded-md">
+          <Link href="/" className="flex size-8 items-center justify-center rounded-md text-muted">
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <HousePlus className="size-5" />
               <span className="sr-only">Imobiliary</span>

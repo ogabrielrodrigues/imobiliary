@@ -70,7 +70,11 @@ export function NavMain() {
       <SidebarMenu>
         <Collapsible key={item.title} asChild defaultOpen>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton
+              asChild
+              isActive={item.url.includes(pathname)}
+              className="data-[active=true]:!text-primary data-[active=true]:!bg-sidebar"
+            >
               <a href={item.url}>
                 <item.icon />
                 <span>{item.title}</span>
@@ -87,9 +91,13 @@ export function NavMain() {
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild isActive={pathname === subItem.url}>
+                      <SidebarMenuSubButton
+                        asChild
+                        isActive={pathname === subItem.url}
+                        className="group data-[active=true]:!text-primary data-[active=true]:!bg-ring/20 data-[active=true]:!font-medium"
+                      >
                         <a href={subItem.url}>
-                          <subItem.icon />
+                          <subItem.icon className="group-data-[active=true]:!text-primary" />
                           <span>{subItem.title}</span>
                         </a>
                       </SidebarMenuSubButton>
