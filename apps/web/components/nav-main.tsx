@@ -34,7 +34,7 @@ type NavMainType = {
 }
 
 const item: NavMainType = {
-  title: "Locação de Imóveis",
+  title: "Locação",
   url: "/dashboard/locacao",
   icon: BookOpenText,
   items: [
@@ -72,7 +72,6 @@ export function NavMain() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              isActive={item.url.includes(pathname)}
               className="data-[active=true]:!text-primary data-[active=true]:!bg-sidebar"
             >
               <a href={item.url}>

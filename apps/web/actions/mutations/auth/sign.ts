@@ -5,13 +5,12 @@ import { env } from "@/lib/env"
 
 export async function sign(values: SignRequest): Promise<number> {
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/users`, {
+    const response = await fetch(`${env.SERVER_ADDR}/manager`, {
       method: "POST",
       body: JSON.stringify({
         fullname: values.fullname,
-        creci_id: values.creci_id,
+        phone: values.phone,
         email: values.email,
-        cellphone: values.cellphone,
         password: values.password,
       }),
     })

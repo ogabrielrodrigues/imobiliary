@@ -60,19 +60,19 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
       case 401:
         toast.error("Senha inválida.", {
           description: "Verifique sua senha e tente novamente",
-          duration: 3000
+          duration: 4000
         })
         break
       case 404:
         toast.error("Usuário não encontrado.", {
           description: "Verifique seu email e tente novamente",
-          duration: 3000
+          duration: 4000
         })
         break
       default:
         toast.error("Erro ao realizar login.", {
           description: "Ocorreu um erro interno ao tentar realizar login. Caso o problema persista entre em contato",
-          duration: 3000
+          duration: 4000
         })
         break
     }
@@ -98,6 +98,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
                   className="text-sm md:text-base"
                   placeholder="Seu e-mail de acesso"
                   autoComplete="off"
+                  disabled={loading}
                   autoFocus
                   {...field}
                 />
@@ -118,6 +119,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
                   type="password"
                   placeholder="Sua senha de acesso"
                   autoComplete="off"
+                  disabled={loading}
                   {...field}
                 />
               </FormControl>

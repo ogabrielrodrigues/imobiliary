@@ -6,7 +6,7 @@ import { cookies } from "next/headers"
 
 export async function login(values: LoginRequest): Promise<number> {
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/users/auth`, {
+    const response = await fetch(`${env.SERVER_ADDR}/auth`, {
       method: "POST",
       body: JSON.stringify(values),
     })

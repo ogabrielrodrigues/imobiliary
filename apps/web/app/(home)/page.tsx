@@ -13,20 +13,20 @@ export default async function HomePage() {
   return (
     <Fragment>
       <HomeHeader />
-      <main className="sm:container mx-auto w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
+      <main className="sm:container bg-primary/3 mx-auto w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
         <div className="px-4 sm:px-0 flex flex-col items-center">
-          <h1 className="text-[1.80rem] leading-8 sm:px-8 md:leading-[4.5rem] font-extrabold font-heading text-muted mb-4 sm:text-6xl text-left sm:text-center">
+          <h1 className="text-[1.80rem] sm:px-8 leading-8 sm:leading-16 font-extrabold font-heading text-muted mb-4 sm:text-6xl text-left sm:text-center">
             Bem-vindo ao Imobiliary!
           </h1>
-          <p className="mb-8 md:text-lg text-base max-w-[800px] text-muted-foreground text-left sm:text-center">
-            Aqui você poderá, gerenciar seus imóveis com agilidade e eficiência, sem gastar <span className="text-primary font-bold">nenhum real</span> com isso.
+          <p className="mb-8 md:text-lg text-base max-w-[640px] text-muted-foreground text-left sm:text-center">
+            Aqui você poderá gerenciar seus imóveis com agilidade e eficiência, sem gastar <span className="text-primary font-bold">nenhum real</span> com isso.
           </p>
           <Link href="/login">
-            <Button size="lg" className="!bg-primary">Conhecer agora</Button>
+            <Button size="lg">Conhecer agora</Button>
           </Link>
         </div>
       </main>
-      <footer className="border-t border-border p-4 h-16 sm:gap-2 w-full flex items-center justify-center text-muted-foreground text-xs sm:text-sm">
+      <footer className="bg-primary/3 border-t border-border p-4 h-16 sm:gap-2 w-full flex items-center justify-center text-muted-foreground text-xs sm:text-sm">
         <p>Quer contribuir, e ajudar a aprimorar a plataforma?</p>
         <Link
           target="_blank"

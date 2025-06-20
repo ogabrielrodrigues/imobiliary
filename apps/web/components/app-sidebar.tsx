@@ -13,24 +13,22 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar"
 
-import { User } from "@/types/user"
+import { Manager } from "@/types/manager"
 import { House, HousePlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NavMain } from "./nav-main"
+import { NavManager } from "./nav-manager"
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-  user?: User
+  manager?: Manager
 }
 
-export function AppSidebar({ user, ...props }: AppSidebarProps) {
+export function AppSidebar({ manager, ...props }: AppSidebarProps) {
   const pathname = usePathname()
 
   return (
-    <Sidebar
-      className="top-(--header-height) h-[calc(100svh-var(--header-height))]! "
-      {...props}
-    >
+    <Sidebar variant="inset" {...props} >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -62,7 +60,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
         <NavMain />
       </SidebarContent>
       <SidebarFooter>
-        {/* <NavUser user={user} /> */}
+        <NavManager manager={manager} />
       </SidebarFooter>
     </Sidebar>
   )

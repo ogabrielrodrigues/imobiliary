@@ -28,7 +28,7 @@ import { useHookFormMask } from 'use-mask-input'
 const sign_schema = z.object({
   fullname: z.string().min(10, "Seu nome deve contem ao menos 10 caracteres").max(100, "Seu nome deve contem menos de 100 caracteres"),
   email: z.string().email("o e-mail digitado deve ser válido"),
-  cellphone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
+  phone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
     .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
   password: z.string().min(8, "A senha deve contem ao menos 8 caracteres"),
   confirm_password: z.string().min(8, "A senha deve contem ao menos 8 caracteres")
@@ -48,7 +48,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
     defaultValues: {
       fullname: "",
       email: "",
-      cellphone: "",
+      phone: "",
       password: "",
       confirm_password: ""
     }
@@ -72,15 +72,15 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
         }, 2000)
         break
       case 409:
-        toast.error("Erro ao cadastrar usuário", {
+        toast.error("Usúario já cadastrado", {
           description: "Já existe um usuário com esse e-mail.",
-          duration: 3000
+          duration: 4000
         })
         break
       default:
         toast.error("Erro ao cadastrar usuário", {
           description: "Verifique os dados e tente novamente.",
-          duration: 3000
+          duration: 4000
         })
         break
     }
@@ -134,7 +134,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
         />
         <FormField
           control={form.control}
-          name="cellphone"
+          name="phone"
           render={({ field }) => (
             <FormItem className="col-span-1 md:col-span-3">
               <FormLabel>Telefone / Celular</FormLabel>
@@ -144,7 +144,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   placeholder="Seu telefone ou celular"
                   autoComplete="off"
                   {...field}
-                  {...registerWithMask("cellphone", ['(99) 9999-9999', '(99) 99999-9999'], {
+                  {...registerWithMask("phone", ['(99) 9999-9999', '(99) 99999-9999'], {
                     showMaskOnHover: false,
                     showMaskOnFocus: false,
                     required: true
