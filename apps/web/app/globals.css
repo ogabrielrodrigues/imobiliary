@@ -91,10 +91,6 @@
   }
 
   ::-webkit-scrollbar {
-    @apply w-2
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-zinc-700 rounded-lg
+    @apply hidden
   }
 }

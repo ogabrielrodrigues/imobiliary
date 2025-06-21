@@ -14,7 +14,7 @@ export async function getOwner(id: string): Promise<GetOwnerResponse> {
   const auth_token = await token()
 
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/owners/${id}`, {
+    const response = await fetch(`${env.SERVER_ADDR}/owner/${id}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${auth_token}`

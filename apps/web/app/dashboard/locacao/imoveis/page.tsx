@@ -13,7 +13,9 @@ export default async function PropertiesPage() {
   const { properties: found, status } = await listProperties()
 
   if (!found || status !== 200) {
-    return <div className="container mx-auto">Erro ao carregar os imóveis</div>
+    return <div className="w-full flex justify-center">
+      <p className="font-medium text-muted">Erro ao carregar os imóveis</p>
+    </div>
   }
 
   const properties = found.length > 0 ? found : []

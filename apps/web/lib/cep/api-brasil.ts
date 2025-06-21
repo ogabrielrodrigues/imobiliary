@@ -13,8 +13,11 @@ export async function searchCEP(cep: string): Promise<CEP | undefined> {
   const data = await response.json()
 
   const found_cep: CEP = {
+    street: data.street,
     cep: data.cep,
-    state: data.state
+    state: data.state,
+    city: data.city,
+    neighborhood: data.neighborhood
   }
 
   return found_cep

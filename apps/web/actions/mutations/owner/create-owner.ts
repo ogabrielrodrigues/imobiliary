@@ -17,7 +17,7 @@ export async function createOwner(data: OwnerRequest): Promise<number> {
   data.address.state = found.state
 
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/owners`, {
+    const response = await fetch(`${env.SERVER_ADDR}/owner`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

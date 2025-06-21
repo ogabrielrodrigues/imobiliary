@@ -9,7 +9,7 @@ export async function HomeHeader() {
   const { manager } = await getManager()
 
   return (
-    <header className="h-16 p-4 gap-4 w-full bg-primary/3 flex items-center justify-between border-b border-borde text-muted">
+    <header className="h-16 p-4 gap-4 w-full flex items-center justify-between border-b border-borde text-muted">
       <nav className="gap-4 flex items-center">
         <div className="flex items-center gap-2">
           <HousePlus className="size-5" />

@@ -13,7 +13,7 @@ export default async function HomePage() {
   return (
     <Fragment>
       <HomeHeader />
-      <main className="sm:container bg-primary/3 mx-auto w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
+      <main className="bg-primary/3 w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
         <div className="px-4 sm:px-0 flex flex-col items-center">
           <h1 className="text-[1.80rem] sm:px-8 leading-8 sm:leading-16 font-extrabold font-heading text-muted mb-4 sm:text-6xl text-left sm:text-center">
             Bem-vindo ao Imobiliary!
@@ -26,7 +26,7 @@ export default async function HomePage() {
           </Link>
         </div>
       </main>
-      <footer className="bg-primary/3 border-t border-border p-4 h-16 sm:gap-2 w-full flex items-center justify-center text-muted-foreground text-xs sm:text-sm">
+      <footer className=" border-t border-border p-4 h-16 sm:gap-2 w-full flex items-center justify-center text-muted-foreground text-xs sm:text-sm">
         <p>Quer contribuir, e ajudar a aprimorar a plataforma?</p>
         <Link
           target="_blank"

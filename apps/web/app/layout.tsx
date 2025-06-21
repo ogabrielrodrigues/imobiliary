@@ -27,7 +27,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className="">
       <body
-        className={cn(fontSans.variable, fontHeading.variable, 'font-sans antialiased')}
+        className={cn(fontSans.variable, fontHeading.variable, 'font-sans antialiased !bg-primary/5 w-svw min-h-svh')}
       >
         <Toaster />
         {children}

@@ -22,7 +22,7 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
       <SidebarProvider className="flex flex-col">
         <div className="flex flex-1 !bg-primary/3">
           <AppSidebar manager={manager} />
-          <SidebarInset className="!m-0 sm:!m-3 overflow-x-hidden">
+          <SidebarInset className="!m-0 w-full lg:!m-3">
             <SiteHeader />
             <section className="px-4">
               {children}

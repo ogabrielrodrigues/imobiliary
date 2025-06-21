@@ -1,17 +1,15 @@
-
 export type Owner = {
   id: string
+  manager_id: string
   fullname: string
   cpf: string
   rg: string
   email: string
-  cellphone: string
+  phone: string
   occupation: string
   marital_status: 'Solteiro(a)' | 'Casado(a)' | 'Amasiado(a)' | 'Divorciado(a)' | 'Viúvo(a)' | 'União Estável',
-  manager_id: string
   address: {
-    full_address: string
-    mini_address: string
+    address: string
     street: string
     number: string
     neighborhood: string

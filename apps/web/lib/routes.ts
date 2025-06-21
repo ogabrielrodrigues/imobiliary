@@ -117,24 +117,10 @@ export const routes: RouteStructure = {
         name: "Conta",
         href: "/dashboard/conta",
       },
-      assinatura: {
-        name: "Assinatura",
-        href: "/dashboard/assinatura",
-      },
       locacao: {
         name: "Alugueis",
         href: "/dashboard/locacao",
         children: {
-          contratos: {
-            name: "Contratos",
-            href: "/dashboard/locacao/contratos",
-            dynamicChildren: {
-              id: {
-                name: "Detalhes do Contrato",
-                isDynamic: true
-              }
-            }
-          },
           inquilinos: {
             name: "Inquilinos",
             href: "/dashboard/locacao/inquilinos",
@@ -160,19 +146,11 @@ export const routes: RouteStructure = {
             href: "/dashboard/locacao/proprietarios",
             dynamicChildren: {
               id: {
-                name: "Perfil do Proprietário",
+                name: "Proprietário",
                 isDynamic: true
               }
             }
           },
-          vistorias: {
-            name: "Vistorias",
-            href: "/dashboard/locacao/vistorias",
-          },
-          relatorios: {
-            name: "Relatórios",
-            href: "/dashboard/locacao/relatorios",
-          }
         }
       },
     }

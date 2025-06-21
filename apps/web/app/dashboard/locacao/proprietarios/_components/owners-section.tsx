@@ -19,7 +19,7 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
   const filtered = useMemo(() => {
     return owners.filter(owner => {
       const matchesSearch = searchTerm.trim() === "" ||
-        owner.address.mini_address.toLowerCase().includes(searchTerm.toLowerCase())
+        owner.fullname.toLowerCase().includes(searchTerm.toLowerCase())
 
       return matchesSearch
     })
@@ -58,7 +58,7 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
 
         <Link href="/dashboard/locacao/proprietarios/novo">
           <Button>
-            <Plus className="size-4 mr-1" />
+            <Plus className="size-4 lg:mr-1" />
             <p className="hidden lg:block">Novo Proprietário</p>
           </Button>
         </Link>
