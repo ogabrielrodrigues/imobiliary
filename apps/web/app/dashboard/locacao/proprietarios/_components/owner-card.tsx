@@ -15,10 +15,10 @@ export function OwnerCard({ owner }: OwnerCardProps) {
         <CardTitle>{owner.fullname}</CardTitle>
         <CardDescription>{owner.address.address}</CardDescription>
       </CardHeader>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end !m-0">
         <div className="flex justify-end">
           <Link href={`/dashboard/locacao/proprietarios/${owner.id}`}>
-            <Button variant="outline">
+            <Button variant="link">
               <ArrowUpRight className="size-4 lg:mr-1" />
               <p className="hidden sm:block">Detalhes</p>
             </Button>

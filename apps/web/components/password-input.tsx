@@ -12,7 +12,7 @@ function PasswordInput({ className, type, ...props }: React.ComponentProps<"inpu
   const disabled = props.value === '' || props.value === undefined || props.disabled
 
   return (
-    <div className="relative">
+    <div className="relative !bg-background rounded-md">
       <Input
         type={showPassword ? 'text' : 'password'}
         className={cn('hide-password-toggle pr-10', className)}
@@ -51,3 +51,4 @@ function PasswordInput({ className, type, ...props }: React.ComponentProps<"inpu
 PasswordInput.displayName = 'PasswordInput'
 
 export { PasswordInput }
+

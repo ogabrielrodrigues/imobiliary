@@ -36,7 +36,7 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
   const isFilterActive = searchTerm !== ""
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex flex-col gap-6 pb-4">
       <div className="flex items-center justify-between">
         <div className="w-full flex gap-2">
           <Input
@@ -66,11 +66,11 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
 
       {owners.length > 0
         ? (<OwnersList owners={filtered} />)
-        : (<div className="col-span-full text-center py-8">
-          <p className="text-muted-foreground">Nenhum propretário encontrado.</p>
-        </div>)}
-
-
+        : (
+          <div className="col-span-full text-center py-8">
+            <p className="text-muted-foreground">Nenhum propretário encontrado.</p>
+          </div>
+        )}
     </section>
   )
 }

@@ -41,10 +41,9 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
           <CardTitle className="text-lg font-bold">Dados p/ contato</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <p className="text-muted-foreground"><strong className="text-muted">Email:</strong> {owner.email}</p>
             <p className="text-muted-foreground"><strong className="text-muted">Telefone:</strong> {owner.phone}</p>
-            <p className="text-muted-foreground"><strong className="text-muted">Endereço:</strong> {owner.address.address}</p>
           </div>
         </CardContent>
       </Card>

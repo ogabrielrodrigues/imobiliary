@@ -107,6 +107,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   placeholder="Seu nome completo"
                   autoComplete="off"
                   autoFocus
+                  disabled={loading}
                   {...field}
                 />
               </FormControl>
@@ -125,6 +126,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   className="text-sm md:text-base"
                   placeholder="Seu e-mail de acesso"
                   autoComplete="off"
+                  disabled={loading}
                   {...field}
                 />
               </FormControl>
@@ -143,6 +145,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   className="text-sm md:text-base"
                   placeholder="Seu telefone ou celular"
                   autoComplete="off"
+                  disabled={loading}
                   {...field}
                   {...registerWithMask("phone", ['(99) 9999-9999', '(99) 99999-9999'], {
                     showMaskOnHover: false,
@@ -166,6 +169,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   className="text-sm md:text-base"
                   placeholder="Sua senha de acesso"
                   autoComplete="off"
+                  disabled={loading}
                   {...field}
                 />
               </FormControl>
@@ -184,6 +188,7 @@ export function SignForm({ className, ...props }: React.ComponentProps<"form">) 
                   className="text-sm md:text-base"
                   placeholder="Confirme sua senha de acesso"
                   autoComplete="off"
+                  disabled={loading}
                   {...field}
                 />
               </FormControl>

@@ -1,6 +1,6 @@
 "use client"
 
-import { Banknote, BookOpenText, Building, ChevronRight, type LucideIcon, UserRoundCheck, UsersRound } from "lucide-react"
+import { BookOpenText, Building, ChevronRight, type LucideIcon, UserRoundCheck } from "lucide-react"
 
 import {
   Collapsible,
@@ -38,16 +38,16 @@ const item: NavMainType = {
   url: "/dashboard/locacao",
   icon: BookOpenText,
   items: [
-    {
-      title: "Alugueres",
-      url: "/dashboard/locacao",
-      icon: Banknote,
-    },
-    {
-      title: "Inquilinos",
-      url: "/dashboard/locacao/inquilinos",
-      icon: UsersRound,
-    },
+    // {
+    //   title: "Alugueres",
+    //   url: "/dashboard/locacao",
+    //   icon: Banknote,
+    // },
+    // {
+    //   title: "Inquilinos",
+    //   url: "/dashboard/locacao/inquilinos",
+    //   icon: UsersRound,
+    // },
     {
       title: "Imóveis",
       url: "/dashboard/locacao/imoveis",

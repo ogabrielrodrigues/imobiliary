@@ -21,7 +21,9 @@ import { cn } from "@/lib/utils"
 import { createOwner } from "@/actions/mutations/owner/create-owner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { searchCEP } from "@/lib/cep/api-brasil"
+import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useHookFormMask } from "use-mask-input"
 
@@ -49,6 +51,7 @@ export type OwnerRequest = z.infer<typeof owner_schema>
 
 export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<OwnerRequest>({
     resolver: zodResolver(owner_schema),
@@ -88,6 +91,8 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
   }
 
   async function onSubmit(values: OwnerRequest) {
+    setLoading(true)
+
     const status = await createOwner(values)
 
     switch (status) {
@@ -102,6 +107,8 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
         toast.error("Erro ao criar proprietário", { description: "Confira os dados e tente novamente", duration: 1500 })
         break
     }
+
+    setLoading(false)
   }
 
   return (
@@ -124,6 +131,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     placeholder="Nome completo"
                     autoComplete="off"
                     autoFocus
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -143,6 +151,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="CPF"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                     {...registerWithMask("cpf", '999.999.999-99', {
                       showMaskOnHover: false,
@@ -167,7 +176,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="RG"
                     autoComplete="off"
-                    autoFocus
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -187,6 +196,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Telefone ou celular"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                     {...registerWithMask("phone", ['(99) 9999-9999', '(99) 99999-9999'], {
                       showMaskOnHover: false,
@@ -211,6 +221,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="E-mail de contato"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -230,6 +241,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Ocupação"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -248,6 +260,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                   <Select
                     defaultValue={field.value}
                     onValueChange={field.onChange}
+                    disabled={loading}
                     {...field}
                   >
                     <SelectTrigger>
@@ -280,6 +293,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     placeholder="CEP"
                     autoComplete="off"
                     maxLength={8}
+                    disabled={loading}
                     {...field}
                     {...registerWithMask("address.zip_code", '99999999', {
                       showMaskOnHover: false,
@@ -307,7 +321,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Logradouro"
                     autoComplete="off"
-                    autoFocus
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -326,6 +340,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Número"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -345,6 +360,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Complemento"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -364,6 +380,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Bairro"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -383,6 +400,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     className="text-sm md:text-base"
                     placeholder="Cidade"
                     autoComplete="off"
+                    disabled={loading}
                     {...field}
                   />
                 </FormControl>
@@ -393,8 +411,8 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" size="lg" className="">
-            Cadastrar
+          <Button disabled={loading} type="submit" size="lg" className="">
+            {loading && <LoaderCircle className="size-4 animate-spin" />}Cadastrar
           </Button>
         </div>
       </form>

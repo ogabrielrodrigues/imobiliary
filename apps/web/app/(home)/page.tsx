@@ -13,7 +13,7 @@ export default async function HomePage() {
   return (
     <Fragment>
       <HomeHeader />
-      <main className="bg-primary/3 w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
+      <main className="w-screen h-[calc(100svh-132px)] flex flex-col items-center justify-center text-center">
         <div className="px-4 sm:px-0 flex flex-col items-center">
           <h1 className="text-[1.80rem] sm:px-8 leading-8 sm:leading-16 font-extrabold font-heading text-muted mb-4 sm:text-6xl text-left sm:text-center">
             Bem-vindo ao Imobiliary!
