@@ -17,7 +17,7 @@ export async function createProperty(data: CreatePropertyRequest): Promise<numbe
   data.address.state = found.state
 
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/properties`, {
+    const response = await fetch(`${env.SERVER_ADDR}/property`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

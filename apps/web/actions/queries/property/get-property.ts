@@ -14,7 +14,7 @@ export async function getProperty(id: string): Promise<GetPropertyResponse> {
   const auth_token = await token()
 
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/properties/${id}`, {
+    const response = await fetch(`${env.SERVER_ADDR}/property/${id}`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${auth_token}`

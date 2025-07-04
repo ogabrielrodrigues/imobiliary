@@ -19,8 +19,7 @@ export function OwnerCard({ owner }: OwnerCardProps) {
         <div className="flex justify-end">
           <Link href={`/dashboard/locacao/proprietarios/${owner.id}`}>
             <Button variant="link">
-              <ArrowUpRight className="size-4 lg:mr-1" />
-              <p className="hidden sm:block">Detalhes</p>
+              <ArrowUpRight className="size-4" />Detalhes
             </Button>
           </Link>
         </div>

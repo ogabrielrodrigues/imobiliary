@@ -7,8 +7,7 @@ export type Property = {
   kind: 'Residencial' | 'Comercial' | 'Industrial' | 'Terreno' | 'Rural',
   status: 'Disponível' | 'Ocupado' | 'Indisponível' | 'Reservado' | 'Reformando',
   address: {
-    full_address: string
-    mini_address: string
+    address: string
     street: string
     number: string
     neighborhood: string

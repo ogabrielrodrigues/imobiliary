@@ -12,13 +12,13 @@ export const metadata: Metadata = {
 export default async function PropertiesPage() {
   const { properties: found, status } = await listProperties()
 
-  if (!found || status !== 200) {
+  if (status !== 200) {
     return <div className="w-full flex justify-center">
       <p className="font-medium text-muted">Erro ao carregar os imóveis</p>
     </div>
   }
 
-  const properties = found.length > 0 ? found : []
+  const properties = !found ? [] : found
 
   return (
     <div className="container mx-auto flex flex-col space-y-10">

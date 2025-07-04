@@ -1,3 +1,4 @@
+import { listOwners } from "@/actions/queries/owner/list-owners"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Metadata } from "next"
@@ -9,6 +10,18 @@ export const metadata: Metadata = {
 }
 
 export default async function NewPropertyPage() {
+  const { status: owner_status, owners: found } = await listOwners()
+
+  if (owner_status != 200) {
+    return (
+      <div className="w-full flex justify-center">
+        <p className="font-medium text-muted">Erro ao carregar proprietários</p>
+      </div>
+    )
+  }
+
+  const owners = !found ? [] : found
+
   return (
     <div className="container mx-auto xl:max-w-xl flex flex-col space-y-4">
 
@@ -21,7 +34,7 @@ export default async function NewPropertyPage() {
           </Button>
         </Link>
       </div>
-      <NewPropertyForm />
+      <NewPropertyForm owners={owners} />  {/* Fazer melhoria de busca de endereço ...*/}
     </div >
   )
 }

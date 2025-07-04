@@ -14,7 +14,7 @@ export async function listProperties(): Promise<ListPropertiesResponse> {
   const auth_token = await token()
 
   try {
-    const response = await fetch(`${env.SERVER_ADDR}/properties`, {
+    const response = await fetch(`${env.SERVER_ADDR}/property`, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${auth_token}`

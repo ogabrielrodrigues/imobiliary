@@ -27,14 +27,12 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
           <h1 className="text-2xl font-bold">{owner.fullname}</h1>
           <span className="text-muted-foreground text-sm">{owner.address.address}</span>
         </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Link href="/dashboard/locacao/proprietarios">
-            <Button variant="outline">
-              <ArrowLeft className="w-4 h-4" />
-              <p className="hidden md:block">Voltar</p>
-            </Button>
-          </Link>
-        </div>
+        <Link href="/dashboard/locacao/proprietarios">
+          <Button variant="outline">
+            <ArrowLeft className="w-4 h-4" />
+            <p className="hidden md:block">Voltar</p>
+          </Button>
+        </Link>
       </div>
       <Card className="backdrop-blur-2xl relative z-20 overflow-hidden">
         <CardHeader>

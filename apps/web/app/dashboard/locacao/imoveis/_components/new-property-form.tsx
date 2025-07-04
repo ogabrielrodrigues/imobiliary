@@ -17,15 +17,17 @@ import { Input } from "@/components/ui/input"
 
 import { cn } from "@/lib/utils"
 
-import { Separator } from "@/components/ui/separator"
-
 import { createProperty } from "@/actions/mutations/property/create-property"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Owner } from "@/types/owner"
+import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useHookFormMask } from "use-mask-input"
 
 export const property_schema = z.object({
+  owner_id: z.string().uuid("Você deve selecionar um proprietário"),
   water_id: z.string().min(3, "O código da água deve conter ao menos 3 caracteres"),
   energy_id: z.string().min(3, "O código da energia deve conter ao menos 3 caracteres"),
   status: z.enum(['Disponível', 'Ocupado', 'Indisponível', 'Reservado', 'Reformando']),
@@ -43,12 +45,18 @@ export const property_schema = z.object({
 
 export type CreatePropertyRequest = z.infer<typeof property_schema>
 
-export function NewPropertyForm({ className, ...props }: React.ComponentProps<"form">) {
+export type NewPropertyFormProps = React.ComponentProps<"form"> & {
+  owners: Owner[]
+}
+
+export function NewPropertyForm({ owners, className, ...props }: NewPropertyFormProps) {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<CreatePropertyRequest>({
     resolver: zodResolver(property_schema),
     defaultValues: {
+      owner_id: "",
       water_id: "",
       energy_id: "",
       status: "Disponível",
@@ -68,6 +76,8 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
   const registerWithMask = useHookFormMask(form.register);
 
   async function onSubmit(values: CreatePropertyRequest) {
+    setLoading(true)
+
     const status = await createProperty(values)
 
     switch (status) {
@@ -82,234 +92,283 @@ export function NewPropertyForm({ className, ...props }: React.ComponentProps<"f
         toast.error("Erro ao criar imóvel", { description: "Confira os dados e tente novamente", duration: 1500 })
         break
     }
+
+    setLoading(false)
   }
 
   return (
     <Form {...form}>
       <form
-        className={cn("grid grid-cols-subgrid md:!grid-cols-2 space-y-4 gap-x-2", className)}
+        className="flex flex-col pb-4 gap-4"
         {...props}
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <FormField
-          control={form.control}
-          name="address.street"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Logradouro</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Logradouro"
-                  autoComplete="off"
-                  autoFocus
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="address.number"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Número</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Número"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className={cn("grid grid-cols-subgrid md:!grid-cols-2 gap-y-4 gap-x-2", className)}>
+          <FormField
+            control={form.control}
+            name="owner_id"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>Proprietário</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                    disabled={loading || owners.length === 0}
+                    {...field}
+                  >
+                    <SelectTrigger autoFocus>
+                      <SelectValue
+                        placeholder={owners.length > 0
+                          ? "Selecione o proprietário"
+                          : "Sem proprietários"}
+                      />
+                    </SelectTrigger>
+                    <SelectContent className="text-sm md:text-base">
+                      {owners.length > 0 && owners.map(owner => <SelectItem key={owner.id} value={owner.id}>{owner.fullname}</SelectItem>)}
+                      {/* <SelectItem value="Disponível">Disponível</SelectItem>
+                      <SelectItem value="Ocupado">Ocupado</SelectItem>
+                      <SelectItem value="Indisponível">Indisponível</SelectItem>
+                      <SelectItem value="Reservado">Reservado</SelectItem>
+                      <SelectItem value="Reformando">Reformando</SelectItem> */}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="address.complement"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Complemento</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Complemento"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="address.street"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Logradouro</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Logradouro"
+                    autoComplete="off"
+                    disabled={loading}
+                    autoFocus
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="address.number"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Número</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Número"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="address.neighborhood"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bairro</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Bairro"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="address.complement"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Complemento</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Complemento"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="address.city"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cidade</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Cidade"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="address.neighborhood"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bairro</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Bairro"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="address.zip_code"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>CEP</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="CEP"
-                  autoComplete="off"
-                  maxLength={8}
-                  {...field}
-                  {...registerWithMask("address.zip_code", '99999999', {
-                    showMaskOnHover: false,
-                    showMaskOnFocus: false,
-                    required: true,
-                  })}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="address.city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cidade</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Cidade"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Separator className="col-span-1 sm:col-span-2" />
+          <FormField
+            control={form.control}
+            name="address.zip_code"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>CEP</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="CEP"
+                    autoComplete="off"
+                    disabled={loading}
+                    maxLength={8}
+                    {...field}
+                    {...registerWithMask("address.zip_code", '99999999', {
+                      showMaskOnHover: false,
+                      showMaskOnFocus: false,
+                      required: true,
+                    })}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="water_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cód. Água</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Cód. água"
-                  autoComplete="off"
-                  autoFocus
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="energy_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cód. Energia</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Cód. energia"
-                  autoComplete="off"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="water_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cód. Água</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Cód. água"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="energy_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cód. Energia</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Cód. energia"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="kind"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tipo</FormLabel>
-              <FormControl>
-                <Select
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                  {...field}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                  <SelectContent className="text-sm md:text-base">
-                    <SelectItem value="Residencial">Residencial</SelectItem>
-                    <SelectItem value="Comercial">Comercial</SelectItem>
-                    <SelectItem value="Industrial">Industrial</SelectItem>
-                    <SelectItem value="Terreno">Terreno</SelectItem>
-                    <SelectItem value="Rural">Rural</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Status</FormLabel>
-              <FormControl>
-                <Select
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                  {...field}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                  <SelectContent className="text-sm md:text-base">
-                    <SelectItem value="Disponível">Disponível</SelectItem>
-                    <SelectItem value="Ocupado">Ocupado</SelectItem>
-                    <SelectItem value="Indisponível">Indisponível</SelectItem>
-                    <SelectItem value="Reservado">Reservado</SelectItem>
-                    <SelectItem value="Reformando">Reformando</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="sm:col-start-2">
-          Cadastrar
-        </Button>
+          <FormField
+            control={form.control}
+            name="kind"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipo</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                    {...field}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o tipo" />
+                    </SelectTrigger>
+                    <SelectContent className="text-sm md:text-base">
+                      <SelectItem value="Residencial">Residencial</SelectItem>
+                      <SelectItem value="Comercial">Comercial</SelectItem>
+                      <SelectItem value="Industrial">Industrial</SelectItem>
+                      <SelectItem value="Terreno">Terreno</SelectItem>
+                      <SelectItem value="Rural">Rural</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                    {...field}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o tipo" />
+                    </SelectTrigger>
+                    <SelectContent className="text-sm md:text-base">
+                      <SelectItem value="Disponível">Disponível</SelectItem>
+                      <SelectItem value="Ocupado">Ocupado</SelectItem>
+                      <SelectItem value="Indisponível">Indisponível</SelectItem>
+                      <SelectItem value="Reservado">Reservado</SelectItem>
+                      <SelectItem value="Reformando">Reformando</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="flex justify-end">
+          <Button disabled={loading} type="submit" size="lg" className="">
+            {loading && <LoaderCircle className="size-4 animate-spin" />}Cadastrar
+          </Button>
+        </div>
       </form>
     </Form>
   )

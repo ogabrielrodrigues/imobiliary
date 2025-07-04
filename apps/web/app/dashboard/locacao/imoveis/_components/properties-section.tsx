@@ -21,7 +21,7 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
   const filtered = useMemo(() => {
     return properties.filter(property => {
       const matchesSearch = searchTerm.trim() === "" ||
-        property.address.mini_address.toLowerCase().includes(searchTerm.toLowerCase())
+        property.address.address.toLowerCase().includes(searchTerm.toLowerCase())
 
       const matchesKind = selectedKind === "Todos" ||
         property.kind === selectedKind
@@ -56,14 +56,14 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div className="w-full flex gap-2">
+        <div className="w-3/5 lg:w-full flex flex-col lg:flex-row gap-2">
           <Input
             placeholder="Procurar..."
             onChange={handleSearch}
             className="w-4/5 sm:w-1/4"
             value={searchTerm}
           />
-          <div className="hidden lg:flex gap-2">
+          <div className="flex flex-col lg:flex-row gap-2">
             <Select onValueChange={handleFilterKind} value={selectedKind}>
               <SelectTrigger>
                 <SelectValue placeholder="Tipo" />
@@ -129,7 +129,7 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
 
         <Link href="/dashboard/locacao/imoveis/novo">
           <Button>
-            <Plus className="size-4 mr-1" />
+            <Plus className="size-4 lg:mr-1" />
             <p className="hidden lg:block">Novo Imóvel</p>
           </Button>
         </Link>

@@ -39,5 +39,11 @@ func setupRoutes(h *Handler, router *http.ServeMux) error {
 	router.Handle("POST /owner", middleware.AuthMiddleware(makeHandler(oh.Create, h.logger), h.config.GetJwtSecret()))
 	router.Handle("GET /owner", middleware.AuthMiddleware(makeHandler(oh.FindAll, h.logger), h.config.GetJwtSecret()))
 
+	ph := maker.MakePropertyHandler(h.pool, h.config)
+
+	router.Handle("GET /property/{property_id}", middleware.AuthMiddleware(makeHandler(ph.FindByID, h.logger), h.config.GetJwtSecret()))
+	router.Handle("POST /property", middleware.AuthMiddleware(makeHandler(ph.Create, h.logger), h.config.GetJwtSecret()))
+	router.Handle("GET /property", middleware.AuthMiddleware(makeHandler(ph.FindAll, h.logger), h.config.GetJwtSecret()))
+
 	return nil
 }
