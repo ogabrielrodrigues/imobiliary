@@ -5,32 +5,31 @@ import (
 	"database/sql"
 	"errors"
 	"imobiliary/internal/application/httperr"
-	"imobiliary/internal/domain/owner"
+	"imobiliary/internal/domain/tenant"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type PostgresOwnerRepository struct {
+type PostgresTenantRepository struct {
 	db *pgxpool.Pool
 }
 
-func NewPostgresOwnerRepository(pool *pgxpool.Pool) *PostgresOwnerRepository {
-	return &PostgresOwnerRepository{db: pool}
+func NewPostgresTenantRepository(pool *pgxpool.Pool) *PostgresTenantRepository {
+	return &PostgresTenantRepository{db: pool}
 }
 
-func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UUID, managerID uuid.UUID) (*owner.Owner, *httperr.HttpError) {
-	row := or.db.QueryRow(ctx, `
+func (tr *PostgresTenantRepository) FindByID(ctx context.Context, tenantID uuid.UUID, managerID uuid.UUID) (*tenant.Tenant, *httperr.HttpError) {
+	row := tr.db.QueryRow(ctx, `
 	SELECT
-		ow.id,
-		ow.manager_id,
-		ow.fullname,
-		ow.cpf,
-		ow.rg,
-		ow.phone,
-		ow.email,
-		ow.occupation,
-		ow.marital_status,
+		te.id,
+		te.manager_id,
+		te.fullname,
+		te.cpf,
+		te.rg,
+		te.phone,
+		te.occupation,
+		te.marital_status,
 		ad.full_address,
 		ad.street,
 		ad.number,
@@ -39,11 +38,11 @@ func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UU
 		ad.city,
 		ad.state,
 		ad.zip_code
-	FROM "owner" ow
-	INNER JOIN "address" ad ON ow.address_id = ad.id
-	WHERE ow.id = $1 AND ow.manager_id = $2`, ownerID, managerID)
+	FROM "tenant" te
+	INNER JOIN "address" ad ON te.address_id = ad.id
+	WHERE te.id = $1 AND te.manager_id = $2`, tenantID, managerID)
 
-	var found owner.Owner
+	var found tenant.Tenant
 	if err := row.Scan(
 		&found.ID,
 		&found.ManagerID,
@@ -51,7 +50,6 @@ func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UU
 		&found.CPF.Cpf,
 		&found.RG.Rg,
 		&found.Phone.Number,
-		&found.Email.Address,
 		&found.Occupation,
 		&found.MaritalStatus,
 		&found.Address.FullAddress,
@@ -64,7 +62,7 @@ func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UU
 		&found.Address.ZipCode,
 	); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, httperr.NewNotFoundError(ctx, "owner not found or not exists")
+			return nil, httperr.NewNotFoundError(ctx, "tenant not found or not exists")
 		}
 
 		return nil, httperr.NewInternalServerError(ctx, err.Error())
@@ -73,11 +71,11 @@ func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UU
 	return &found, nil
 }
 
-func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owner, managerID uuid.UUID) *httperr.HttpError {
-	tx, err := or.db.Begin(ctx)
+func (tr *PostgresTenantRepository) Create(ctx context.Context, tenant *tenant.Tenant, managerID uuid.UUID) *httperr.HttpError {
+	tx, err := tr.db.Begin(ctx)
 	if err != nil {
 		tx.Rollback(ctx)
-		return httperr.NewInternalServerError(ctx, "error creating owner address")
+		return httperr.NewInternalServerError(ctx, "error creating tenant address")
 	}
 
 	row := tx.QueryRow(ctx, `
@@ -85,14 +83,14 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 		(full_address, street, number, complement, neighborhood, city, state, zip_code)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id`,
-		owner.Address.FullAddress,
-		owner.Address.Street,
-		owner.Address.Number,
-		owner.Address.Complement,
-		owner.Address.Neighborhood,
-		owner.Address.City,
-		owner.Address.State,
-		owner.Address.ZipCode,
+		tenant.Address.FullAddress,
+		tenant.Address.Street,
+		tenant.Address.Number,
+		tenant.Address.Complement,
+		tenant.Address.Neighborhood,
+		tenant.Address.City,
+		tenant.Address.State,
+		tenant.Address.ZipCode,
 	)
 
 	var addressID string
@@ -100,31 +98,30 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 		tx.Rollback(ctx)
 
 		if IsUniqueConstraint(err) {
-			return httperr.NewAlreadyExistsError(ctx, "owner address already exists")
+			return httperr.NewAlreadyExistsError(ctx, "tenant address already exists")
 		}
 
 		return httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 
 	_, err = tx.Exec(ctx, `
-		INSERT INTO "owner"
-		(id, manager_id, address_id, fullname, cpf, rg, phone, email, occupation, marital_status)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-		owner.ID,
+		INSERT INTO "tenant"
+		(id, manager_id, address_id, fullname, cpf, rg, phone, occupation, marital_status)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+		tenant.ID,
 		managerID,
 		addressID,
-		owner.Fullname,
-		owner.CPF.Value(),
-		owner.RG.Value(),
-		owner.Phone.Value(),
-		owner.Email.Value(),
-		owner.Occupation,
-		owner.MaritalStatus,
+		tenant.Fullname,
+		tenant.CPF.Value(),
+		tenant.RG.Value(),
+		tenant.Phone.Value(),
+		tenant.Occupation,
+		tenant.MaritalStatus,
 	)
 
 	if err != nil {
 		if IsUniqueConstraint(err) {
-			return httperr.NewAlreadyExistsError(ctx, "owner already exists")
+			return httperr.NewAlreadyExistsError(ctx, "tenant already exists")
 		}
 
 		return httperr.NewInternalServerError(ctx, httperr.InternalServerError)
@@ -138,18 +135,17 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 	return nil
 }
 
-func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.UUID) ([]owner.Owner, *httperr.HttpError) {
-	rows, err := or.db.Query(ctx, `
+func (tr *PostgresTenantRepository) FindAll(ctx context.Context, managerID uuid.UUID) ([]tenant.Tenant, *httperr.HttpError) {
+	rows, err := tr.db.Query(ctx, `
 	SELECT
-		ow.id,
-		ow.manager_id,
-		ow.fullname,
-		ow.cpf,
-		ow.rg,
-		ow.phone,
-		ow.email,
-		ow.occupation,
-		ow.marital_status,
+		te.id,
+		te.manager_id,
+		te.fullname,
+		te.cpf,
+		te.rg,
+		te.phone,
+		te.occupation,
+		te.marital_status,
 		ad.full_address,
 		ad.street,
 		ad.number,
@@ -158,20 +154,20 @@ func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.U
 		ad.city,
 		ad.state,
 		ad.zip_code
-	FROM "owner" ow
-	INNER JOIN "address" ad ON ow.address_id = ad.id
-	WHERE ow.manager_id = $1`, managerID)
+	FROM "tenant" te
+	INNER JOIN "address" ad ON te.address_id = ad.id
+	WHERE te.manager_id = $1`, managerID)
 
 	if err != nil {
 		if IsErrNoRows(err) {
-			return []owner.Owner{}, nil
+			return []tenant.Tenant{}, nil
 		}
 
 		return nil, httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 
-	var found owner.Owner
-	var owners []owner.Owner
+	var found tenant.Tenant
+	var tenants []tenant.Tenant
 	for rows.Next() {
 		if err := rows.Scan(
 			&found.ID,
@@ -180,7 +176,6 @@ func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.U
 			&found.CPF.Cpf,
 			&found.RG.Rg,
 			&found.Phone.Number,
-			&found.Email.Address,
 			&found.Occupation,
 			&found.MaritalStatus,
 			&found.Address.FullAddress,
@@ -193,14 +188,14 @@ func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.U
 			&found.Address.ZipCode,
 		); err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
-				return nil, httperr.NewNotFoundError(ctx, "owner not found or not exists")
+				return nil, httperr.NewNotFoundError(ctx, "tenant not found or not exists")
 			}
 
 			return nil, httperr.NewInternalServerError(ctx, err.Error())
 		}
 
-		owners = append(owners, found)
+		tenants = append(tenants, found)
 	}
 
-	return owners, nil
+	return tenants, nil
 }

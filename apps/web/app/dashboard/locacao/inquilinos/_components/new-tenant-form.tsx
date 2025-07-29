@@ -17,8 +17,7 @@ import { Input } from "@/components/ui/input"
 
 import { cn } from "@/lib/utils"
 
-
-import { createOwner } from "@/actions/mutations/owner/create-owner"
+import { createTenant } from "@/actions/mutations/tenant/create-tenant"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { searchCEP } from "@/lib/cep/api-brasil"
 import { LoaderCircle } from "lucide-react"
@@ -27,11 +26,10 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { useHookFormMask } from "use-mask-input"
 
-const owner_schema = z.object({
+const tenant_schema = z.object({
   fullname: z.string().min(10, "O nome deve conter ao menos 10 caracteres").max(100, "Máximo de 100 caracteres"),
   cpf: z.string().length(14),
   rg: z.string().min(5, "o rg deve ter no minimo 5 caracteres").max(15, "o rg deve ter no máximo 15 caracteres"),
-  email: z.string().email("o e-mail digitado deve ser válido"),
   phone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
     .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
   occupation: z.string().min(3, "A ocupação deve conter ao menos 3 caracteres").max(50, "Máximo de 50 caracteres"),
@@ -47,19 +45,18 @@ const owner_schema = z.object({
   }),
 })
 
-export type OwnerRequest = z.infer<typeof owner_schema>
+export type TenantRequest = z.infer<typeof tenant_schema>
 
-export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form">) {
+export function NewTenantForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
-  const form = useForm<OwnerRequest>({
-    resolver: zodResolver(owner_schema),
+  const form = useForm<TenantRequest>({
+    resolver: zodResolver(tenant_schema),
     defaultValues: {
       fullname: "",
       cpf: "",
       rg: "",
-      email: "",
       phone: "",
       occupation: "",
       marital_status: "Solteiro(a)",
@@ -90,21 +87,21 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
     }
   }
 
-  async function onSubmit(values: OwnerRequest) {
+  async function onSubmit(values: TenantRequest) {
     setLoading(true)
 
-    const status = await createOwner(values)
+    const status = await createTenant(values)
 
     switch (status) {
       case 201:
-        toast.success("Proprietário criado com sucesso", { duration: 1500 })
+        toast.success("Inquilino criado com sucesso", { duration: 1500 })
 
         setTimeout(() => {
-          router.push("/dashboard/locacao/proprietarios")
+          router.push("/dashboard/locacao/inquilinos")
         }, 1500)
         break
       default:
-        toast.error("Erro ao criar proprietário", { description: "Confira os dados e tente novamente", duration: 1500 })
+        toast.error("Erro ao criar inquilino", { description: "Confira os dados e tente novamente", duration: 1500 })
         break
     }
 
@@ -203,26 +200,6 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                       showMaskOnFocus: false,
                       required: true,
                     })}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>E-mail</FormLabel>
-                <FormControl>
-                  <Input
-                    className="text-sm md:text-base"
-                    placeholder="E-mail de contato"
-                    autoComplete="off"
-                    disabled={loading}
-                    {...field}
                   />
                 </FormControl>
                 <FormMessage />

@@ -8,7 +8,7 @@ interface OwnersHeaderProps {
 
 export function OwnersHeader({ owners, propertiesCount }: OwnersHeaderProps) {
   const ownersCount = owners.length
-  const propertiesPerOwner = owners.length > 0 ? (propertiesCount / owners.length) : propertiesCount
+  const propertiesPerOwner = ownersCount > 0 ? (propertiesCount / ownersCount) : propertiesCount
 
   return (
     <div className="grid gap-6 md:grid-cols-2">

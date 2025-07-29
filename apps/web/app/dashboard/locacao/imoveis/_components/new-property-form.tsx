@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils"
 
 import { createProperty } from "@/actions/mutations/property/create-property"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { searchCEP } from "@/lib/cep/api-brasil"
 import { Owner } from "@/types/owner"
 import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -75,6 +76,19 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
 
   const registerWithMask = useHookFormMask(form.register);
 
+  async function searchAddressByCEP(cep: string) {
+    const address = await searchCEP(cep)
+
+    if (address) {
+      form.setValue("address.street", address.street)
+      form.setValue("address.neighborhood", address.neighborhood)
+      form.setValue("address.city", address.city)
+      form.setValue("address.state", address.state)
+    } else {
+      toast.error("CEP não encontrado", { duration: 1500 })
+    }
+  }
+
   async function onSubmit(values: CreatePropertyRequest) {
     setLoading(true)
 
@@ -126,13 +140,37 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
                     </SelectTrigger>
                     <SelectContent className="text-sm md:text-base">
                       {owners.length > 0 && owners.map(owner => <SelectItem key={owner.id} value={owner.id}>{owner.fullname}</SelectItem>)}
-                      {/* <SelectItem value="Disponível">Disponível</SelectItem>
-                      <SelectItem value="Ocupado">Ocupado</SelectItem>
-                      <SelectItem value="Indisponível">Indisponível</SelectItem>
-                      <SelectItem value="Reservado">Reservado</SelectItem>
-                      <SelectItem value="Reformando">Reformando</SelectItem> */}
                     </SelectContent>
                   </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="address.zip_code"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>CEP</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="CEP"
+                    autoComplete="off"
+                    disabled={loading}
+                    maxLength={8}
+                    {...field}
+                    {...registerWithMask("address.zip_code", '99999999', {
+                      showMaskOnHover: false,
+                      showMaskOnFocus: false,
+                      required: true,
+                      onBlur: (e) => {
+                        searchAddressByCEP(e.target.value)
+                      }
+                    })}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -232,32 +270,6 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
                     autoComplete="off"
                     disabled={loading}
                     {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="address.zip_code"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CEP</FormLabel>
-                <FormControl>
-                  <Input
-                    className="text-sm md:text-base"
-                    placeholder="CEP"
-                    autoComplete="off"
-                    disabled={loading}
-                    maxLength={8}
-                    {...field}
-                    {...registerWithMask("address.zip_code", '99999999', {
-                      showMaskOnHover: false,
-                      showMaskOnFocus: false,
-                      required: true,
-                    })}
                   />
                 </FormControl>
                 <FormMessage />

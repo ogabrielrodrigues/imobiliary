@@ -1,8 +1,14 @@
 import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
+import { Tenant } from "@/types/tenant"
 
-type TenantsHeaderProps = {}
+type TenantsHeaderProps = {
+  tenants: Tenant[]
+}
 
-export function TenantsHeader({ }: TenantsHeaderProps) {
+export function TenantsHeader({ tenants }: TenantsHeaderProps) {
+  const tenantsCount = tenants.length
+  const exactRentPay = 0
+
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       <HeaderCard>
@@ -11,27 +17,17 @@ export function TenantsHeader({ }: TenantsHeaderProps) {
           description="Inquilinos ativos no sistema"
         />
         <HeaderCardContent
-          count="78"
+          count={tenantsCount.toString()}
           className="text-muted"
         />
       </HeaderCard>
-      <HeaderCard>
-        <HeaderCardHead
-          title="Novos Inquilinos"
-          description="Adicionados este mês"
-        />
-        <HeaderCardContent
-          count="9"
-          className="text-muted"
-        />
-      </HeaderCard>
-      <HeaderCard className="md:col-span-2 xl:col-span-1">
+      <HeaderCard className="">
         <HeaderCardHead
           title="Inquilinos Pontuais"
           description="Pagamentos em dia"
         />
         <HeaderCardContent
-          count="92%"
+          count={`${exactRentPay.toString()}%`}
           className="text-muted"
         />
       </HeaderCard>

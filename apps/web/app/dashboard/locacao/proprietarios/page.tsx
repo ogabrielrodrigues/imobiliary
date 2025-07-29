@@ -1,4 +1,5 @@
 import { listOwners } from "@/actions/queries/owner/list-owners"
+import { listProperties } from "@/actions/queries/property/list-properties"
 import { Metadata } from "next"
 import { OwnersHeader } from "./_components/owners-header"
 import { OwnersSection } from "./_components/owners-section"
@@ -19,14 +20,15 @@ export default async function OwnersPage() {
     )
   }
 
-  // const { status: properties_status, properties } = await listProperties()
-
   const owners = !found ? [] : found
-  // const propertiesCount = properties_status !== 200 ? 0 : properties!.length
+
+  const { status: properties_status, properties } = await listProperties()
+
+  const propertiesCount = Math.floor(properties_status !== 200 ? 0 : properties!.length)
 
   return (
     <div className=" flex flex-col space-y-10">
-      <OwnersHeader owners={owners} propertiesCount={0} />
+      <OwnersHeader owners={owners} propertiesCount={propertiesCount} />
 
       <OwnersSection owners={owners} />
     </div>
