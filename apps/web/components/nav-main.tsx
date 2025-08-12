@@ -38,11 +38,6 @@ const item: NavMainType = {
   url: "/dashboard/locacao",
   icon: BookOpenText,
   items: [
-    // {
-    //   title: "Alugueres",
-    //   url: "/dashboard/locacao",
-    //   icon: Banknote,
-    // },
     {
       title: "Inquilinos",
       url: "/dashboard/locacao/inquilinos",
@@ -72,7 +67,8 @@ export function NavMain() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[active=true]:!text-primary data-[active=true]:!bg-sidebar"
+              isActive={pathname === '/dashboard/locacao'}
+              className="data-[active=true]:!text-primary data-[active=true]:!bg-ring/20 data-[active=true]:!font-medium"
             >
               <a href={item.url}>
                 <item.icon />

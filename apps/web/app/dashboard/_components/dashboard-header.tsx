@@ -1,8 +1,14 @@
 import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
+import { Property } from "@/types/property"
 
-type DashboardHeaderProps = {}
+type DashboardHeaderProps = {
+  properties: Property[]
+}
 
-export function DashboardHeader({ }: DashboardHeaderProps) {
+export function DashboardHeader({ properties }: DashboardHeaderProps) {
+  const propertiesCount = properties.length
+  const occupied = properties.filter(property => property.status === 'Ocupado').length
+
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       <HeaderCard>
@@ -11,7 +17,7 @@ export function DashboardHeader({ }: DashboardHeaderProps) {
           description="Total de imóveis em locação"
         />
         <HeaderCardContent
-          count="253"
+          count={propertiesCount.toString().padStart(2, '0')}
           className="text-muted"
         />
       </HeaderCard>
@@ -21,7 +27,7 @@ export function DashboardHeader({ }: DashboardHeaderProps) {
           description="Total de contratos em vigor"
         />
         <HeaderCardContent
-          count="87"
+          count={occupied.toString().padStart(2, '0')}
           className="text-muted"
         />
       </HeaderCard>

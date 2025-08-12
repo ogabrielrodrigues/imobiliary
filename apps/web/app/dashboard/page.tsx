@@ -1,4 +1,5 @@
 import { getManager } from "@/actions/queries/manager/get-manager"
+import { listProperties } from "@/actions/queries/property/list-properties"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Metadata } from "next"
 import { DashboardHeader } from "./_components/dashboard-header"
@@ -12,9 +13,12 @@ export default async function DashboardPage() {
 
   const dateFormatter = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short' })
 
+  const { properties: foundProperties } = await listProperties()
+  const properties = !foundProperties ? [] : foundProperties
+
   return (
     <div className="container mx-auto flex flex-col space-y-6">
-      <DashboardHeader />
+      <DashboardHeader properties={properties} />
       <div className="text-muted-foreground">
         <div className="flex items-center justify-between font-heading text-lg text-muted">
           <h1>Olá, {manager?.fullname.split(" ")[0]}</h1>

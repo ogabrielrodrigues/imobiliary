@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default async function OwnersPage() {
-  const { status: owner_status, owners: found } = await listOwners()
+  const { status: owner_status, owners: foundOwners } = await listOwners()
 
   if (owner_status != 200) {
     return (
@@ -20,15 +20,14 @@ export default async function OwnersPage() {
     )
   }
 
-  const owners = !found ? [] : found
+  const { properties: foundProperties } = await listProperties()
 
-  const { status: properties_status, properties } = await listProperties()
-
-  const propertiesCount = Math.floor(properties_status !== 200 ? 0 : properties!.length)
+  const owners = !foundOwners ? [] : foundOwners
+  const properties = !foundProperties ? [] : foundProperties
 
   return (
     <div className=" flex flex-col space-y-10">
-      <OwnersHeader owners={owners} propertiesCount={propertiesCount} />
+      <OwnersHeader owners={owners} properties={properties} />
 
       <OwnersSection owners={owners} />
     </div>

@@ -159,6 +159,7 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
                     className="text-sm md:text-base"
                     placeholder="CEP"
                     autoComplete="off"
+                    autoFocus
                     disabled={loading}
                     maxLength={8}
                     {...field}
@@ -189,7 +190,6 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
                     placeholder="Logradouro"
                     autoComplete="off"
                     disabled={loading}
-                    autoFocus
                     {...field}
                   />
                 </FormControl>

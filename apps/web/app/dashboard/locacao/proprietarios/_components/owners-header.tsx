@@ -1,13 +1,15 @@
 import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
 import { Owner } from "@/types/owner"
+import { Property } from "@/types/property"
 
 interface OwnersHeaderProps {
   owners: Owner[]
-  propertiesCount: number
+  properties: Property[]
 }
 
-export function OwnersHeader({ owners, propertiesCount }: OwnersHeaderProps) {
+export function OwnersHeader({ owners, properties }: OwnersHeaderProps) {
   const ownersCount = owners.length
+  const propertiesCount = properties.length
   const propertiesPerOwner = ownersCount > 0 ? (propertiesCount / ownersCount) : propertiesCount
 
   return (
@@ -18,7 +20,7 @@ export function OwnersHeader({ owners, propertiesCount }: OwnersHeaderProps) {
           description="Proprietários cadastrados"
         />
         <HeaderCardContent
-          count={ownersCount.toString()}
+          count={ownersCount.toString().padStart(2, '0')}
           className="text-muted"
         />
       </HeaderCard>
@@ -29,7 +31,7 @@ export function OwnersHeader({ owners, propertiesCount }: OwnersHeaderProps) {
           description="Média de imóveis (Aproximada)"
         />
         <HeaderCardContent
-          count={propertiesPerOwner.toString()}
+          count={propertiesPerOwner.toString().padStart(2, '0')}
           className="text-muted"
         />
       </HeaderCard>

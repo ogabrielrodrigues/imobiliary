@@ -10,14 +10,14 @@ export function TenantsHeader({ tenants }: TenantsHeaderProps) {
   const exactRentPay = 0
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2">
       <HeaderCard>
         <HeaderCardHead
           title="Total de Inquilinos"
           description="Inquilinos ativos no sistema"
         />
         <HeaderCardContent
-          count={tenantsCount.toString()}
+          count={tenantsCount.toString().padStart(2, '0')}
           className="text-muted"
         />
       </HeaderCard>

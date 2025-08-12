@@ -12,7 +12,7 @@ export function OwnersList({ owners }: OwnersListProps) {
         ? owners.map((owner) => <OwnerCard key={owner.id} owner={owner} />)
         : (
           <div className="col-span-full text-center py-8">
-            <p className="text-muted-foreground">Nenhum propretário encontrado com os busca desejada.</p>
+            <p className="text-muted-foreground">Nenhum proprietário encontrado com os filtros selecionados.</p>
           </div>
         )}
     </div>

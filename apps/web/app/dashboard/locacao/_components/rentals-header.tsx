@@ -1,8 +1,13 @@
 import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
+import { Property } from "@/types/property"
 
-type RentalsHeaderProps = {}
+type RentalsHeaderProps = {
+  properties: Property[]
+}
 
-export function RentalsHeader({ }: RentalsHeaderProps) {
+export function RentalsHeader({ properties }: RentalsHeaderProps) {
+  const available = properties.filter(property => property.status === 'Disponível').length
+
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       <HeaderCard>
@@ -31,7 +36,7 @@ export function RentalsHeader({ }: RentalsHeaderProps) {
           description="Prontos para locação"
         />
         <HeaderCardContent
-          count="15"
+          count={available.toString().padStart(2, '0')}
           className="text-muted"
         />
       </HeaderCard>

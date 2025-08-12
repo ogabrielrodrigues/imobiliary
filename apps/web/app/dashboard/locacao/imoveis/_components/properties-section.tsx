@@ -56,14 +56,14 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <div className="w-3/5 lg:w-full flex flex-col lg:flex-row gap-2">
+        <div className="w-full flex flex-col sm:flex-row gap-2">
           <Input
             placeholder="Procurar..."
             onChange={handleSearch}
-            className="w-4/5 sm:w-1/4"
+            className="w-4/5 sm:w-3/6"
             value={searchTerm}
           />
-          <div className="flex flex-col lg:flex-row gap-2">
+          <div className="hidden flex-col sm:flex-row gap-2 sm:flex">
             <Select onValueChange={handleFilterKind} value={selectedKind}>
               <SelectTrigger>
                 <SelectValue placeholder="Tipo" />
@@ -121,8 +121,8 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
               onClick={handleClearFilter}
               disabled={!isFilterActive}
             >
-              <CircleX className="size-4 mr-1" />
-              Limpar Filtros
+              <CircleX className="size-4 lg:mr-1" />
+              <p className="hidden lg:block">Limpar Filtros</p>
             </Button>
           </div>
         </div>

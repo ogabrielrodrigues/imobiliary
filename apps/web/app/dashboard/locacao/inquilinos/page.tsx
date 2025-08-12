@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default async function TenantsPage() {
-  const { status: tenant_status, tenants: found } = await listTenants()
+  const { status: tenant_status, tenants: foundTenants } = await listTenants()
 
   if (tenant_status != 200) {
     return (
@@ -19,7 +19,7 @@ export default async function TenantsPage() {
     )
   }
 
-  const tenants = !found ? [] : found
+  const tenants = !foundTenants ? [] : foundTenants
 
   return (
     <div className="container mx-auto flex flex-col space-y-10">

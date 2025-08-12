@@ -10,6 +10,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Fragment } from "react"
 import { bgColorStatusDetail, StatusBadge } from "../_components/status-badge"
+import { PropertyCodes } from "./_components/property-codes"
 
 type PropertyDetailsPageParams = {
   params: Promise<{ property_id: string }>
@@ -29,6 +30,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
 
   if (status_owner !== 200) notFound()
 
+
   return (
     <Fragment>
       <div className={cn(["absolute z-10 w-1/2 h-3 blur-[92px] top-0 left-1/2 -translate-x-1/2", bgColorStatusDetail(property.status)])} />
@@ -42,10 +44,7 @@ export default async function PropertyDetailsPage({ params }: PropertyDetailsPag
             </Button>
           </Link>
         </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-xs text-muted-foreground">
-          <span>Cód. Água - {property.water_id}</span>
-          <span>Cód. Energia - {property.energy_id}</span>
-        </div>
+        <PropertyCodes property={property} />
         <div className="flex space-x-2">
           <StatusBadge status={property.status} />
           <Badge className="h-8" variant="outline">{property.kind}</Badge>

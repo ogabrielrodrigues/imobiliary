@@ -34,7 +34,7 @@ export default async function NewPropertyPage() {
           </Button>
         </Link>
       </div>
-      <NewPropertyForm owners={owners} />  {/* Fazer melhoria de busca de endereço ...*/}
+      <NewPropertyForm owners={owners} />
     </div >
   )
 }

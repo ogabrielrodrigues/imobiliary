@@ -12,7 +12,7 @@ export function TenantsList({ tenants }: TenantsListProps) {
         ? tenants.map((tenant) => <TenantCard key={tenant.id} tenant={tenant} />)
         : (
           <div className="col-span-full text-center py-8">
-            <p className="text-muted-foreground">Nenhum inquilino encontrado com os busca desejada.</p>
+            <p className="text-muted-foreground">Nenhum inquilino encontrado com os filtros selecionados</p>
           </div>
         )}
     </div>

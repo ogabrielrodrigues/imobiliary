@@ -41,7 +41,7 @@ export function TenantsSection({ tenants }: TenantsSectionProps) {
           <Input
             placeholder="Procurar..."
             onChange={handleSearch}
-            className="w-4/5 sm:w-1/4"
+            className="w-4/5 sm:w-3/6"
             value={searchTerm}
           />
           <div className="hidden lg:flex gap-2">
@@ -63,13 +63,7 @@ export function TenantsSection({ tenants }: TenantsSectionProps) {
         </Link>
       </div>
 
-      {tenants.length > 0
-        ? (<TenantsList tenants={filtered} />)
-        : (
-          <div className="col-span-full text-center py-8">
-            <p className="text-muted-foreground">Nenhum inquilino encontrado.</p>
-          </div>
-        )}
+      <TenantsList tenants={filtered} />
     </section>
   )
 }

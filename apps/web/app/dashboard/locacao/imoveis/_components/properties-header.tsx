@@ -7,10 +7,7 @@ interface PropertiesHeaderProps {
 
 export function PropertiesHeader({ properties }: PropertiesHeaderProps) {
   const occupied = properties.filter(property => property.status === 'Ocupado')
-  const occupied_percent = ((occupied.length / properties.length) * 100) || 0
-
   const available = properties.filter(property => property.status === 'Disponível')
-  const available_percent = ((available.length / properties.length) * 100) || 0
 
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
