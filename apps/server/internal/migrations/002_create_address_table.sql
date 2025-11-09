@@ -1,15 +1,16 @@
-CREATE TABLE IF NOT EXISTS "address" (
-  "id" UUID NOT NULL PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
-  "full_address" VARCHAR(255) NOT NULL UNIQUE,
-  "street" VARCHAR(255) NOT NULL,
-  "number" VARCHAR(20) NOT NULL,
-  "complement" VARCHAR(255),
-  "neighborhood" VARCHAR(100) NOT NULL,
-  "city" VARCHAR(100) NOT NULL,
-  "state" CHAR(2) NOT NULL,
-  "zip_code" CHAR(8) NOT NULL
+create table if not exists "address" (
+  "id" uuid not null primary key default gen_random_uuid(),
+  "full_address" varchar(255) not null unique,
+  "street" varchar(255) not null,
+  "number" varchar(20) not null,
+  "complement" varchar(255),
+  "neighborhood" varchar(100) not null,
+  "city" varchar(100) not null,
+  "state" char(2) not null,
+  "zip_code" char(8) not null,
+  "active" boolean default true
 );
 
 ---- create above / drop below ----
 
-DROP TABLE IF EXISTS "address";
+drop table if exists "address";

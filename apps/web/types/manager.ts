@@ -3,5 +3,5 @@ export type Manager = {
   fullname: string
   phone: string
   email: string
+  active: boolean
 }
-

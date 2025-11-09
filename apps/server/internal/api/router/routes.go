@@ -21,6 +21,7 @@ func makeHandler(handler RouteHandler, logger *zap.Logger) http.HandlerFunc {
 				zap.Int("status", err.HttpCode),
 				zap.String("message", err.Message),
 			)
+
 			response.Json(w, err.HttpCode, err)
 		}
 	}

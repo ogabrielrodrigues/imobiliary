@@ -1,4 +1,4 @@
-CREATE TYPE property_status AS ENUM (
+create type property_status as enum (
   'Disponível',
   'Ocupado',
   'Indisponível',
@@ -6,7 +6,7 @@ CREATE TYPE property_status AS ENUM (
   'Reformando'
 );
 
-CREATE TYPE property_kind AS ENUM (
+create type property_kind as enum (
   'Residencial',
   'Comercial',
   'Industrial',
@@ -14,28 +14,20 @@ CREATE TYPE property_kind AS ENUM (
   'Rural'
 );
 
-CREATE TABLE IF NOT EXISTS "property" (
-  "id" UUID NOT NULL PRIMARY KEY,
-  "status" property_status NOT NULL,
-  "kind" property_kind NOT NULL,
-  "water_id" VARCHAR(20) NOT NULL UNIQUE,
-  "energy_id" VARCHAR(20) NOT NULL UNIQUE,
-  "address_id" UUID NOT NULL UNIQUE,
-  "manager_id" UUID NOT NULL,
-  "owner_id" UUID NOT NULL,
-  FOREIGN KEY ("address_id")
-  REFERENCES "address" ("id")
-  ON DELETE CASCADE,
-  FOREIGN KEY ("manager_id")
-  REFERENCES "manager" ("id")
-  ON DELETE CASCADE,
-  FOREIGN KEY ("owner_id")
-  REFERENCES "owner" ("id")
-  ON DELETE CASCADE
+create table if not exists "property" (
+  "id" uuid not null primary key,
+  "address_id" uuid not null unique references "address" ("id"),
+  "manager_id" uuid not null references "manager" ("id"),
+  "owner_id" uuid not null references "owner" ("id"),
+  "status" property_status not null,
+  "kind" property_kind not null,
+  "water_id" varchar(20) not null unique,
+  "energy_id" varchar(20) not null unique,
+  "active" boolean default true
 );
 
 ---- create above / drop below ----
 
-DROP TABLE IF EXISTS "property";
-DROP TYPE IF EXISTS "property_kind";
-DROP TYPE IF EXISTS "property_status";
+drop table if exists "property";
+drop type if exists "property_kind";
+drop type if exists "property_status";

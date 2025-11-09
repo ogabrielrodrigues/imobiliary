@@ -5,4 +5,5 @@ type ManagerDTO struct {
 	Fullname string `json:"fullname"`
 	Phone    string `json:"phone"`
 	Email    string `json:"email"`
+	Active   bool   `json:"active"`
 }

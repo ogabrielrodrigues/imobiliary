@@ -1,21 +1,16 @@
-CREATE TABLE IF NOT EXISTS "tenant" (
-  "id" UUID NOT NULL PRIMARY KEY,
-  "manager_id" UUID NOT NULL,
-  "address_id" UUID NOT NULL,
-  "fullname" VARCHAR(100) NOT NULL,
-  "cpf" CHAR(14) NOT NULL UNIQUE,
-  "rg" VARCHAR(15) NOT NULL UNIQUE,
-  "phone" VARCHAR(15) NOT NULL,
-  "occupation" VARCHAR(100) NOT NULL,
-  "marital_status" marital_status NOT NULL,
-  FOREIGN KEY ("manager_id")
-  REFERENCES "manager" ("id")
-  ON DELETE CASCADE,
-  FOREIGN KEY ("address_id")
-  REFERENCES "address" ("id")
-  ON DELETE CASCADE
+create table if not exists "tenant" (
+  "id" uuid not null primary key,
+  "manager_id" uuid not null references "manager" ("id"),
+  "address_id" uuid not null references "address" ("id"),
+  "fullname" varchar(100) not null,
+  "cpf" char(14) not null unique,
+  "rg" varchar(15) not null unique,
+  "phone" varchar(15) not null,
+  "occupation" varchar(100) not null,
+  "marital_status" marital_status not null,
+  "active" boolean default true
 );
 
 ---- create above / drop below ----
 
-DROP TABLE IF EXISTS "tenant";
+drop table if exists "tenant";

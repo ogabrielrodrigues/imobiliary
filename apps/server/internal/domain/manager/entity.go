@@ -16,6 +16,7 @@ type Manager struct {
 	Phone    types.Phone
 	Email    types.Email
 	Password string
+	Active   bool
 }
 
 func NewManager(
@@ -30,6 +31,7 @@ func NewManager(
 		Phone:    phone,
 		Email:    email,
 		Password: password,
+		Active:   true,
 	}
 
 	if err := newManager.hashPassword(); err != nil {

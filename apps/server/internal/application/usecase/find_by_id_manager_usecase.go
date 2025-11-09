@@ -28,6 +28,7 @@ func (fm *FindByIDManager) Execute(ctx context.Context, managerID uuid.UUID) (*r
 		Fullname: manager.Fullname,
 		Email:    manager.Email.Value(),
 		Phone:    manager.Phone.Value(),
+		Active:   manager.Active,
 	}
 
 	return &managerDTO, nil
