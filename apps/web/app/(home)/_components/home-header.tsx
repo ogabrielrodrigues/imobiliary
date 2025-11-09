@@ -34,10 +34,10 @@ export async function HomeHeader() {
         </form>
       ) : (
         <div className="flex items-center gap-2">
-          <Link href="/login" id="login">
+          <Link href="/login">
             <Button variant="secondary" size="sm">Login</Button>
           </Link>
-          <Link href="/cadastro" id="sign">
+          <Link href="/cadastro">
             <Button size="sm">Cadastro</Button>
           </Link>
         </div>

@@ -1,27 +1,19 @@
 'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import { PasswordInput } from "@/components/password-input"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-
 import { login } from "@/actions/mutations/auth/login"
+import { PasswordInput } from "@/components/password-input"
+import { ResetPasswordDialog } from "@/components/reset-password-dialog"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { Fragment, useState } from "react"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { z } from "zod"
 
 const login_schema = z.object({
   email: z.string().email("o e-mail digitado deve ser válido"),
@@ -31,8 +23,14 @@ const login_schema = z.object({
 export type LoginRequest = z.infer<typeof login_schema>
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  function setDialog(open: boolean) {
+    setOpen(open)
+  }
+
+  const router = useRouter()
 
   const form = useForm<LoginRequest>({
     resolver: zodResolver(login_schema),
@@ -81,56 +79,60 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
   }
 
   return (
-    <Form {...form}>
-      <form
-        className={cn("flex flex-col space-y-4", className)}
-        {...props}
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>E-mail</FormLabel>
-              <FormControl>
-                <Input
-                  className="text-sm md:text-base"
-                  placeholder="Seu e-mail de acesso"
-                  autoComplete="off"
-                  disabled={loading}
-                  autoFocus
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage id="email-error-label" />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Senha</FormLabel>
-              <FormControl>
-                <PasswordInput
-                  className="text-sm md:text-base"
-                  type="password"
-                  placeholder="Sua senha de acesso"
-                  autoComplete="off"
-                  disabled={loading}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage id="password-error-label" />
-            </FormItem>
-          )}
-        />
-        <Button disabled={loading} type="submit" className="w-full" id="login">
-          {loading && <LoaderCircle className="size-4 animate-spin" />}Entrar
-        </Button>
-      </form>
-    </Form>
+    <Fragment>
+      <Form {...form}>
+        <form
+          className={cn("flex flex-col space-y-4", className)}
+          {...props}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>E-mail</FormLabel>
+                <FormControl>
+                  <Input
+                    className="text-sm md:text-base"
+                    placeholder="Seu e-mail de acesso"
+                    autoComplete="off"
+                    disabled={loading}
+                    autoFocus
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage id="email-error-label" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Senha</FormLabel>
+                <FormControl>
+                  <PasswordInput
+                    className="text-sm md:text-base"
+                    type="password"
+                    placeholder="Sua senha de acesso"
+                    autoComplete="off"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage id="password-error-label" />
+              </FormItem>
+            )}
+          />
+
+          <Button disabled={loading} type="submit" className="w-full" id="login">
+            {loading && <LoaderCircle className="size-4 animate-spin" />}Entrar
+          </Button>
+        </form>
+      </Form>
+      <ResetPasswordDialog open={open} setOpen={setDialog} />
+    </Fragment>
   )
 }

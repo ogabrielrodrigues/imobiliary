@@ -40,7 +40,7 @@ export default async function TenantDetailsPage({ params }: TenantDetailsPagePar
         </CardHeader>
         <CardContent>
           <div className="flex flex-col">
-            <p className="text-muted-foreground"><strong className="text-muted">Telefone:</strong> {tenant.fullname}</p>
+            <p className="text-muted-foreground"><strong className="text-muted">Nome completo:</strong> {tenant.fullname}</p>
             <p className="text-muted-foreground"><strong className="text-muted">RG:</strong> {tenant.rg}</p>
             <p className="text-muted-foreground"><strong className="text-muted">CPF:</strong> {tenant.cpf}</p>
             <p className="text-muted-foreground"><strong className="text-muted">Profissão:</strong> {tenant.occupation}</p>
