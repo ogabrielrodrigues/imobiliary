@@ -14,4 +14,5 @@ type TenantDTO struct {
 	Occupation    string              `json:"occupation"`
 	MaritalStatus types.MaritalStatus `json:"marital_status"`
 	Address       AddressDTO          `json:"address"`
+	Active        bool                `json:"active"`
 }

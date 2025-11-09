@@ -21,36 +21,35 @@ func NewPostgresPropertyRepository(pool *pgxpool.Pool) *PostgresPropertyReposito
 
 func (pr *PostgresPropertyRepository) FindByID(ctx context.Context, propertyID, managerID uuid.UUID) (*property.Property, *httperr.HttpError) {
 	row := pr.db.QueryRow(ctx, `
-	SELECT
-		pr.id,
-		pr.status,
-		pr.kind,
-		pr.water_id,
-		pr.energy_id,
-		pr.manager_id,
-		pr.owner_id,
-		ad.full_address,
-		ad.street,
-		ad.number,
-		ad.complement,
-		ad.neighborhood,
-		ad.city,
-		ad.state,
-		ad.zip_code
-	FROM "property" pr
-	INNER JOIN "address" ad ON pr.address_id = ad.id
-	LEFT JOIN "owner" ow ON pr.owner_id = ow.id
-	WHERE pr.id = $1 AND pr.manager_id = $2`, propertyID, managerID)
+		select
+			pr.*,
+			ad.full_address,
+			ad.street,
+			ad.number,
+			ad.complement,
+			ad.neighborhood,
+			ad.city,
+			ad.state,
+			ad.zip_code
+		from "property" pr
+		join "address" ad on pr.address_id = ad.id
+		left join "owner" ow on pr.owner_id = ow.id
+		where pr.id = $1 and pr.manager_id = $2 and pr.active = true`,
+		propertyID,
+		managerID,
+	)
 
 	var found property.Property
 	if err := row.Scan(
 		&found.ID,
+		&found.Address.ID,
+		&found.ManagerID,
+		&found.OwnerID,
 		&found.Status,
 		&found.Kind,
 		&found.WaterID,
 		&found.EnergyID,
-		&found.ManagerID,
-		&found.OwnerID,
+		&found.Active,
 		&found.Address.FullAddress,
 		&found.Address.Street,
 		&found.Address.Number,
@@ -78,10 +77,8 @@ func (pr *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 	}
 
 	row := tx.QueryRow(ctx, `
-		INSERT INTO "address"
-		(full_address, street, number, complement, neighborhood, city, state, zip_code)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-		RETURNING id`,
+		insert into "address" (full_address, street, number, complement, neighborhood, city, state, zip_code)
+		values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`,
 		property.Address.FullAddress,
 		property.Address.Street,
 		property.Address.Number,
@@ -104,17 +101,16 @@ func (pr *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 	}
 
 	_, err = tx.Exec(ctx, `
-		INSERT INTO "property"
-		(id, status, kind, water_id, energy_id, address_id, manager_id, owner_id)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+		insert into "property" values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
 		property.ID,
+		addressID,
+		managerID,
+		property.OwnerID,
 		property.Status,
 		property.Kind,
 		property.WaterID,
 		property.EnergyID,
-		addressID,
-		managerID,
-		property.OwnerID,
+		property.Active,
 	)
 
 	if err != nil {
@@ -135,26 +131,22 @@ func (pr *PostgresPropertyRepository) Create(ctx context.Context, property *prop
 
 func (pr *PostgresPropertyRepository) FindAll(ctx context.Context, managerID uuid.UUID) ([]property.Property, *httperr.HttpError) {
 	rows, err := pr.db.Query(ctx, `
-	SELECT
-		pr.id,
-		pr.status,
-		pr.kind,
-		pr.water_id,
-		pr.energy_id,
-		pr.manager_id,
-		pr.owner_id,
-		ad.full_address,
-		ad.street,
-		ad.number,
-		ad.complement,
-		ad.neighborhood,
-		ad.city,
-		ad.state,
-		ad.zip_code
-	FROM "property" pr
-	INNER JOIN "address" ad ON pr.address_id = ad.id
-	LEFT JOIN "owner" ow ON pr.owner_id = ow.id
-	WHERE pr.manager_id = $1`, managerID)
+		select
+			pr.*,
+			ad.full_address,
+			ad.street,
+			ad.number,
+			ad.complement,
+			ad.neighborhood,
+			ad.city,
+			ad.state,
+			ad.zip_code
+		from "property" pr
+		join "address" ad on pr.address_id = ad.id
+		left join "owner" ow on pr.owner_id = ow.id
+		where pr.manager_id = $1 and pr.active = true`,
+		managerID,
+	)
 
 	if err != nil {
 		if IsErrNoRows(err) {
@@ -169,12 +161,14 @@ func (pr *PostgresPropertyRepository) FindAll(ctx context.Context, managerID uui
 	for rows.Next() {
 		if err := rows.Scan(
 			&found.ID,
+			&found.Address.ID,
+			&found.ManagerID,
+			&found.OwnerID,
 			&found.Status,
 			&found.Kind,
 			&found.WaterID,
 			&found.EnergyID,
-			&found.ManagerID,
-			&found.OwnerID,
+			&found.Active,
 			&found.Address.FullAddress,
 			&found.Address.Street,
 			&found.Address.Number,

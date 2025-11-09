@@ -16,6 +16,7 @@ type Tenant struct {
 	Occupation    string
 	MaritalStatus types.MaritalStatus
 	Address       types.Address
+	Active        bool
 }
 
 func NewTenant(
@@ -38,6 +39,7 @@ func NewTenant(
 		Occupation:    occupation,
 		MaritalStatus: marital_status,
 		Address:       address,
+		Active:        true,
 	}
 
 	return newTenant

@@ -33,6 +33,7 @@ func (fa *FindAllProperty) Execute(ctx context.Context, managerID uuid.UUID) ([]
 			WaterID:  property.WaterID,
 			EnergyID: property.EnergyID,
 			OwnerID:  property.OwnerID.String(),
+			Active:   property.Active,
 			Address: response.AddressDTO{
 				FullAddress:  property.Address.FullAddress,
 				Street:       property.Address.Street,

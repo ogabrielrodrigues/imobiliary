@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/domain/owner"
 
@@ -103,14 +102,14 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 		owner.Email.Value(),
 		owner.Occupation,
 		owner.MaritalStatus,
-		true,
+		owner.Active,
 	)
 
 	if err != nil {
 		if IsUniqueConstraint(err) {
 			return httperr.NewAlreadyExistsError(ctx, "owner already exists")
 		}
-		fmt.Println(err)
+
 		return httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 

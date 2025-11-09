@@ -10,4 +10,5 @@ type PropertyDTO struct {
 	EnergyID string               `json:"energy_id"`
 	OwnerID  string               `json:"owner_id"`
 	Address  AddressDTO           `json:"address"`
+	Active   bool                 `json:"active"`
 }

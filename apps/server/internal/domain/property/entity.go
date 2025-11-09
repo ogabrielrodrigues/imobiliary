@@ -15,6 +15,7 @@ type Property struct {
 	WaterID   string
 	EnergyID  string
 	Address   types.Address
+	Active    bool
 }
 
 func NewProperty(
@@ -35,6 +36,7 @@ func NewProperty(
 		WaterID:   waterID,
 		EnergyID:  energyID,
 		Address:   address,
+		Active:    true,
 	}
 
 	return newProperty

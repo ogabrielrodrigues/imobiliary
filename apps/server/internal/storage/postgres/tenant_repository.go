@@ -21,37 +21,35 @@ func NewPostgresTenantRepository(pool *pgxpool.Pool) *PostgresTenantRepository {
 
 func (tr *PostgresTenantRepository) FindByID(ctx context.Context, tenantID uuid.UUID, managerID uuid.UUID) (*tenant.Tenant, *httperr.HttpError) {
 	row := tr.db.QueryRow(ctx, `
-	SELECT
-		te.id,
-		te.manager_id,
-		te.fullname,
-		te.cpf,
-		te.rg,
-		te.phone,
-		te.occupation,
-		te.marital_status,
-		ad.full_address,
-		ad.street,
-		ad.number,
-		ad.complement,
-		ad.neighborhood,
-		ad.city,
-		ad.state,
-		ad.zip_code
-	FROM "tenant" te
-	INNER JOIN "address" ad ON te.address_id = ad.id
-	WHERE te.id = $1 AND te.manager_id = $2`, tenantID, managerID)
+		select
+			te.*,
+			ad.full_address,
+			ad.street,
+			ad.number,
+			ad.complement,
+			ad.neighborhood,
+			ad.city,
+			ad.state,
+			ad.zip_code
+		from "tenant" te
+		join "address" ad on te.address_id = ad.id
+		where te.id = $1 and te.manager_id = $2 and te.active = true`,
+		tenantID,
+		managerID,
+	)
 
 	var found tenant.Tenant
 	if err := row.Scan(
 		&found.ID,
 		&found.ManagerID,
+		&found.Address.ID,
 		&found.Fullname,
 		&found.CPF.Cpf,
 		&found.RG.Rg,
 		&found.Phone.Number,
 		&found.Occupation,
 		&found.MaritalStatus,
+		&found.Active,
 		&found.Address.FullAddress,
 		&found.Address.Street,
 		&found.Address.Number,
@@ -79,10 +77,8 @@ func (tr *PostgresTenantRepository) Create(ctx context.Context, tenant *tenant.T
 	}
 
 	row := tx.QueryRow(ctx, `
-		INSERT INTO "address"
-		(full_address, street, number, complement, neighborhood, city, state, zip_code)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-		RETURNING id`,
+		insert into "address" (full_address, street, number, complement, neighborhood, city, state, zip_code)
+		values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`,
 		tenant.Address.FullAddress,
 		tenant.Address.Street,
 		tenant.Address.Number,
@@ -105,9 +101,7 @@ func (tr *PostgresTenantRepository) Create(ctx context.Context, tenant *tenant.T
 	}
 
 	_, err = tx.Exec(ctx, `
-		INSERT INTO "tenant"
-		(id, manager_id, address_id, fullname, cpf, rg, phone, occupation, marital_status)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+		insert into "tenant" values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
 		tenant.ID,
 		managerID,
 		addressID,
@@ -117,6 +111,7 @@ func (tr *PostgresTenantRepository) Create(ctx context.Context, tenant *tenant.T
 		tenant.Phone.Value(),
 		tenant.Occupation,
 		tenant.MaritalStatus,
+		tenant.Active,
 	)
 
 	if err != nil {
@@ -137,26 +132,21 @@ func (tr *PostgresTenantRepository) Create(ctx context.Context, tenant *tenant.T
 
 func (tr *PostgresTenantRepository) FindAll(ctx context.Context, managerID uuid.UUID) ([]tenant.Tenant, *httperr.HttpError) {
 	rows, err := tr.db.Query(ctx, `
-	SELECT
-		te.id,
-		te.manager_id,
-		te.fullname,
-		te.cpf,
-		te.rg,
-		te.phone,
-		te.occupation,
-		te.marital_status,
-		ad.full_address,
-		ad.street,
-		ad.number,
-		ad.complement,
-		ad.neighborhood,
-		ad.city,
-		ad.state,
-		ad.zip_code
-	FROM "tenant" te
-	INNER JOIN "address" ad ON te.address_id = ad.id
-	WHERE te.manager_id = $1`, managerID)
+		select
+			te.*,
+			ad.full_address,
+			ad.street,
+			ad.number,
+			ad.complement,
+			ad.neighborhood,
+			ad.city,
+			ad.state,
+			ad.zip_code
+		from "tenant" te
+		join "address" ad on te.address_id = ad.id
+		where te.manager_id = $1 and te.active = true`,
+		managerID,
+	)
 
 	if err != nil {
 		if IsErrNoRows(err) {
@@ -172,12 +162,14 @@ func (tr *PostgresTenantRepository) FindAll(ctx context.Context, managerID uuid.
 		if err := rows.Scan(
 			&found.ID,
 			&found.ManagerID,
+			&found.Address.ID,
 			&found.Fullname,
 			&found.CPF.Cpf,
 			&found.RG.Rg,
 			&found.Phone.Number,
 			&found.Occupation,
 			&found.MaritalStatus,
+			&found.Active,
 			&found.Address.FullAddress,
 			&found.Address.Street,
 			&found.Address.Number,

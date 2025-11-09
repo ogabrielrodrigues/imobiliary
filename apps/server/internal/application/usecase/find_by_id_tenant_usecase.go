@@ -32,6 +32,7 @@ func (ft *FindByIDTenant) Execute(ctx context.Context, tenantID, managerID uuid.
 		Phone:         tenant.Phone.Value(),
 		Occupation:    tenant.Occupation,
 		MaritalStatus: tenant.MaritalStatus,
+		Active:        tenant.Active,
 		Address: response.AddressDTO{
 			FullAddress:  tenant.Address.FullAddress,
 			Street:       tenant.Address.Street,
