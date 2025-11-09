@@ -33,6 +33,7 @@ func (fo *FindByIDOwner) Execute(ctx context.Context, ownerID, managerID uuid.UU
 		Phone:         owner.Phone.Value(),
 		Occupation:    owner.Occupation,
 		MaritalStatus: owner.MaritalStatus,
+		Active:        owner.Active,
 		Address: response.AddressDTO{
 			FullAddress:  owner.Address.FullAddress,
 			Street:       owner.Address.Street,

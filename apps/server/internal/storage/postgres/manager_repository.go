@@ -22,8 +22,7 @@ func NewPostgresManagerRepository(pool *pgxpool.Pool) *PostgresManagerRepository
 
 func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uuid.UUID) (*manager.Manager, *httperr.HttpError) {
 	row := mr.db.QueryRow(ctx, `
-		select * from "manager"
-		where id = $1 and active = true`,
+		select * from "manager" where id = $1 and active = true`,
 		managerID,
 	)
 
@@ -48,8 +47,7 @@ func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uui
 
 func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) *httperr.HttpError {
 	_, err := mr.db.Exec(ctx, `
-		insert into "manager" (id, fullname, phone, email, password)
-		values ($1, $2, $3, $4, $5, $6)`,
+		insert into "manager" values ($1, $2, $3, $4, $5, $6)`,
 		manager.ID,
 		manager.Fullname,
 		manager.Phone.Value(),
@@ -70,8 +68,7 @@ func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manage
 
 func (mr *PostgresManagerRepository) Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, *httperr.HttpError) {
 	row := mr.db.QueryRow(ctx, `
-		select id, password from "manager"
-		where email = $1 and active = true`,
+		select id, password from "manager" where email = $1 and active = true`,
 		email.Value(),
 	)
 

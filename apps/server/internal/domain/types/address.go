@@ -3,9 +3,12 @@ package types
 import (
 	"fmt"
 	"imobiliary/internal/application/httperr"
+
+	"github.com/google/uuid"
 )
 
 type Address struct {
+	ID           uuid.UUID
 	FullAddress  string
 	Street       string
 	Number       string

@@ -11,6 +11,7 @@ export type Owner = {
   occupation: string
   marital_status: 'Solteiro(a)' | 'Casado(a)' | 'Amasiado(a)' | 'Divorciado(a)' | 'Viúvo(a)' | 'União Estável',
   address: Address,
+  active: boolean
 };
 
 

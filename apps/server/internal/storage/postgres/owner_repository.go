@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/domain/owner"
 
@@ -21,27 +22,12 @@ func NewPostgresOwnerRepository(pool *pgxpool.Pool) *PostgresOwnerRepository {
 
 func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UUID, managerID uuid.UUID) (*owner.Owner, *httperr.HttpError) {
 	row := or.db.QueryRow(ctx, `
-	SELECT
-		ow.id,
-		ow.manager_id,
-		ow.fullname,
-		ow.cpf,
-		ow.rg,
-		ow.phone,
-		ow.email,
-		ow.occupation,
-		ow.marital_status,
-		ad.full_address,
-		ad.street,
-		ad.number,
-		ad.complement,
-		ad.neighborhood,
-		ad.city,
-		ad.state,
-		ad.zip_code
-	FROM "owner" ow
-	INNER JOIN "address" ad ON ow.address_id = ad.id
-	WHERE ow.id = $1 AND ow.manager_id = $2`, ownerID, managerID)
+		select * from "owner" ow
+		join "address" ad on ow.address_id = ad.id
+		where ow.id = $1 and ow.manager_id = $2 and ow.active = true`,
+		ownerID,
+		managerID,
+	)
 
 	var found owner.Owner
 	if err := row.Scan(
@@ -54,6 +40,7 @@ func (or *PostgresOwnerRepository) FindByID(ctx context.Context, ownerID uuid.UU
 		&found.Email.Address,
 		&found.Occupation,
 		&found.MaritalStatus,
+		&found.Active,
 		&found.Address.FullAddress,
 		&found.Address.Street,
 		&found.Address.Number,
@@ -81,10 +68,8 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 	}
 
 	row := tx.QueryRow(ctx, `
-		INSERT INTO "address"
-		(full_address, street, number, complement, neighborhood, city, state, zip_code)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-		RETURNING id`,
+		insert into "address" (full_address, street, number, complement, neighborhood, city, state, zip_code)
+		values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`,
 		owner.Address.FullAddress,
 		owner.Address.Street,
 		owner.Address.Number,
@@ -107,9 +92,7 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 	}
 
 	_, err = tx.Exec(ctx, `
-		INSERT INTO "owner"
-		(id, manager_id, address_id, fullname, cpf, rg, phone, email, occupation, marital_status)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+		insert into "owner" values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
 		owner.ID,
 		managerID,
 		addressID,
@@ -120,13 +103,14 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 		owner.Email.Value(),
 		owner.Occupation,
 		owner.MaritalStatus,
+		true,
 	)
 
 	if err != nil {
 		if IsUniqueConstraint(err) {
 			return httperr.NewAlreadyExistsError(ctx, "owner already exists")
 		}
-
+		fmt.Println(err)
 		return httperr.NewInternalServerError(ctx, httperr.InternalServerError)
 	}
 
@@ -140,27 +124,21 @@ func (or *PostgresOwnerRepository) Create(ctx context.Context, owner *owner.Owne
 
 func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.UUID) ([]owner.Owner, *httperr.HttpError) {
 	rows, err := or.db.Query(ctx, `
-	SELECT
-		ow.id,
-		ow.manager_id,
-		ow.fullname,
-		ow.cpf,
-		ow.rg,
-		ow.phone,
-		ow.email,
-		ow.occupation,
-		ow.marital_status,
-		ad.full_address,
-		ad.street,
-		ad.number,
-		ad.complement,
-		ad.neighborhood,
-		ad.city,
-		ad.state,
-		ad.zip_code
-	FROM "owner" ow
-	INNER JOIN "address" ad ON ow.address_id = ad.id
-	WHERE ow.manager_id = $1`, managerID)
+		select
+			ow.*,
+			ad.full_address,
+			ad.street,
+			ad.number,
+			ad.complement,
+			ad.neighborhood,
+			ad.city,
+			ad.state,
+			ad.zip_code
+		from "owner" ow
+		join "address" ad on ow.address_id = ad.id
+		where ow.manager_id = $1 and ow.active = true`,
+		managerID,
+	)
 
 	if err != nil {
 		if IsErrNoRows(err) {
@@ -176,6 +154,7 @@ func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.U
 		if err := rows.Scan(
 			&found.ID,
 			&found.ManagerID,
+			&found.Address.ID,
 			&found.Fullname,
 			&found.CPF.Cpf,
 			&found.RG.Rg,
@@ -183,6 +162,7 @@ func (or *PostgresOwnerRepository) FindAll(ctx context.Context, managerID uuid.U
 			&found.Email.Address,
 			&found.Occupation,
 			&found.MaritalStatus,
+			&found.Active,
 			&found.Address.FullAddress,
 			&found.Address.Street,
 			&found.Address.Number,

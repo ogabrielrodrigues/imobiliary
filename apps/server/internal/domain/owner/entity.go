@@ -17,6 +17,7 @@ type Owner struct {
 	Occupation    string
 	MaritalStatus types.MaritalStatus
 	Address       types.Address
+	Active        bool
 }
 
 func NewOwner(
@@ -41,6 +42,7 @@ func NewOwner(
 		Occupation:    occupation,
 		MaritalStatus: marital_status,
 		Address:       address,
+		Active:        true,
 	}
 
 	return newOwner

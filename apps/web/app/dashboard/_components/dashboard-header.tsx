@@ -8,6 +8,7 @@ type DashboardHeaderProps = {
 export function DashboardHeader({ properties }: DashboardHeaderProps) {
   const propertiesCount = properties.length
   const occupied = properties.filter(property => property.status === 'Ocupado').length
+  const occupiedPercent = (occupied / propertiesCount) * 100 || 0
 
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -37,7 +38,7 @@ export function DashboardHeader({ properties }: DashboardHeaderProps) {
           description="Percentual de imóveis ocupados"
         />
         <HeaderCardContent
-          count="85.5%"
+          count={`${occupiedPercent}%`}
           className="text-muted"
         />
       </HeaderCard>
