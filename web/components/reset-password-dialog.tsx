@@ -10,6 +10,7 @@ import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
+import { changePassword } from '@/actions/mutations/manager/change-password'
 
 const reset_password = z.object({
   email: z.string().email("o e-mail digitado deve ser válido"),
@@ -35,37 +36,30 @@ export function ResetPasswordDialog({ open, setOpen }: ResetPasswordDialogProps)
   async function onSubmit(values: ResetPasswordRequest) {
     setLoading(true)
 
-    toast.success("E-mail de redefinição enviado ao endereço fornecido.", {
-      description: "Acesse o e-mail e siga os passos para redefinição de sua senha.",
-      duration: 4000
-    })
+    const status = await changePassword(values)
+
+    switch (status) {
+      case 200:
+        toast.success("E-mail de redefinição enviado ao endereço fornecido.", {
+          description: "Acesse o e-mail e siga os passos para redefinição de sua senha.",
+          duration: 4000
+        })
+        break
+      case 404:
+        toast.error("Usuário não encontrado.", {
+          description: "Verifique seu email e tente novamente",
+          duration: 4000
+        })
+        break
+      default:
+        toast.error("Erro ao redefinir senha.", {
+          description: "Ocorreu um erro interno ao tentar redefinir senha. Caso o problema persista entre em contato",
+          duration: 4000
+        })
+        break
+    }
 
     setOpen(false)
-
-    // const status: number = 200
-    //await changePassword()
-
-    // switch (status) {
-    //   case 200:
-    //     toast.success("E-mail de redefinição enviado ao endereço fornecido.", {
-    //       description: "Acesse o e-mail e siga os passos para redefinição de sua senha.",
-    //       duration: 4000
-    //     })
-    //     break
-    //   case 404:
-    //     toast.error("Usuário não encontrado.", {
-    //       description: "Verifique seu email e tente novamente",
-    //       duration: 4000
-    //     })
-    //     break
-    //   default:
-    //     toast.error("Erro ao redefinir senha.", {
-    //       description: "Ocorreu um erro interno ao tentar redefinir senha. Caso o problema persista entre em contato",
-    //       duration: 4000
-    //     })
-    //     break
-    // }
-
     setLoading(false)
   }
 

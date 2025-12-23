@@ -6,8 +6,10 @@ import { ResetPasswordDialog } from "@/components/reset-password-dialog"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { IconLogin2 } from "@tabler/icons-react"
 import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Fragment, useState } from "react"
@@ -128,7 +130,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
           />
 
           <Button disabled={loading} type="submit" className="w-full" id="login">
-            {loading && <LoaderCircle className="size-4 animate-spin" />}Entrar
+            {loading ? <Spinner/> : <IconLogin2/>}Entrar
           </Button>
         </form>
       </Form>

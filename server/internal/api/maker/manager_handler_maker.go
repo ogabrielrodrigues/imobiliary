@@ -1,26 +1,24 @@
 package maker
 
 import (
-	"imobiliary/config"
 	"imobiliary/internal/api/handler"
-	"imobiliary/internal/application/usecase"
 	"imobiliary/internal/domain/manager"
+	"imobiliary/internal/mail"
 	"imobiliary/internal/storage/postgres"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func MakeManagerHandler(pool *pgxpool.Pool, config *config.Config) *handler.ManagerHandler {
+func MakeManagerHandler(pool *pgxpool.Pool) *handler.ManagerHandler {
 	managerRepository := postgres.NewPostgresManagerRepository(pool)
 
-	findByIDManagerUseCase := usecase.NewFindByIDManager(managerRepository)
-	createManagerUseCase := usecase.NewCreateManager(managerRepository, manager.NewManagerValidator())
-	authenticateManagerUseCase := usecase.NewAuthenticateManager(managerRepository, config.GetJwtSecret())
+	mailClient, _ := mail.NewMailClient()
+	managerMailRepository := mail.NewMailManagerRepository(mailClient)
 
 	managerHandler := handler.NewManagerHandler(
-		findByIDManagerUseCase,
-		createManagerUseCase,
-		authenticateManagerUseCase,
+		managerRepository,
+		manager.NewManagerValidator(),
+		&managerMailRepository,
 	)
 
 	return managerHandler

@@ -1,17 +1,13 @@
 'use server'
 
-import { token } from "@/actions/queries/auth/token"
+import { ResetPasswordRequest } from "@/components/reset-password-dialog"
 import { env } from "@/lib/env"
 
-export async function changePassword(): Promise<number> {
-  const auth_token = await token()
-
+export async function changePassword(data: ResetPasswordRequest): Promise<number> {
   try {
     const response = await fetch(`${env.SERVER_ADDR}/manager/reset`, {
       method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${auth_token}`,
-      },
+      body: JSON.stringify(data)
     })
 
     return response.status

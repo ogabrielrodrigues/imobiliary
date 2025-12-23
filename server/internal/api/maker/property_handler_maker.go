@@ -1,7 +1,6 @@
 package maker
 
 import (
-	"imobiliary/config"
 	"imobiliary/internal/api/handler"
 	"imobiliary/internal/application/usecase"
 	"imobiliary/internal/domain/property"
@@ -10,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func MakePropertyHandler(pool *pgxpool.Pool, config *config.Config) *handler.PropertyHandler {
+func MakePropertyHandler(pool *pgxpool.Pool) *handler.PropertyHandler {
 	propertyRepository := postgres.NewPostgresPropertyRepository(pool)
 
 	findByIDPropertyUseCase := usecase.NewFindByIDProperty(propertyRepository)

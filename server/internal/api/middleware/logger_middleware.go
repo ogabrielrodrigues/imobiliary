@@ -1,14 +1,13 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
-	"go.uber.org/zap"
+	"github.com/phuslu/log"
 )
 
-func LoggerMiddleware(next http.Handler, logger *zap.Logger) http.Handler {
+func LoggerMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
@@ -16,10 +15,10 @@ func LoggerMiddleware(next http.Handler, logger *zap.Logger) http.Handler {
 
 		duration := uint(time.Since(start).Milliseconds())
 
-		logger.Info("request received",
-			zap.String("method", r.Method),
-			zap.String("path", r.URL.Path),
-			zap.String("duration", fmt.Sprintf("%dms", duration)),
+		log.Info().Msgf("request received. %s %s ...%dms",
+			r.Method,
+			r.URL.Path,
+			duration,
 		)
 	})
 }

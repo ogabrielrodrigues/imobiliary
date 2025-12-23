@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"imobiliary/config"
 	"imobiliary/internal/application/dto/response"
 	"imobiliary/internal/application/jwt"
 )
@@ -18,8 +19,10 @@ var (
 	ManagerIDKey = contextKey("manager_id")
 )
 
-func AuthMiddleware(next http.Handler, jwtSecret string) http.Handler {
+func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		config := config.GetConfig()
+
 		authorization := r.Header.Get("Authorization")
 
 		token, err := jwt.ExtractToken(authorization)
@@ -28,7 +31,7 @@ func AuthMiddleware(next http.Handler, jwtSecret string) http.Handler {
 			return
 		}
 
-		managerID, err := jwt.ParseToken(token, jwtSecret)
+		managerID, err := jwt.ParseToken(token, config.JwtSecret)
 		if err != nil {
 			response.Json(w, err.HttpCode, err)
 			return

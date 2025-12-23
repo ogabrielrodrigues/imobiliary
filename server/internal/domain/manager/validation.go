@@ -5,7 +5,6 @@ import (
 	"imobiliary/internal/application/dto/request"
 	"imobiliary/internal/application/httperr"
 	"imobiliary/internal/domain/types"
-	"time"
 )
 
 type Validator struct{}
@@ -14,7 +13,7 @@ func NewManagerValidator() *Validator {
 	return &Validator{}
 }
 
-func (v *Validator) Validate(dto request.CreateManagerDTO, currentTime time.Time) (*Manager, error) {
+func (v *Validator) Validate(dto request.CreateManagerDto) (*Manager, error) {
 	validationErrs := &httperr.ValidationErrors{}
 
 	if dto.Fullname == "" {

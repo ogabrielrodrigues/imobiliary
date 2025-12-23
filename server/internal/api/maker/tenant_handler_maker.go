@@ -1,7 +1,6 @@
 package maker
 
 import (
-	"imobiliary/config"
 	"imobiliary/internal/api/handler"
 	"imobiliary/internal/application/usecase"
 	"imobiliary/internal/domain/tenant"
@@ -10,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func MakeTenantHandler(pool *pgxpool.Pool, config *config.Config) *handler.TenantHandler {
+func MakeTenantHandler(pool *pgxpool.Pool) *handler.TenantHandler {
 	tenantRepository := postgres.NewPostgresTenantRepository(pool)
 
 	findByIDTenantUseCase := usecase.NewFindByIDTenant(tenantRepository)

@@ -2,11 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"imobiliary/config"
 	"imobiliary/internal/api/middleware"
 	"imobiliary/internal/api/router"
-	"imobiliary/internal/application/logger"
 	"imobiliary/internal/storage/postgres"
 	"net/http"
 	"os"
@@ -15,14 +13,13 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"go.uber.org/zap"
+	"github.com/phuslu/log"
 )
 
-func initDependencies(config *config.Config) (*pgxpool.Pool, error) {
-	postgresConnString := config.GetPostgresConnString()
+func initDependencies(connString string) (*pgxpool.Pool, error) {
 	postgresConfig := postgres.DefaultPostgresConfig()
 
-	postgresClient, err := postgres.NewPostgresClient(postgresConnString, postgresConfig)
+	postgresClient, err := postgres.NewPostgresClient(connString, postgresConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -31,34 +28,34 @@ func initDependencies(config *config.Config) (*pgxpool.Pool, error) {
 }
 
 func main() {
-	logger := logger.NewLogger()
-	config, err := config.NewConfig()
+	err := config.LoadConfig()
 	if err != nil {
-		logger.Panic("error loading config", zap.Error(err))
+		log.Panic().Msgf("error loading config. err=%v", err)
 	}
+
+	config := config.GetConfig()
 
 	ctx := context.Background()
 
-	postgresClient, err := initDependencies(config)
+	postgresClient, err := initDependencies(config.PostgresConnString)
 	if err != nil {
-		logger.Panic("error initializing dependencies", zap.Error(err))
+		log.Panic().Msgf("error initializing dependencies. err=%v", err)
 	}
 
-	handler, err := router.NewRouter(postgresClient, logger, config)
+	handler := router.NewRouter(postgresClient)
 	if err != nil {
-		logger.Panic("error on routes setup", zap.Error(err))
+		log.Panic().Msgf("error on routes setup. err=%v", err)
 	}
 
 	handler = middleware.CORSMiddleware(
 		middleware.LoggerMiddleware(
 			middleware.CurrentTimeMiddleware(handler),
-			logger,
 		),
-		config.GetCorsOrigin(),
+		config.CorsOrigin,
 	)
 
 	server := &http.Server{
-		Addr:           config.GetServerAddr(),
+		Addr:           config.ServerAddr,
 		Handler:        handler,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
@@ -66,9 +63,9 @@ func main() {
 	}
 
 	go func() {
-		logger.Info(fmt.Sprintf("server running on %s", config.GetServerAddr()))
+		log.Info().Msgf("server running on %s", config.ServerAddr)
 		if err := server.ListenAndServe(); err != http.ErrServerClosed {
-			logger.Panic("server error on listen", zap.Error(err))
+			log.Panic().Msgf("server error on listen. err=%v", err)
 		}
 	}()
 
@@ -76,14 +73,14 @@ func main() {
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
 
-	logger.Info("initialized graceful shutdown...")
+	log.Info().Msg("initialized graceful shutdown...")
 
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
 	if server.Shutdown(ctx); err != nil {
-		logger.Panic("fail to shutdown server", zap.Error(err))
+		log.Panic().Msgf("fail to shutdown server. err=%v", err)
 	}
 
-	logger.Info("server shutdown")
+	log.Info().Msg("server shutdown")
 }

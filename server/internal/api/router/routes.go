@@ -7,19 +7,19 @@ import (
 	"imobiliary/internal/application/httperr"
 	"net/http"
 
-	"go.uber.org/zap"
+	"github.com/phuslu/log"
 )
 
 type RouteHandler func(w http.ResponseWriter, r *http.Request) *httperr.HttpError
 
-func makeHandler(handler RouteHandler, logger *zap.Logger) http.HandlerFunc {
+func makeHandler(handler RouteHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := handler(w, r); err != nil {
-			logger.Error(err.Message,
-				zap.String("method", r.Method),
-				zap.String("path", r.URL.Path),
-				zap.Int("status", err.HttpCode),
-				zap.String("message", err.Message),
+			log.Error().Msgf("%s %s [%d]. err=%v",
+				r.Method,
+				r.URL.Path,
+				err.HttpCode,
+				err,
 			)
 
 			response.Json(w, err.HttpCode, err)
@@ -27,30 +27,29 @@ func makeHandler(handler RouteHandler, logger *zap.Logger) http.HandlerFunc {
 	}
 }
 
-func setupRoutes(h *Handler, router *http.ServeMux) error {
-	mh := maker.MakeManagerHandler(h.pool, h.config)
+func setupRoutes(h *Handler, router *http.ServeMux) {
+	mh := maker.MakeManagerHandler(h.pool)
 
-	router.Handle("GET /manager", middleware.AuthMiddleware(makeHandler(mh.FindByID, h.logger), h.config.GetJwtSecret()))
-	router.Handle("POST /manager", makeHandler(mh.Create, h.logger))
-	router.Handle("POST /auth", makeHandler(mh.Authenticate, h.logger))
+	router.Handle("GET /manager", middleware.AuthMiddleware(makeHandler(mh.FindByID)))
+	router.Handle("POST /manager", makeHandler(mh.Create))
+	router.Handle("POST /auth", makeHandler(mh.Authenticate))
+	router.Handle("PUT /manager/reset", makeHandler(mh.ResetPassword))
 
-	oh := maker.MakeOwnerHandler(h.pool, h.config)
+	oh := maker.MakeOwnerHandler(h.pool)
 
-	router.Handle("GET /owner/{owner_id}", middleware.AuthMiddleware(makeHandler(oh.FindByID, h.logger), h.config.GetJwtSecret()))
-	router.Handle("POST /owner", middleware.AuthMiddleware(makeHandler(oh.Create, h.logger), h.config.GetJwtSecret()))
-	router.Handle("GET /owner", middleware.AuthMiddleware(makeHandler(oh.FindAll, h.logger), h.config.GetJwtSecret()))
+	router.Handle("GET /owner/{owner_id}", middleware.AuthMiddleware(makeHandler(oh.FindByID)))
+	router.Handle("POST /owner", middleware.AuthMiddleware(makeHandler(oh.Create)))
+	router.Handle("GET /owner", middleware.AuthMiddleware(makeHandler(oh.FindAll)))
 
-	ph := maker.MakePropertyHandler(h.pool, h.config)
+	ph := maker.MakePropertyHandler(h.pool)
 
-	router.Handle("GET /property/{property_id}", middleware.AuthMiddleware(makeHandler(ph.FindByID, h.logger), h.config.GetJwtSecret()))
-	router.Handle("POST /property", middleware.AuthMiddleware(makeHandler(ph.Create, h.logger), h.config.GetJwtSecret()))
-	router.Handle("GET /property", middleware.AuthMiddleware(makeHandler(ph.FindAll, h.logger), h.config.GetJwtSecret()))
+	router.Handle("GET /property/{property_id}", middleware.AuthMiddleware(makeHandler(ph.FindByID)))
+	router.Handle("POST /property", middleware.AuthMiddleware(makeHandler(ph.Create)))
+	router.Handle("GET /property", middleware.AuthMiddleware(makeHandler(ph.FindAll)))
 
-	th := maker.MakeTenantHandler(h.pool, h.config)
+	th := maker.MakeTenantHandler(h.pool)
 
-	router.Handle("GET /tenant/{tenant_id}", middleware.AuthMiddleware(makeHandler(th.FindByID, h.logger), h.config.GetJwtSecret()))
-	router.Handle("POST /tenant", middleware.AuthMiddleware(makeHandler(th.Create, h.logger), h.config.GetJwtSecret()))
-	router.Handle("GET /tenant", middleware.AuthMiddleware(makeHandler(th.FindAll, h.logger), h.config.GetJwtSecret()))
-
-	return nil
+	router.Handle("GET /tenant/{tenant_id}", middleware.AuthMiddleware(makeHandler(th.FindByID)))
+	router.Handle("POST /tenant", middleware.AuthMiddleware(makeHandler(th.Create)))
+	router.Handle("GET /tenant", middleware.AuthMiddleware(makeHandler(th.FindAll)))
 }

@@ -10,6 +10,7 @@ import (
 
 type Repository interface {
 	FindByID(ctx context.Context, managerID uuid.UUID) (*Manager, *httperr.HttpError)
+	FindByEmail(ctx context.Context, email *types.Email) (*Manager, *httperr.HttpError)
 	Create(ctx context.Context, manager *Manager) *httperr.HttpError
 	Authenticate(ctx context.Context, email *types.Email, password string) (uuid.UUID, *httperr.HttpError)
 }

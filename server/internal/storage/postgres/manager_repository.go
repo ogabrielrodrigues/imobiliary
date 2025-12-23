@@ -45,6 +45,31 @@ func (mr *PostgresManagerRepository) FindByID(ctx context.Context, managerID uui
 	return &found, nil
 }
 
+func (mr *PostgresManagerRepository) FindByEmail(ctx context.Context, email *types.Email) (*manager.Manager, *httperr.HttpError) {
+	row := mr.db.QueryRow(ctx, `
+		select * from "manager" where email = $1 and active = true`,
+		email.Value(),
+	)
+
+	var found manager.Manager
+	if err := row.Scan(
+		&found.ID,
+		&found.Fullname,
+		&found.Phone.Number,
+		&found.Email.Address,
+		&found.Password,
+		&found.Active,
+	); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, httperr.NewNotFoundError(ctx, "manager not found or not exists")
+		}
+
+		return nil, httperr.NewInternalServerError(ctx, httperr.InternalServerError)
+	}
+
+	return &found, nil
+}
+
 func (mr *PostgresManagerRepository) Create(ctx context.Context, manager *manager.Manager) *httperr.HttpError {
 	_, err := mr.db.Exec(ctx, `
 		insert into "manager" values ($1, $2, $3, $4, $5, $6)`,

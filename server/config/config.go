@@ -1,84 +1,96 @@
 package config
 
 import (
-	"errors"
+	"fmt"
 	"os"
-
-	"imobiliary/internal/domain/types"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	environment        types.Environment
-	serverAddr         string
-	corsOrigin         string
-	jwtSecret          string
-	postgresConnString string
+	ServerAddr         string
+	CorsOrigin         string
+	JwtSecret          string
+	PostgresConnString string
+	MailAddr           string
+	MailHost           string
+	MailPort           string
+	MailUser           string
+	MailPassword       string
+	ResetPasswordUrl   string
 }
 
-func NewConfig() (*Config, error) {
+var globalConfig Config
+
+func LoadConfig() error {
 	if err := godotenv.Load(); err != nil {
-		return nil, err
-	}
-
-	env := os.Getenv("ENVIRONMENT")
-
-	var environment types.Environment
-	switch env {
-	case "production":
-		environment = types.Production
-	case "staging":
-		environment = types.Staging
-	default:
-		environment = types.Development
+		return fmt.Errorf("error reading environment variables")
 	}
 
 	serverAddr := os.Getenv("SERVER_ADDR")
 	if serverAddr == "" {
-		return nil, errors.New("SERVER_ADDR env variable not defined")
+		return fmt.Errorf("SERVER_ADDR environment variable is not defined")
 	}
 
 	corsOrigin := os.Getenv("CORS_ORIGIN")
 	if corsOrigin == "" {
-		return nil, errors.New("CORS_ORIGIN env variable not defined")
+		return fmt.Errorf("CORS_ORIGIN environment variable is not defined")
 	}
 
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
-		return nil, errors.New("JWT_SECRET env variable not defined")
+		return fmt.Errorf("JWT_SECRET environment variable is not defined")
 	}
 
 	postgresConnString := os.Getenv("DATABASE_URL")
 	if postgresConnString == "" {
-		return nil, errors.New("DATABASE_URL env variable not defined")
+		return fmt.Errorf("DATABASE_URL env variable not defined")
 	}
 
-	return &Config{
-		environment:        environment,
-		serverAddr:         serverAddr,
-		corsOrigin:         corsOrigin,
-		jwtSecret:          jwtSecret,
-		postgresConnString: postgresConnString,
-	}, nil
+	mailAddr := os.Getenv("MAIL_ADDR")
+	if mailAddr == "" {
+		return fmt.Errorf("MAIL_ADDR env variable not defined")
+	}
+
+	mailHost := os.Getenv("MAIL_HOST")
+	if mailHost == "" {
+		return fmt.Errorf("MAIL_HOST env variable not defined")
+	}
+
+	mailPort := os.Getenv("MAIL_PORT")
+	if mailPort == "" {
+		return fmt.Errorf("MAIL_PORT env variable not defined")
+	}
+
+	mailUser := os.Getenv("MAIL_USER")
+	if mailUser == "" {
+		return fmt.Errorf("MAIL_USER env variable not defined")
+	}
+
+	mailPassword := os.Getenv("MAIL_PASSWORD")
+	if mailPassword == "" {
+		return fmt.Errorf("MAIL_PASSWORD env variable not defined")
+	}
+
+	resetPasswordUrl := os.Getenv("RESET_PASSWORD_URL")
+	if resetPasswordUrl == "" {
+		return fmt.Errorf("RESET_PASSWORD_URL env variable not defined")
+	}
+
+	globalConfig.ServerAddr = serverAddr
+	globalConfig.CorsOrigin = corsOrigin
+	globalConfig.JwtSecret = jwtSecret
+	globalConfig.PostgresConnString = postgresConnString
+	globalConfig.MailAddr = mailAddr
+	globalConfig.MailHost = mailHost
+	globalConfig.MailPort = mailPort
+	globalConfig.MailUser = mailUser
+	globalConfig.MailPassword = mailPassword
+	globalConfig.ResetPasswordUrl = resetPasswordUrl
+
+	return nil
 }
 
-func (c *Config) GetEnvironment() types.Environment {
-	return c.environment
-}
-
-func (c *Config) GetServerAddr() string {
-	return c.serverAddr
-}
-
-func (c *Config) GetCorsOrigin() string {
-	return c.corsOrigin
-}
-
-func (c *Config) GetJwtSecret() string {
-	return c.jwtSecret
-}
-
-func (c *Config) GetPostgresConnString() string {
-	return c.postgresConnString
+func GetConfig() *Config {
+	return &globalConfig
 }

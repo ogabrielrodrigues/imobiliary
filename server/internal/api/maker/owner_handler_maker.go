@@ -1,7 +1,6 @@
 package maker
 
 import (
-	"imobiliary/config"
 	"imobiliary/internal/api/handler"
 	"imobiliary/internal/application/usecase"
 	"imobiliary/internal/domain/owner"
@@ -10,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func MakeOwnerHandler(pool *pgxpool.Pool, config *config.Config) *handler.OwnerHandler {
+func MakeOwnerHandler(pool *pgxpool.Pool) *handler.OwnerHandler {
 	ownerRepository := postgres.NewPostgresOwnerRepository(pool)
 
 	findByIDOwnerUseCase := usecase.NewFindByIDOwner(ownerRepository)
