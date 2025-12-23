@@ -1,6 +1,10 @@
-import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
-import { Owner } from "@/types/owner"
-import { Property } from "@/types/property"
+import {
+  HeaderCard,
+  HeaderCardContent,
+  HeaderCardHead,
+} from "@/components/header-card"
+import type { Owner } from "@/types/owner"
+import type { Property } from "@/types/property"
 
 interface OwnersHeaderProps {
   owners: Owner[]
@@ -10,7 +14,8 @@ interface OwnersHeaderProps {
 export function OwnersHeader({ owners, properties }: OwnersHeaderProps) {
   const ownersCount = owners.length
   const propertiesCount = properties.length
-  const propertiesPerOwner = ownersCount > 0 ? (propertiesCount / ownersCount) : propertiesCount
+  const propertiesPerOwner =
+    ownersCount > 0 ? propertiesCount / ownersCount : propertiesCount
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -20,7 +25,7 @@ export function OwnersHeader({ owners, properties }: OwnersHeaderProps) {
           description="Proprietários cadastrados"
         />
         <HeaderCardContent
-          count={ownersCount.toString().padStart(2, '0')}
+          count={ownersCount.toString().padStart(2, "0")}
           className="text-muted"
         />
       </HeaderCard>
@@ -31,7 +36,7 @@ export function OwnersHeader({ owners, properties }: OwnersHeaderProps) {
           description="Média de imóveis (Aproximada)"
         />
         <HeaderCardContent
-          count={propertiesPerOwner.toString().padStart(2, '0')}
+          count={propertiesPerOwner.toString().padStart(2, "0")}
           className="text-muted"
         />
       </HeaderCard>

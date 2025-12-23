@@ -1,7 +1,7 @@
-'use server'
+"use server"
 
 import { env } from "../env"
-import { CEP } from "./cep"
+import type { CEP } from "./cep"
 
 export async function searchCEP(cep: string): Promise<CEP | undefined> {
   const response = await fetch(`${env.CEP_API_ADDR}/${cep}`)
@@ -17,7 +17,7 @@ export async function searchCEP(cep: string): Promise<CEP | undefined> {
     cep: data.cep,
     state: data.state,
     city: data.city,
-    neighborhood: data.neighborhood
+    neighborhood: data.neighborhood,
   }
 
   return found_cep

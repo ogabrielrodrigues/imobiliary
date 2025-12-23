@@ -1,5 +1,5 @@
 import { Loader2Icon } from "lucide-react"
-import {IconLoader} from '@tabler/icons-react'
+import { IconLoader, IconLoader3, IconLoaderQuarter } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
 

@@ -1,5 +1,9 @@
-import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
-import { Property } from "@/types/property"
+import {
+  HeaderCard,
+  HeaderCardContent,
+  HeaderCardHead,
+} from "@/components/header-card"
+import type { Property } from "@/types/property"
 
 type DashboardHeaderProps = {
   properties: Property[]
@@ -7,7 +11,9 @@ type DashboardHeaderProps = {
 
 export function DashboardHeader({ properties }: DashboardHeaderProps) {
   const propertiesCount = properties.length
-  const occupied = properties.filter(property => property.status === 'Ocupado').length
+  const occupied = properties.filter(
+    property => property.status === "Ocupado",
+  ).length
   const occupiedPercent = (occupied / propertiesCount) * 100 || 0
 
   return (
@@ -18,7 +24,7 @@ export function DashboardHeader({ properties }: DashboardHeaderProps) {
           description="Total de imóveis em locação"
         />
         <HeaderCardContent
-          count={propertiesCount.toString().padStart(2, '0')}
+          count={propertiesCount.toString().padStart(2, "0")}
           className="text-muted"
         />
       </HeaderCard>
@@ -28,7 +34,7 @@ export function DashboardHeader({ properties }: DashboardHeaderProps) {
           description="Total de contratos em vigor"
         />
         <HeaderCardContent
-          count={occupied.toString().padStart(2, '0')}
+          count={occupied.toString().padStart(2, "0")}
           className="text-muted"
         />
       </HeaderCard>

@@ -1,6 +1,13 @@
 "use client"
 
-import { BookOpenText, Building, ChevronRight, type LucideIcon, UserRoundCheck, UsersRound } from "lucide-react"
+import {
+  BookOpenText,
+  Building,
+  ChevronRight,
+  type LucideIcon,
+  UserRoundCheck,
+  UsersRound,
+} from "lucide-react"
 
 import {
   Collapsible,
@@ -67,7 +74,7 @@ export function NavMain() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              isActive={pathname === '/dashboard/locacao'}
+              isActive={pathname === "/dashboard/locacao"}
               className="data-[active=true]:!text-primary data-[active=true]:!bg-ring/20 data-[active=true]:!font-medium"
             >
               <a href={item.url}>
@@ -84,7 +91,7 @@ export function NavMain() {
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
+                  {item.items?.map(subItem => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton
                         asChild

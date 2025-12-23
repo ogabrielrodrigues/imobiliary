@@ -1,112 +1,115 @@
-import { capitalizeFirstLetter } from "./utils";
+import { capitalizeFirstLetter } from "./utils"
 
 type DynamicParam = {
-  name: string;
-  isDynamic: boolean;
-  children?: RouteStructure;
+  name: string
+  isDynamic: boolean
+  children?: RouteStructure
 }
 
 type RouteNode = {
-  name: string;
-  href: string;
-  children?: RouteStructure;
-  dynamicChildren?: Record<string, DynamicParam>;
+  name: string
+  href: string
+  children?: RouteStructure
+  dynamicChildren?: Record<string, DynamicParam>
 }
 
 type RouteStructure = {
-  [key: string]: RouteNode;
+  [key: string]: RouteNode
 }
 
 type BreadcrumbItem = {
-  name: string;
-  href: string;
-  isLast: boolean;
-  dynamicId?: string;
+  name: string
+  href: string
+  isLast: boolean
+  dynamicId?: string
 }
 
 function isDynamicSegment(segment: string): boolean {
-  return (
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(segment)
-  );
-};
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    segment,
+  )
+}
 
 type GenerateBreadcrumbPathParams = {
-  pathname: string,
+  pathname: string
   routeStructure: RouteStructure
 }
 
-export function generateBreadcrumbPath({ pathname, routeStructure }: GenerateBreadcrumbPathParams): BreadcrumbItem[] {
-  if (!pathname) return [];
+export function generateBreadcrumbPath({
+  pathname,
+  routeStructure,
+}: GenerateBreadcrumbPathParams): BreadcrumbItem[] {
+  if (!pathname) return []
 
-  const pathSegments = pathname.split('/').filter(Boolean);
-  if (pathSegments.length === 0) return [];
+  const pathSegments = pathname.split("/").filter(Boolean)
+  if (pathSegments.length === 0) return []
 
-  const breadcrumbItems: BreadcrumbItem[] = [];
+  const breadcrumbItems: BreadcrumbItem[] = []
 
-  const dashboardNode: RouteNode = routeStructure.dashboard;
+  const dashboardNode: RouteNode = routeStructure.dashboard
 
   if (!dashboardNode) {
-    return [];
+    return []
   }
 
-  let currentPath = '';
-  let currentStructure: RouteStructure | undefined = routeStructure;
-  let dynamicParent: RouteNode | null = null;
+  let currentPath = ""
+  let currentStructure: RouteStructure | undefined = routeStructure
+  let dynamicParent: RouteNode | null = null
 
   for (let i = 0; i < pathSegments.length; i++) {
-    const segment = pathSegments[i];
-    currentPath += `/${segment}`;
+    const segment = pathSegments[i]
+    currentPath += `/${segment}`
 
-    if (i === 0 && segment === 'dashboard') {
+    if (i === 0 && segment === "dashboard") {
       breadcrumbItems.push({
         name: dashboardNode.name,
         href: dashboardNode.href,
-        isLast: pathSegments.length === 1
-      });
+        isLast: pathSegments.length === 1,
+      })
 
-      currentStructure = dashboardNode.children;
+      currentStructure = dashboardNode.children
     } else if (currentStructure && segment in currentStructure) {
-      const currentNode: RouteNode = currentStructure[segment];
+      const currentNode: RouteNode = currentStructure[segment]
 
       breadcrumbItems.push({
         name: currentNode.name,
         href: currentNode.href,
-        isLast: i === pathSegments.length - 1
-      });
+        isLast: i === pathSegments.length - 1,
+      })
 
-      dynamicParent = currentNode;
-      currentStructure = currentNode.children;
+      dynamicParent = currentNode
+      currentStructure = currentNode.children
     } else if (
       isDynamicSegment(segment) &&
       dynamicParent &&
       dynamicParent.dynamicChildren &&
-      'id' in dynamicParent.dynamicChildren
+      "id" in dynamicParent.dynamicChildren
     ) {
-      const dynamicConfig: DynamicParam = dynamicParent.dynamicChildren.id;
+      const dynamicConfig: DynamicParam = dynamicParent.dynamicChildren.id
 
       if (dynamicConfig) {
         breadcrumbItems.push({
           name: dynamicConfig.name,
           href: currentPath,
           isLast: i === pathSegments.length - 1,
-          dynamicId: segment
-        });
+          dynamicId: segment,
+        })
 
-        currentStructure = dynamicConfig.children;
+        currentStructure = dynamicConfig.children
       }
     } else {
       breadcrumbItems.push({
         name: capitalizeFirstLetter(segment),
         href: currentPath,
-        isLast: i === pathSegments.length - 1
-      });
+        isLast: i === pathSegments.length - 1,
+      })
 
-      currentStructure = undefined;
+      currentStructure = undefined
     }
   }
 
-  return breadcrumbItems;
-};
+  return breadcrumbItems
+}
 
 export const routes: RouteStructure = {
   dashboard: {
@@ -127,9 +130,9 @@ export const routes: RouteStructure = {
             dynamicChildren: {
               id: {
                 name: "Perfil do Inquilino",
-                isDynamic: true
-              }
-            }
+                isDynamic: true,
+              },
+            },
           },
           imoveis: {
             name: "Imóveis",
@@ -137,9 +140,9 @@ export const routes: RouteStructure = {
             dynamicChildren: {
               id: {
                 name: "Detalhes do Imóvel",
-                isDynamic: true
-              }
-            }
+                isDynamic: true,
+              },
+            },
           },
           proprietarios: {
             name: "Proprietários",
@@ -147,12 +150,12 @@ export const routes: RouteStructure = {
             dynamicChildren: {
               id: {
                 name: "Proprietário",
-                isDynamic: true
-              }
-            }
+                isDynamic: true,
+              },
+            },
           },
-        }
+        },
       },
-    }
-  }
-};
+    },
+  },
+}

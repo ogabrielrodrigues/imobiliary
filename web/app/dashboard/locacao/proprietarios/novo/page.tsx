@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { NewOwnerForm } from "../_components/new-owner-form"
 
@@ -21,6 +21,6 @@ export default async function NewOwnersPage() {
         </Link>
       </div>
       <NewOwnerForm />
-    </div >
+    </div>
   )
 }

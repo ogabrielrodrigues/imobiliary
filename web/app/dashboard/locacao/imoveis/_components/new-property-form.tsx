@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -11,16 +11,22 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
 import { cn } from "@/lib/utils"
 
 import { createProperty } from "@/actions/mutations/property/create-property"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { searchCEP } from "@/lib/cep/api-brasil"
-import { Owner } from "@/types/owner"
+import type { Owner } from "@/types/owner"
 import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -29,14 +35,30 @@ import { useHookFormMask } from "use-mask-input"
 
 export const property_schema = z.object({
   owner_id: z.string().uuid("Você deve selecionar um proprietário"),
-  water_id: z.string().min(3, "O código da água deve conter ao menos 3 caracteres"),
-  energy_id: z.string().min(3, "O código da energia deve conter ao menos 3 caracteres"),
-  status: z.enum(['Disponível', 'Ocupado', 'Indisponível', 'Reservado', 'Reformando']),
-  kind: z.enum(['Residencial', 'Comercial', 'Industrial', 'Terreno', 'Rural']),
+  water_id: z
+    .string()
+    .min(3, "O código da água deve conter ao menos 3 caracteres"),
+  energy_id: z
+    .string()
+    .min(3, "O código da energia deve conter ao menos 3 caracteres"),
+  status: z.enum([
+    "Disponível",
+    "Ocupado",
+    "Indisponível",
+    "Reservado",
+    "Reformando",
+  ]),
+  kind: z.enum(["Residencial", "Comercial", "Industrial", "Terreno", "Rural"]),
   address: z.object({
-    street: z.string().min(3, "O nome da rua deve conter ao menos 3 caracteres"),
-    number: z.string().min(1, "O número da rua deve conter ao menos 1 caracter"),
-    neighborhood: z.string().min(3, "O bairro deve conter ao menos 3 caracteres"),
+    street: z
+      .string()
+      .min(3, "O nome da rua deve conter ao menos 3 caracteres"),
+    number: z
+      .string()
+      .min(1, "O número da rua deve conter ao menos 1 caracter"),
+    neighborhood: z
+      .string()
+      .min(3, "O bairro deve conter ao menos 3 caracteres"),
     complement: z.string().optional(),
     city: z.string().min(3, "A cidade deve conter ao menos 3 caracteres"),
     state: z.string().optional(),
@@ -50,7 +72,11 @@ export type NewPropertyFormProps = React.ComponentProps<"form"> & {
   owners: Owner[]
 }
 
-export function NewPropertyForm({ owners, className, ...props }: NewPropertyFormProps) {
+export function NewPropertyForm({
+  owners,
+  className,
+  ...props
+}: NewPropertyFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -69,12 +95,12 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
         complement: "",
         city: "",
         state: "",
-        zip_code: ""
-      }
-    }
+        zip_code: "",
+      },
+    },
   })
 
-  const registerWithMask = useHookFormMask(form.register);
+  const registerWithMask = useHookFormMask(form.register)
 
   async function searchAddressByCEP(cep: string) {
     const address = await searchCEP(cep)
@@ -103,7 +129,10 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
         }, 1500)
         break
       default:
-        toast.error("Erro ao criar imóvel", { description: "Confira os dados e tente novamente", duration: 1500 })
+        toast.error("Erro ao criar imóvel", {
+          description: "Confira os dados e tente novamente",
+          duration: 1500,
+        })
         break
     }
 
@@ -117,7 +146,12 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
         {...props}
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className={cn("grid grid-cols-subgrid md:!grid-cols-2 gap-y-4 gap-x-2", className)}>
+        <div
+          className={cn(
+            "grid grid-cols-subgrid md:!grid-cols-2 gap-y-4 gap-x-2",
+            className,
+          )}
+        >
           <FormField
             control={form.control}
             name="owner_id"
@@ -133,13 +167,20 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
                   >
                     <SelectTrigger autoFocus>
                       <SelectValue
-                        placeholder={owners.length > 0
-                          ? "Selecione o proprietário"
-                          : "Sem proprietários"}
+                        placeholder={
+                          owners.length > 0
+                            ? "Selecione o proprietário"
+                            : "Sem proprietários"
+                        }
                       />
                     </SelectTrigger>
                     <SelectContent className="text-sm md:text-base">
-                      {owners.length > 0 && owners.map(owner => <SelectItem key={owner.id} value={owner.id}>{owner.fullname}</SelectItem>)}
+                      {owners.length > 0 &&
+                        owners.map(owner => (
+                          <SelectItem key={owner.id} value={owner.id}>
+                            {owner.fullname}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -163,13 +204,13 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
                     disabled={loading}
                     maxLength={8}
                     {...field}
-                    {...registerWithMask("address.zip_code", '99999999', {
+                    {...registerWithMask("address.zip_code", "99999999", {
                       showMaskOnHover: false,
                       showMaskOnFocus: false,
                       required: true,
-                      onBlur: (e) => {
+                      onBlur: e => {
                         searchAddressByCEP(e.target.value)
-                      }
+                      },
                     })}
                   />
                 </FormControl>
@@ -378,7 +419,8 @@ export function NewPropertyForm({ owners, className, ...props }: NewPropertyForm
 
         <div className="flex justify-end">
           <Button disabled={loading} type="submit" size="lg" className="">
-            {loading && <LoaderCircle className="size-4 animate-spin" />}Cadastrar
+            {loading && <LoaderCircle className="size-4 animate-spin" />}
+            Cadastrar
           </Button>
         </div>
       </form>

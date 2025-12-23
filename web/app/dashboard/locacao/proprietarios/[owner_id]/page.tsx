@@ -2,7 +2,7 @@ import { getOwner } from "@/actions/queries/owner/get-owner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
@@ -14,7 +14,9 @@ export const metadata: Metadata = {
   title: "Perfil do Proprietário",
 }
 
-export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParams) {
+export default async function OwnerDetailsPage({
+  params,
+}: OwnerDetailsPageParams) {
   const { owner_id } = await params
   const { status, owner } = await getOwner(owner_id)
 
@@ -25,7 +27,9 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
       <div className="flex justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{owner.fullname}</h1>
-          <span className="text-muted-foreground text-sm">{owner.address.address}</span>
+          <span className="text-muted-foreground text-sm">
+            {owner.address.address}
+          </span>
         </div>
         <Link href="/dashboard/locacao/proprietarios">
           <Button variant="outline">
@@ -40,8 +44,12 @@ export default async function OwnerDetailsPage({ params }: OwnerDetailsPageParam
         </CardHeader>
         <CardContent>
           <div className="flex flex-col">
-            <p className="text-muted-foreground"><strong className="text-muted">Email:</strong> {owner.email}</p>
-            <p className="text-muted-foreground"><strong className="text-muted">Telefone:</strong> {owner.phone}</p>
+            <p className="text-muted-foreground">
+              <strong className="text-muted">Email:</strong> {owner.email}
+            </p>
+            <p className="text-muted-foreground">
+              <strong className="text-muted">Telefone:</strong> {owner.phone}
+            </p>
           </div>
         </CardContent>
       </Card>

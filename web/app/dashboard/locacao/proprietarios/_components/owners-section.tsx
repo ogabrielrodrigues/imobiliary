@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Owner } from "@/types/owner"
+import type { Owner } from "@/types/owner"
 import { CircleX, Plus } from "lucide-react"
 import Link from "next/link"
-import { ChangeEvent, useCallback, useMemo, useState } from "react"
+import { type ChangeEvent, useCallback, useMemo, useState } from "react"
 import { OwnersList } from "./owners-list"
 // import { PropertyList } from "./properties-list"
 
@@ -18,7 +18,8 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
 
   const filtered = useMemo(() => {
     return owners.filter(owner => {
-      const matchesSearch = searchTerm.trim() === "" ||
+      const matchesSearch =
+        searchTerm.trim() === "" ||
         owner.fullname.toLowerCase().includes(searchTerm.toLowerCase())
 
       return matchesSearch
@@ -46,10 +47,7 @@ export function OwnersSection({ owners }: OwnersSectionProps) {
             value={searchTerm}
           />
           <div className="hidden lg:flex gap-2">
-            <Button
-              onClick={handleClearFilter}
-              disabled={!isFilterActive}
-            >
+            <Button onClick={handleClearFilter} disabled={!isFilterActive}>
               <CircleX className="size-4 mr-1" />
               Limpar Filtro
             </Button>

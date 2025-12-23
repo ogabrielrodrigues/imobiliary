@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -11,15 +11,20 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
 import { cn } from "@/lib/utils"
 
-
 import { createOwner } from "@/actions/mutations/owner/create-owner"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { searchCEP } from "@/lib/cep/api-brasil"
 import { LoaderCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -28,18 +33,46 @@ import { toast } from "sonner"
 import { useHookFormMask } from "use-mask-input"
 
 const owner_schema = z.object({
-  fullname: z.string().min(10, "O nome deve conter ao menos 10 caracteres").max(100, "Máximo de 100 caracteres"),
+  fullname: z
+    .string()
+    .min(10, "O nome deve conter ao menos 10 caracteres")
+    .max(100, "Máximo de 100 caracteres"),
   cpf: z.string().length(14),
-  rg: z.string().min(5, "o rg deve ter no minimo 5 caracteres").max(15, "o rg deve ter no máximo 15 caracteres"),
+  rg: z
+    .string()
+    .min(5, "o rg deve ter no minimo 5 caracteres")
+    .max(15, "o rg deve ter no máximo 15 caracteres"),
   email: z.string().email("o e-mail digitado deve ser válido"),
-  phone: z.string().min(14, "O telefone deve conter ao menos 10 dígitos").max(15, "O telefone deve conter no máximo 11 dígitos")
-    .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, "O telefone deve conter apenas números"),
-  occupation: z.string().min(3, "A ocupação deve conter ao menos 3 caracteres").max(50, "Máximo de 50 caracteres"),
-  marital_status: z.enum(["Solteiro(a)", "Casado(a)", "Amasiado(a)", "Divorciado(a)", "Viúvo(a)", "União Estável"]),
+  phone: z
+    .string()
+    .min(14, "O telefone deve conter ao menos 10 dígitos")
+    .max(15, "O telefone deve conter no máximo 11 dígitos")
+    .regex(
+      /^\(\d{2}\)\s\d{4,5}-\d{4}$/,
+      "O telefone deve conter apenas números",
+    ),
+  occupation: z
+    .string()
+    .min(3, "A ocupação deve conter ao menos 3 caracteres")
+    .max(50, "Máximo de 50 caracteres"),
+  marital_status: z.enum([
+    "Solteiro(a)",
+    "Casado(a)",
+    "Amasiado(a)",
+    "Divorciado(a)",
+    "Viúvo(a)",
+    "União Estável",
+  ]),
   address: z.object({
-    street: z.string().min(3, "O nome da rua deve conter ao menos 3 caracteres"),
-    number: z.string().min(1, "O número da rua deve conter ao menos 1 caracter"),
-    neighborhood: z.string().min(3, "O bairro deve conter ao menos 3 caracteres"),
+    street: z
+      .string()
+      .min(3, "O nome da rua deve conter ao menos 3 caracteres"),
+    number: z
+      .string()
+      .min(1, "O número da rua deve conter ao menos 1 caracter"),
+    neighborhood: z
+      .string()
+      .min(3, "O bairro deve conter ao menos 3 caracteres"),
     complement: z.string().optional(),
     city: z.string().min(3, "A cidade deve conter ao menos 3 caracteres"),
     state: z.string().optional(),
@@ -49,7 +82,10 @@ const owner_schema = z.object({
 
 export type OwnerRequest = z.infer<typeof owner_schema>
 
-export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form">) {
+export function NewOwnerForm({
+  className,
+  ...props
+}: React.ComponentProps<"form">) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -70,12 +106,12 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
         complement: "",
         city: "",
         state: "",
-        zip_code: ""
-      }
-    }
+        zip_code: "",
+      },
+    },
   })
 
-  const registerWithMask = useHookFormMask(form.register);
+  const registerWithMask = useHookFormMask(form.register)
 
   async function searchAddressByCEP(cep: string) {
     const address = await searchCEP(cep)
@@ -104,7 +140,10 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
         }, 1500)
         break
       default:
-        toast.error("Erro ao criar proprietário", { description: "Confira os dados e tente novamente", duration: 1500 })
+        toast.error("Erro ao criar proprietário", {
+          description: "Confira os dados e tente novamente",
+          duration: 1500,
+        })
         break
     }
 
@@ -118,7 +157,12 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
         className="flex flex-col pb-4 gap-4"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className={cn("grid grid-cols-subgrid md:!grid-cols-2 gap-y-4 gap-x-2", className)}>
+        <div
+          className={cn(
+            "grid grid-cols-subgrid md:!grid-cols-2 gap-y-4 gap-x-2",
+            className,
+          )}
+        >
           <FormField
             control={form.control}
             name="fullname"
@@ -153,7 +197,7 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     autoComplete="off"
                     disabled={loading}
                     {...field}
-                    {...registerWithMask("cpf", '999.999.999-99', {
+                    {...registerWithMask("cpf", "999.999.999-99", {
                       showMaskOnHover: false,
                       showMaskOnFocus: false,
                       required: true,
@@ -198,11 +242,15 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     autoComplete="off"
                     disabled={loading}
                     {...field}
-                    {...registerWithMask("phone", ['(99) 9999-9999', '(99) 99999-9999'], {
-                      showMaskOnHover: false,
-                      showMaskOnFocus: false,
-                      required: true,
-                    })}
+                    {...registerWithMask(
+                      "phone",
+                      ["(99) 9999-9999", "(99) 99999-9999"],
+                      {
+                        showMaskOnHover: false,
+                        showMaskOnFocus: false,
+                        required: true,
+                      },
+                    )}
                   />
                 </FormControl>
                 <FormMessage />
@@ -270,9 +318,13 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                       <SelectItem value="Solteiro(a)">Solteiro(a)</SelectItem>
                       <SelectItem value="Casado(a)">Casado(a)</SelectItem>
                       <SelectItem value="Amasiado(a)">Amasiado(a)</SelectItem>
-                      <SelectItem value="Divorciado(a)">Divorciado(a)</SelectItem>
+                      <SelectItem value="Divorciado(a)">
+                        Divorciado(a)
+                      </SelectItem>
                       <SelectItem value="Viúvo(a)">Viúvo(a)</SelectItem>
-                      <SelectItem value="União Estável">União Estável</SelectItem>
+                      <SelectItem value="União Estável">
+                        União Estável
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -295,13 +347,13 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
                     maxLength={8}
                     disabled={loading}
                     {...field}
-                    {...registerWithMask("address.zip_code", '99999999', {
+                    {...registerWithMask("address.zip_code", "99999999", {
                       showMaskOnHover: false,
                       showMaskOnFocus: false,
                       required: true,
-                      onBlur: (e) => {
+                      onBlur: e => {
                         searchAddressByCEP(e.target.value)
-                      }
+                      },
                     })}
                   />
                 </FormControl>
@@ -412,7 +464,8 @@ export function NewOwnerForm({ className, ...props }: React.ComponentProps<"form
 
         <div className="flex justify-end">
           <Button disabled={loading} type="submit" size="lg" className="">
-            {loading && <LoaderCircle className="size-4 animate-spin" />}Cadastrar
+            {loading && <LoaderCircle className="size-4 animate-spin" />}
+            Cadastrar
           </Button>
         </div>
       </form>

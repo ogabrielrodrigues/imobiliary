@@ -1,7 +1,7 @@
 import { listOwners } from "@/actions/queries/owner/list-owners"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { NewPropertyForm } from "../_components/new-property-form"
 
@@ -24,7 +24,6 @@ export default async function NewPropertyPage() {
 
   return (
     <div className="container mx-auto xl:max-w-xl flex flex-col space-y-4">
-
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Novo Imóvel</h1>
         <Link href="/dashboard/locacao/imoveis">
@@ -35,6 +34,6 @@ export default async function NewPropertyPage() {
         </Link>
       </div>
       <NewPropertyForm owners={owners} />
-    </div >
+    </div>
   )
 }

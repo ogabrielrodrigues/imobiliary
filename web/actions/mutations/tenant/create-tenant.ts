@@ -1,7 +1,7 @@
-'use server'
+"use server"
 
 import { token } from "@/actions/queries/auth/token"
-import { TenantRequest } from "@/app/dashboard/locacao/inquilinos/_components/new-tenant-form"
+import type { TenantRequest } from "@/app/dashboard/locacao/inquilinos/_components/new-tenant-form"
 import { searchCEP } from "@/lib/cep/api-brasil"
 import { env } from "@/lib/env"
 
@@ -21,7 +21,7 @@ export async function createTenant(data: TenantRequest): Promise<number> {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
-        "Authorization": `Bearer ${auth_token}`,
+        Authorization: `Bearer ${auth_token}`,
       },
     })
 

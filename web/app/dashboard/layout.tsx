@@ -1,10 +1,10 @@
-import { auth } from "@/actions/queries/auth/auth";
-import { getManager } from "@/actions/queries/manager/get-manager";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { redirect } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { auth } from "@/actions/queries/auth/auth"
+import { getManager } from "@/actions/queries/manager/get-manager"
+import { AppSidebar } from "@/components/app-sidebar"
+import { SiteHeader } from "@/components/site-header"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { redirect } from "next/navigation"
+import type { PropsWithChildren } from "react"
 
 export default async function DashboardLayout({ children }: PropsWithChildren) {
   const auth_id = await auth()
@@ -24,12 +24,10 @@ export default async function DashboardLayout({ children }: PropsWithChildren) {
           <AppSidebar manager={manager} />
           <SidebarInset className="!m-0 w-full lg:!m-3">
             <SiteHeader />
-            <section className="px-4">
-              {children}
-            </section>
+            <section className="px-4">{children}</section>
           </SidebarInset>
         </div>
       </SidebarProvider>
     </div>
-  );
+  )
 }

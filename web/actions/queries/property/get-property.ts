@@ -1,12 +1,12 @@
-'use server'
+"use server"
 
 import { token } from "@/actions/queries/auth/token"
 import { env } from "@/lib/env"
-import { Property } from "@/types/property"
-import { Response } from "@/types/response"
+import type { Property } from "@/types/property"
+import type { Response } from "@/types/response"
 
 type GetPropertyResponse = {
-  property: Property | undefined,
+  property: Property | undefined
   status: number
 }
 
@@ -17,15 +17,15 @@ export async function getProperty(id: string): Promise<GetPropertyResponse> {
     const response = await fetch(`${env.SERVER_ADDR}/property/${id}`, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${auth_token}`
-      }
+        Authorization: `Bearer ${auth_token}`,
+      },
     })
 
     if (response.status !== 200) {
       return { property: undefined, status: response.status }
     }
 
-    const { result: property } = await response.json() as Response<Property>
+    const { result: property } = (await response.json()) as Response<Property>
 
     return { property, status: response.status }
   } catch {

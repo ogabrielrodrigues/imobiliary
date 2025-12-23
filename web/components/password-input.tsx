@@ -1,54 +1,37 @@
-'use client'
+"use client"
 
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { useState } from 'react'
+import { IconEye, IconEyeOff } from "@tabler/icons-react"
+import { type ComponentProps, useState } from "react"
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupButton,
+	InputGroupInput,
+} from "./ui/input-group"
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+export function PasswordInput(props: ComponentProps<"input">) {
+	const [showPassword, setShowPassword] = useState(false)
+	const disabled = props.disabled
 
-function PasswordInput({ className, type, ...props }: React.ComponentProps<"input">) {
-  const [showPassword, setShowPassword] = useState(false)
-  const disabled = props.value === '' || props.value === undefined || props.disabled
+	function toggleInputType() {
+		setShowPassword(state => !state)
+	}
 
-  return (
-    <div className="relative !bg-background rounded-md">
-      <Input
-        type={showPassword ? 'text' : 'password'}
-        className={cn('hide-password-toggle pr-10', className)}
-        {...props}
-      />
-      <Button
-        id='password-toggle'
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-        onClick={() => setShowPassword(!showPassword)}
-        disabled={disabled}
-      >
-        {showPassword && !disabled ? (
-          <EyeIcon className="h-4 w-4" aria-hidden="true" />
-        ) : (
-          <EyeOffIcon className="h-4 w-4" aria-hidden="true" />
-        )}
-        <span className="sr-only">{showPassword ? 'Hide password' : 'Show password'}</span>
-      </Button>
+	return (
+		<InputGroup>
+			<InputGroupInput type={showPassword ? "text" : "password"} {...props} />
 
-      {/* hides browsers password toggles */}
-      <style>{`
-					.hide-password-toggle::-ms-reveal,
-					.hide-password-toggle::-ms-clear {
-						visibility: hidden;
-						pointer-events: none;
-						display: none;
-					}
-				`}</style>
-    </div>
-  )
+			<InputGroupAddon align="inline-end">
+				<InputGroupButton
+					disabled={disabled}
+					onClick={() => toggleInputType()}
+					size="icon-xs"
+					type="button"
+					variant="ghost"
+				>
+					{showPassword ? <IconEye /> : <IconEyeOff />}
+				</InputGroupButton>
+			</InputGroupAddon>
+		</InputGroup>
+	)
 }
-
-PasswordInput.displayName = 'PasswordInput'
-
-export { PasswordInput }
-

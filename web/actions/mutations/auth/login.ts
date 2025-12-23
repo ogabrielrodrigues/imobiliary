@@ -1,6 +1,6 @@
-'use server'
+"use server"
 
-import { LoginRequest } from "@/app/(auth)/login/_components/login-form"
+import type { LoginRequest } from "@/app/(auth)/login/_components/login-form"
 import { env } from "@/lib/env"
 import { cookies } from "next/headers"
 

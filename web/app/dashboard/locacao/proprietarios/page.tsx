@@ -1,6 +1,6 @@
 import { listOwners } from "@/actions/queries/owner/list-owners"
 import { listProperties } from "@/actions/queries/property/list-properties"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import { OwnersHeader } from "./_components/owners-header"
 import { OwnersSection } from "./_components/owners-section"
 

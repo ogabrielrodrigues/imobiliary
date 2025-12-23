@@ -1,5 +1,5 @@
 import { listProperties } from "@/actions/queries/property/list-properties"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import { RentalsHeader } from "./_components/rentals-header"
 
 export const metadata: Metadata = {
@@ -11,9 +11,11 @@ export default async function RentalsPage() {
   const { properties: foundProperties, status } = await listProperties()
 
   if (status !== 200) {
-    return <div className="w-full flex justify-center">
-      <p className="font-medium text-muted">Erro ao carregar os imóveis</p>
-    </div>
+    return (
+      <div className="w-full flex justify-center">
+        <p className="font-medium text-muted">Erro ao carregar os imóveis</p>
+      </div>
+    )
   }
 
   const properties = !foundProperties ? [] : foundProperties

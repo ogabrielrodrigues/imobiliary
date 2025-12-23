@@ -1,5 +1,5 @@
 import { listTenants } from "@/actions/queries/tenant/list-tenant"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import { TenantsHeader } from "./_components/tenants-header"
 import { TenantsSection } from "./_components/tenants-section"
 

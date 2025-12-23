@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Owner } from "@/types/owner"
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import type { Owner } from "@/types/owner"
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
@@ -19,7 +25,8 @@ export function OwnerCard({ owner }: OwnerCardProps) {
         <div className="flex justify-end">
           <Link href={`/dashboard/locacao/proprietarios/${owner.id}`}>
             <Button variant="link">
-              <ArrowUpRight className="size-4" />Detalhes
+              <ArrowUpRight className="size-4" />
+              Detalhes
             </Button>
           </Link>
         </div>

@@ -1,12 +1,25 @@
-'use client'
+"use client"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Property } from "@/types/property"
-import { CircleCheck, CircleMinus, CircleX, Hammer, LockKeyhole, Plus } from "lucide-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import type { Property } from "@/types/property"
+import {
+  CircleCheck,
+  CircleMinus,
+  CircleX,
+  Hammer,
+  LockKeyhole,
+  Plus,
+} from "lucide-react"
 import Link from "next/link"
-import { ChangeEvent, useCallback, useMemo, useState } from "react"
+import { type ChangeEvent, useCallback, useMemo, useState } from "react"
 import { PropertyList } from "./properties-list"
 
 type PropertiesSectionProps = {
@@ -20,14 +33,17 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
 
   const filtered = useMemo(() => {
     return properties.filter(property => {
-      const matchesSearch = searchTerm.trim() === "" ||
-        property.address.address.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesSearch =
+        searchTerm.trim() === "" ||
+        property.address.address
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
 
-      const matchesKind = selectedKind === "Todos" ||
-        property.kind === selectedKind
+      const matchesKind =
+        selectedKind === "Todos" || property.kind === selectedKind
 
-      const matchesStatus = selectedStatus === "Todos" ||
-        property.status === selectedStatus
+      const matchesStatus =
+        selectedStatus === "Todos" || property.status === selectedStatus
 
       return matchesSearch && matchesKind && matchesStatus
     })
@@ -51,7 +67,8 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
     setSelectedStatus("Todos")
   }, [])
 
-  const isFilterActive = searchTerm !== "" || selectedKind !== "Todos" || selectedStatus !== "Todos"
+  const isFilterActive =
+    searchTerm !== "" || selectedKind !== "Todos" || selectedStatus !== "Todos"
 
   return (
     <section className="flex flex-col gap-6">
@@ -117,10 +134,7 @@ export function PropertiesSection({ properties }: PropertiesSectionProps) {
               </SelectContent>
             </Select>
 
-            <Button
-              onClick={handleClearFilter}
-              disabled={!isFilterActive}
-            >
+            <Button onClick={handleClearFilter} disabled={!isFilterActive}>
               <CircleX className="size-4 lg:mr-1" />
               <p className="hidden lg:block">Limpar Filtros</p>
             </Button>

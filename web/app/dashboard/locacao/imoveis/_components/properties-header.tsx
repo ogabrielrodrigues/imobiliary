@@ -1,13 +1,19 @@
-import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
-import { Property } from "@/types/property"
+import {
+  HeaderCard,
+  HeaderCardContent,
+  HeaderCardHead,
+} from "@/components/header-card"
+import type { Property } from "@/types/property"
 
 interface PropertiesHeaderProps {
   properties: Property[]
 }
 
 export function PropertiesHeader({ properties }: PropertiesHeaderProps) {
-  const occupied = properties.filter(property => property.status === 'Ocupado')
-  const available = properties.filter(property => property.status === 'Disponível')
+  const occupied = properties.filter(property => property.status === "Ocupado")
+  const available = properties.filter(
+    property => property.status === "Disponível",
+  )
 
   return (
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

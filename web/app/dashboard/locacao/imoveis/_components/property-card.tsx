@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Property } from "@/types/property"
+import type { Property } from "@/types/property"
 import { ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { StatusBadge } from "./status-badge"
@@ -17,14 +17,17 @@ export function PropertyCard({ property }: PropertyCardProps) {
         <CardTitle>{property.address.address}</CardTitle>
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
           <StatusBadge status={property.status} />
-          <Badge className="h-8" variant="outline">{property.kind}</Badge>
+          <Badge className="h-8" variant="outline">
+            {property.kind}
+          </Badge>
         </div>
       </CardHeader>
       <CardFooter className="flex justify-end">
         <div className="flex justify-end">
           <Link href={`/dashboard/locacao/imoveis/${property.id}`}>
             <Button variant="link">
-              <ArrowUpRight className="size-4" />Detalhes
+              <ArrowUpRight className="size-4" />
+              Detalhes
             </Button>
           </Link>
         </div>

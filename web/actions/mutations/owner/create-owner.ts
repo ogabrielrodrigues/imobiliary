@@ -1,7 +1,7 @@
-'use server'
+"use server"
 
 import { token } from "@/actions/queries/auth/token"
-import { OwnerRequest } from "@/app/dashboard/locacao/proprietarios/_components/new-owner-form"
+import type { OwnerRequest } from "@/app/dashboard/locacao/proprietarios/_components/new-owner-form"
 import { searchCEP } from "@/lib/cep/api-brasil"
 import { env } from "@/lib/env"
 
@@ -21,7 +21,7 @@ export async function createOwner(data: OwnerRequest): Promise<number> {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
-        "Authorization": `Bearer ${auth_token}`,
+        Authorization: `Bearer ${auth_token}`,
       },
     })
 

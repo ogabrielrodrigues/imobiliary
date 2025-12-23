@@ -1,9 +1,15 @@
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
-import { Property } from "@/types/property"
-import { CircleCheck, CircleMinus, CircleX, Hammer, LockKeyhole } from "lucide-react"
+import type { Property } from "@/types/property"
+import {
+  CircleCheck,
+  CircleMinus,
+  CircleX,
+  Hammer,
+  LockKeyhole,
+} from "lucide-react"
 
-type StatusBadgeProps = Pick<Property, 'status'>
+type StatusBadgeProps = Pick<Property, "status">
 
 export function bgColorStatusDetail(status: string) {
   switch (status) {
@@ -38,24 +44,45 @@ export function textColorStatusDetail(status: string) {
 export function StatusBadge({ status }: StatusBadgeProps) {
   switch (status) {
     case "Disponível":
-      return <Badge variant="outline" className="h-8 gap-2">
-        <CircleCheck className={cn(["!size-4", textColorStatusDetail(status)])} />{status}
-      </Badge >
+      return (
+        <Badge variant="outline" className="h-8 gap-2">
+          <CircleCheck
+            className={cn(["!size-4", textColorStatusDetail(status)])}
+          />
+          {status}
+        </Badge>
+      )
     case "Ocupado":
-      return <Badge variant="outline" className="h-8 gap-2">
-        <CircleMinus className={cn(["!size-4", textColorStatusDetail(status)])} />{status}
-      </Badge >
+      return (
+        <Badge variant="outline" className="h-8 gap-2">
+          <CircleMinus
+            className={cn(["!size-4", textColorStatusDetail(status)])}
+          />
+          {status}
+        </Badge>
+      )
     case "Indisponível":
-      return <Badge variant="outline" className="h-8 gap-2">
-        <CircleX className={cn(["!size-4", textColorStatusDetail(status)])} />{status}
-      </Badge >
+      return (
+        <Badge variant="outline" className="h-8 gap-2">
+          <CircleX className={cn(["!size-4", textColorStatusDetail(status)])} />
+          {status}
+        </Badge>
+      )
     case "Reservado":
-      return <Badge variant="outline" className="h-8 gap-2">
-        <LockKeyhole className={cn(["!size-4", textColorStatusDetail(status)])} />{status}
-      </Badge >
+      return (
+        <Badge variant="outline" className="h-8 gap-2">
+          <LockKeyhole
+            className={cn(["!size-4", textColorStatusDetail(status)])}
+          />
+          {status}
+        </Badge>
+      )
     case "Reformando":
-      return <Badge variant="outline" className="h-8 gap-2">
-        <Hammer className={cn(["!size-4", textColorStatusDetail(status)])} />{status}
-      </Badge >
+      return (
+        <Badge variant="outline" className="h-8 gap-2">
+          <Hammer className={cn(["!size-4", textColorStatusDetail(status)])} />
+          {status}
+        </Badge>
+      )
   }
 }

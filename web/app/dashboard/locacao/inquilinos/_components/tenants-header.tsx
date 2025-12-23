@@ -1,5 +1,9 @@
-import { HeaderCard, HeaderCardContent, HeaderCardHead } from "@/components/header-card"
-import { Tenant } from "@/types/tenant"
+import {
+  HeaderCard,
+  HeaderCardContent,
+  HeaderCardHead,
+} from "@/components/header-card"
+import type { Tenant } from "@/types/tenant"
 
 type TenantsHeaderProps = {
   tenants: Tenant[]
@@ -17,7 +21,7 @@ export function TenantsHeader({ tenants }: TenantsHeaderProps) {
           description="Inquilinos ativos no sistema"
         />
         <HeaderCardContent
-          count={tenantsCount.toString().padStart(2, '0')}
+          count={tenantsCount.toString().padStart(2, "0")}
           className="text-muted"
         />
       </HeaderCard>

@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React from "react"
 
 import {
   Breadcrumb,
@@ -12,18 +12,18 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useIsMobile } from "@/hooks/use-mobile"
 import { generateBreadcrumbPath, routes } from "@/lib/routes"
 import { usePathname } from "next/navigation"
 
 export function SiteHeader(): React.ReactElement {
-  const pathname = usePathname();
-  const isMobile = useIsMobile();
+  const pathname = usePathname()
+  const isMobile = useIsMobile()
 
   const breadcrumbPath = generateBreadcrumbPath({
     pathname,
-    routeStructure: routes
-  });
+    routeStructure: routes,
+  })
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2">
@@ -41,7 +41,9 @@ export function SiteHeader(): React.ReactElement {
                   {item.isLast ? (
                     <BreadcrumbPage>{item.name}</BreadcrumbPage>
                   ) : (
-                    <BreadcrumbLink href={item.href}>{item.name}</BreadcrumbLink>
+                    <BreadcrumbLink href={item.href}>
+                      {item.name}
+                    </BreadcrumbLink>
                   )}
                 </BreadcrumbItem>
                 {!item.isLast && <BreadcrumbSeparator />}
@@ -51,5 +53,5 @@ export function SiteHeader(): React.ReactElement {
         </Breadcrumb>
       </div>
     </header>
-  );
+  )
 }

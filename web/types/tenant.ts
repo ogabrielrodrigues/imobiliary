@@ -1,4 +1,4 @@
-import { Address } from "./address";
+import type { Address } from "./address"
 
 export type Tenant = {
   id: string
@@ -8,9 +8,13 @@ export type Tenant = {
   rg: string
   phone: string
   occupation: string
-  marital_status: 'Solteiro(a)' | 'Casado(a)' | 'Amasiado(a)' | 'Divorciado(a)' | 'Viúvo(a)' | 'União Estável',
-  address: Address,
+  marital_status:
+    | "Solteiro(a)"
+    | "Casado(a)"
+    | "Amasiado(a)"
+    | "Divorciado(a)"
+    | "Viúvo(a)"
+    | "União Estável"
+  address: Address
   active: boolean
-};
-
-
+}

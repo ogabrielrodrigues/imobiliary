@@ -1,6 +1,6 @@
-'use server'
+"use server"
 
-import { SignRequest } from "@/app/(auth)/cadastro/_components/sign-form"
+import type { SignRequest } from "@/app/(auth)/cadastro/_components/sign-form"
 import { env } from "@/lib/env"
 
 export async function sign(values: SignRequest): Promise<number> {

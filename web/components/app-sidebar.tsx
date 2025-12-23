@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import type * as React from "react"
 
 import {
   Sidebar,
@@ -10,10 +10,10 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
-import { Manager } from "@/types/manager"
+import type { Manager } from "@/types/manager"
 import { House, HousePlus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -28,7 +28,7 @@ export function AppSidebar({ manager, ...props }: AppSidebarProps) {
   const pathname = usePathname()
 
   return (
-    <Sidebar variant="inset" {...props} >
+    <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -52,7 +52,8 @@ export function AppSidebar({ manager, ...props }: AppSidebarProps) {
               >
                 <a href="/dashboard">
                   <House />
-                  Dashboard</a>
+                  Dashboard
+                </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
