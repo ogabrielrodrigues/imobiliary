@@ -15,7 +15,7 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 
 		duration := uint(time.Since(start).Milliseconds())
 
-		log.Info().Msgf("request received. %s %s ...%dms",
+		log.Info().Msgf("request received. %s %s %dms",
 			r.Method,
 			r.URL.Path,
 			duration,

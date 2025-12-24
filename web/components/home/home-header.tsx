@@ -1,5 +1,9 @@
-import { IconCirclePlus, IconDoorExit, IconLogin2 } from "@tabler/icons-react"
-import { HousePlus } from "lucide-react"
+import {
+	IconCirclePlus,
+	IconDoorExit,
+	IconHomePlus,
+	IconLogin2,
+} from "@tabler/icons-react"
 import Link from "next/link"
 import { logout } from "@/actions/mutations/auth/logout"
 import { getManager } from "@/actions/queries/manager/get-manager"
@@ -11,7 +15,7 @@ export async function HomeHeader() {
 	return (
 		<header className="w-screen flex items-center justify-between p-4 border-b border-border">
 			<div className="flex items-center gap-2 text-muted">
-				<HousePlus className="size-5" />
+				<IconHomePlus className="size-5" />
 				<strong className="text-xl select-none">imobiliary</strong>
 			</div>
 

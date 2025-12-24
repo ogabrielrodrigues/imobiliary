@@ -19,9 +19,9 @@ import {
 	FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Spinner } from "@/components/ui/spinner"
 import { delay } from "@/lib/utils"
-import { PasswordInput } from "../password-input"
 
 const loginSchema = z.object({
 	email: z.string().email("O e-mail digitado deve ser válido"),

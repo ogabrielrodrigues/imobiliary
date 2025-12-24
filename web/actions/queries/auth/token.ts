@@ -3,13 +3,16 @@
 import { cookies } from "next/headers"
 
 export async function token(): Promise<string | undefined> {
-  const cookiesStore = await cookies()
+	const cookiesStore = await cookies()
 
-  if (!cookiesStore.has("imobiliary-user")) {
-    return undefined
-  }
+	if (!cookiesStore.has("imobiliary-user")) {
+		return undefined
+	}
 
-  const token = cookiesStore.get("imobiliary-user")!.value
+	const token = cookiesStore.get("imobiliary-user")
+	if (!token?.value) {
+		return undefined
+	}
 
-  return token
+	return token.value
 }

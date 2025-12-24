@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
 	return (
-		<html lang="pt-BR">
+		<html className="dark" lang="pt-BR">
 			<body
 				className={cn(
 					fontSans.variable,

@@ -7,7 +7,7 @@ import {
 	InputGroupAddon,
 	InputGroupButton,
 	InputGroupInput,
-} from "./ui/input-group"
+} from "@/components/ui/input-group"
 
 export function PasswordInput(props: ComponentProps<"input">) {
 	const [showPassword, setShowPassword] = useState(false)
@@ -19,7 +19,11 @@ export function PasswordInput(props: ComponentProps<"input">) {
 
 	return (
 		<InputGroup>
-			<InputGroupInput type={showPassword ? "text" : "password"} {...props} />
+			<InputGroupInput
+				type={showPassword ? "text" : "password"}
+				{...props}
+				data-slot="input-group-control"
+			/>
 
 			<InputGroupAddon align="inline-end">
 				<InputGroupButton

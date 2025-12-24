@@ -48,7 +48,7 @@ func (h *ManagerHandler) FindByID(w http.ResponseWriter, r *http.Request) *httpe
 	}
 
 	found, err := h.repository.FindByID(r.Context(), managerID)
-	if err != nil {
+	if err.(*httperr.HttpError) != nil {
 		return err.(*httperr.HttpError)
 	}
 

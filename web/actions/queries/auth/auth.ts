@@ -4,11 +4,11 @@ import { decodeJWT } from "@/lib/jwt"
 import { token } from "./token"
 
 export async function auth(): Promise<string | undefined> {
-  const auth_token = await token()
+	const authToken = await token()
 
-  if (!auth_token) {
-    return undefined
-  }
+	if (!authToken) {
+		return undefined
+	}
 
-  return await decodeJWT(auth_token)
+	return await decodeJWT(authToken)
 }
